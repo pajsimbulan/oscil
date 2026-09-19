@@ -2,9 +2,292 @@
 	(version 20260306)
 	(generator "eeschema")
 	(generator_version "10.0")
-	(uuid c207b121-aeb4-4662-bb5d-c71f93f47474)
-	(paper "A4")
+	(uuid "c207b121-aeb4-4662-bb5d-c71f93f47474")
+	(paper "A3")
+	(title_block
+		(title "Oscil")
+		(date "2026-09-18")
+		(rev "0.1")
+		(comment 1 "Two-channel Digital Oscilloscope and Function Generator")
+		(comment 2 "ESP32-S3 / ESP-IDF / FreeRTOS")
+	)
 	(lib_symbols)
+	(sheet
+		(at 240.03 69.85)
+		(size 50.8 38.1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "0c108123-2575-47bf-8178-25239a6819c5")
+		(property "Sheetname" "03_afe_ch2"
+			(at 240.03 69.1384 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "03_afe_ch2.kicad_sch"
+			(at 240.03 108.5346 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "oscil"
+				(path "/c207b121-aeb4-4662-bb5d-c71f93f47474"
+					(page "4")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 93.98 138.43)
+		(size 50.8 38.1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "3c115426-904e-47a1-b9a9-68daedbcec42")
+		(property "Sheetname" "04_acq"
+			(at 93.98 137.7184 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "04_acq.kicad_sch"
+			(at 93.98 177.1146 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "oscil"
+				(path "/c207b121-aeb4-4662-bb5d-c71f93f47474"
+					(page "5")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 92.71 71.12)
+		(size 50.8 38.1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "4d78cf42-9896-4224-ab71-d11d3235d8c8")
+		(property "Sheetname" "01_power"
+			(at 92.71 70.4084 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "01_power.kicad_sch"
+			(at 92.71 109.8046 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "oscil"
+				(path "/c207b121-aeb4-4662-bb5d-c71f93f47474"
+					(page "2")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 163.83 69.85)
+		(size 53.34 38.1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "d101ac4d-6ddc-4f32-b947-dc7dadbc13b7")
+		(property "Sheetname" "02_afe_ch1"
+			(at 163.83 69.1384 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "02_afe_ch1.kicad_sch"
+			(at 163.83 108.5346 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "oscil"
+				(path "/c207b121-aeb4-4662-bb5d-c71f93f47474"
+					(page "3")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 238.76 139.7)
+		(size 50.8 38.1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "e789f2ab-2444-4127-961c-69df2a2c61cb")
+		(property "Sheetname" "06_gen"
+			(at 238.76 138.9884 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "06_gen.kicad_sch"
+			(at 238.76 178.3846 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "oscil"
+				(path "/c207b121-aeb4-4662-bb5d-c71f93f47474"
+					(page "7")
+				)
+			)
+		)
+	)
+	(sheet
+		(at 165.1 139.7)
+		(size 53.34 38.1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(stroke
+			(width 0.1524)
+			(type solid)
+		)
+		(fill
+			(color 0 0 0 0)
+		)
+		(uuid "f00a21d9-263d-40b5-bdc8-78d602b195e0")
+		(property "Sheetname" "05_display"
+			(at 165.1 138.9884 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Sheetfile" "05_display.kicad_sch"
+			(at 165.1 178.3846 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(instances
+			(project "oscil"
+				(path "/c207b121-aeb4-4662-bb5d-c71f93f47474"
+					(page "6")
+				)
+			)
+		)
+	)
 	(sheet_instances
 		(path "/"
 			(page "1")
