@@ -35,7 +35,7 @@ and caught it, wrong touch controller, wrong backlight, and three pins the
 7.0 inch part actually uses are NC on the 5.0.
 
 Renamed pins 35 and 36 from SCL/SDA to SPI_SCK/SPI_MOSI. They're SPI, and
-the GT911 touch I2C on the same sheet is already using those names.
+the GT911 touch I2C on the same sheet is already using those names. 
 
 Drew the GT911 touch symbol. Six pins, same datasheet page as the LCD
 connector.
@@ -45,3 +45,11 @@ connector.
 Power sheet. USB input, 0R rail split, MCP1700 to +3V3_A.
 
 No ferrite bead in the BOM so fitted 0R instead.
+
+2.2 V reference. 10k/20k off +3V3_A, buffered with half the MCP6292.
+Tied off the spare half.
+
+ERC needed a second PWR_FLAG after R1. The resistor splits the net so
+the flag on +5V doesn't reach the other side.
+
+VREF_2V2 as a power symbol fails ERC. Made it a global label.
