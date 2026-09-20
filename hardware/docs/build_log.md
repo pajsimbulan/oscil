@@ -29,3 +29,10 @@ header order is completely different.
 
 GPIO35-37 are broken out on the header but the octal PSRAM uses them.
 Noted on the symbol.
+
+Drew the LCD 40-pin symbol. Was working off the 5.0 inch datasheet at first
+and caught it, wrong touch controller, wrong backlight, and three pins the
+7.0 inch part actually uses are NC on the 5.0.
+
+Renamed pins 35 and 36 from SCL/SDA to SPI_SCK/SPI_MOSI. They're SPI, and
+the GT911 touch I2C on the same sheet is already using those names.
