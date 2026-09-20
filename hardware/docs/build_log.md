@@ -39,3 +39,9 @@ the GT911 touch I2C on the same sheet is already using those names.
 
 Drew the GT911 touch symbol. Six pins, same datasheet page as the LCD
 connector.
+
+## 2026-09-20
+
+Power sheet. USB input, 0R rail split, MCP1700 to +3V3_A.
+
+No ferrite bead in the BOM so fitted 0R instead.
