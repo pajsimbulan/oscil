@@ -18,3 +18,14 @@ against SLAS594 p.5.
 
 Took me a while to work out that the pin X/Y is where the pin meets the
 body, not the end of the stub.
+
+## 2026-09-19
+
+Drew the dev board symbol. 44 pins, numbered by header position with the
+board in front of me.
+
+Didn't use KiCad's built-in WROOM-1 symbol,  that's the bare module and the
+header order is completely different.
+
+GPIO35-37 are broken out on the header but the octal PSRAM uses them.
+Noted on the symbol.
