@@ -64,3 +64,14 @@ VREF_2V2 instead of GND, which is what shifts the signal into the
 ADC window.
 
 Trimmers go across each resistor, not to ground. R4*C5 = R5*C6.
+
+BAV99 clamp on the divider junction. Pin 3 is the middle tap, the two
+diodes are in series, not a common-cathode pair.
+
+R4 is doing two jobs. It's the attenuator and it's what limits fault
+current into the diodes.
+
+Buffer on ch1. MCP6292 as a follower off the divider junction.
+
+The divider is 188k out. The ADS7883 wants under 200 ohm, so the
+buffer isn't optional.
