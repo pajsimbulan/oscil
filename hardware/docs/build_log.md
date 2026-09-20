@@ -36,3 +36,6 @@ and caught it, wrong touch controller, wrong backlight, and three pins the
 
 Renamed pins 35 and 36 from SCL/SDA to SPI_SCK/SPI_MOSI. They're SPI, and
 the GT911 touch I2C on the same sheet is already using those names.
+
+Drew the GT911 touch symbol. Six pins, same datasheet page as the LCD
+connector.
