@@ -53,3 +53,8 @@ ERC needed a second PWR_FLAG after R1. The resistor splits the net so
 the flag on +5V doesn't reach the other side.
 
 VREF_2V2 as a power symbol fails ERC. Made it a global label.
+
+BNC input on ch1. Shell to GND, centre pin is the signal.
+
+Wrote the safety note on the sheet. The shell is system ground, which
+is USB ground, which is mains earth. Not isolated.
