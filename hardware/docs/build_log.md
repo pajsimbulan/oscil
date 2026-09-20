@@ -58,3 +58,9 @@ BNC input on ch1. Shell to GND, centre pin is the signal.
 
 Wrote the safety note on the sheet. The shell is system ground, which
 is USB ground, which is mains earth. Not isolated.
+
+Divider on ch1. 750k/250k off the BNC, bottom of the stack goes to
+VREF_2V2 instead of GND, which is what shifts the signal into the
+ADC window.
+
+Trimmers go across each resistor, not to ground. R4*C5 = R5*C6.
