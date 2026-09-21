@@ -84,6 +84,16 @@
 	)
 	(wire
 		(pts
+			(xy 144.78 160.02) (xy 165.1 160.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9587c16d-f05c-432b-9ce8-ef05c1a50f44")
+	)
+	(wire
+		(pts
 			(xy 86.36 160.02) (xy 86.36 120.65)
 		)
 		(stroke
@@ -91,6 +101,16 @@
 			(type default)
 		)
 		(uuid "e364ac52-1067-4bbb-8148-ae57d6aada6c")
+	)
+	(wire
+		(pts
+			(xy 144.78 153.67) (xy 165.1 153.67)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e77d4f6b-4901-44cf-b8d7-28ccfceaf803")
 	)
 	(wire
 		(pts
@@ -438,6 +458,36 @@
 					(size 1.27 1.27)
 				)
 				(justify left top)
+			)
+		)
+		(pin "LINK1_RX" input
+			(at 165.1 160.02 180)
+			(uuid "8fa86d3a-8c90-4878-9719-29e9e05c502d")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "LINK1_TX" output
+			(at 165.1 153.67 180)
+			(uuid "9b289147-c4a5-44c4-a968-53df85f473eb")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "LINK2_TX" output
+			(at 218.44 153.67 0)
+			(uuid "0db3510a-64e3-4004-b93f-9b527bd5ac6f")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
 			)
 		)
 		(instances

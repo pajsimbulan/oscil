@@ -212,8 +212,21 @@ GPIO48 is the onboard WS2812, an addressable LED, not a plain one. On board
 1 it is the status LED. On board 2 it shares TOUCH_RESET, which asserts once
 at startup, so the LED stays quiet.
 
+## 2026-09-21
+
 Acquisition sheet. Both ADS7883s on separate SPI hosts, encoders,
 buttons, LEDs, LINK1 header.
 
 Pull-ups on both CS lines. Every GPIO floats until firmware sets it
 up, so without them the ADCs could think they're selected at boot.
+
+Display sheet. RGB565 bus to the 7 inch panel, GT911 touch,
+XL6009 for the backlight.
+
+Panel is 24-bit, only the top 16 bits are driven. Tied the other
+eight low. Panel SPI tied off too, no pins left on board 2.
+
+Board 2's 3V3 regulator feeds the panel and touch, not +3V3_A.
+
+Crossed LINK1 on the root sheet by pin order, TX opposite RX, so
+the wires run straight.
