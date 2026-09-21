@@ -88,94 +88,132 @@ sheet exists.
 Copied ch1 to ch2. Designators auto-incremented, but the notes carry
 part numbers so those had to be retyped.
 
-# Pin map
+### Pin map
 
-First pass. Verify against the Lonely Binary header diagram before wiring.
+First pass, verified against the ESP32-S3 GPIO reference and IO MUX tables.
+Check against the Lonely Binary header diagram before wiring.
 
-## Board 1, acquisition
+### Board 1, acquisition
 
-| Signal | GPIO |
-|---|---|
-| CH1_SCLK | 12 |
-| CH1_SDO | 13 |
-| CH1_CS | 10 |
-| CH2_SCLK | 15 |
-| CH2_SDO | 16 |
-| CH2_CS | 17 |
-| ENC1_A | 4 |
-| ENC1_B | 5 |
-| ENC1_SW | 6 |
-| ENC2_A | 7 |
-| ENC2_B | 8 |
-| ENC2_SW | 9 |
-| ENC3_A | 18 |
-| ENC3_B | 21 |
-| ENC3_SW | 38 |
-| BTN_RUN | 39 |
-| BTN_SINGLE | 40 |
-| BTN_GEN | 41 |
-| LED_RUN | 42 |
-| LED_TRIG | 47 |
-| LED_ARM | 48 |
-| LINK1_TX | 43 |
-| LINK1_RX | 44 |
+| Signal | GPIO | Note |
+|---|---|---|
+| CH1_SCLK | 12 | SPI2 IO_MUX (FSPICLK) |
+| CH1_SDO | 13 | SPI2 IO_MUX (FSPIQ) |
+| CH1_CS | 10 | SPI2 IO_MUX (FSPICS0), 10k pull-up |
+| CH2_SCLK | 15 | SPI3, GPIO matrix |
+| CH2_SDO | 16 | SPI3, GPIO matrix |
+| CH2_CS | 17 | SPI3, GPIO matrix, 10k pull-up |
+| ENC1_A | 4 | |
+| ENC1_B | 5 | |
+| ENC1_SW | 6 | |
+| ENC2_A | 7 | |
+| ENC2_B | 8 | |
+| ENC2_SW | 9 | |
+| ENC3_A | 18 | |
+| ENC3_B | 21 | |
+| ENC3_SW | 38 | |
+| BTN_RUN | 39 | JTAG MTCK |
+| BTN_SINGLE | 40 | JTAG MTDO |
+| BTN_GEN | 41 | JTAG MTDI |
+| LED_RUN | 42 | JTAG MTMS |
+| LED_TRIG | 47 | |
+| LED_ARM | 1 | |
+| STATUS_RGB | 48 | onboard WS2812, driven over RMT |
+| LINK1_TX | 43 | U0TXD, use UART1 |
+| LINK1_RX | 44 | U0RXD, use UART1 |
 
-Spare: 1, 2, 11, 14
+Spare: 2, 11, 14
 
-## Board 2, display and hub
+### Board 2, display and hub
 
-| Signal | GPIO |
-|---|---|
-| LCD_R3 | 1 |
-| LCD_R4 | 2 |
-| LCD_R5 | 4 |
-| LCD_R6 | 5 |
-| LCD_R7 | 6 |
-| LCD_G2 | 7 |
-| LCD_G3 | 8 |
-| LCD_G4 | 9 |
-| LCD_G5 | 10 |
-| LCD_G6 | 11 |
-| LCD_G7 | 12 |
-| LCD_B3 | 13 |
-| LCD_B4 | 14 |
-| LCD_B5 | 15 |
-| LCD_B6 | 16 |
-| LCD_B7 | 17 |
-| LCD_DCLK | 18 |
-| LCD_HSYNC | 21 |
-| LCD_VSYNC | 38 |
-| LCD_DE | 39 |
-| TOUCH_SDA | 40 |
-| TOUCH_SCL | 41 |
-| TOUCH_INT | 42 |
-| TOUCH_RESET | 47 |
-| LINK1_TX | 43 |
-| LINK1_RX | 44 |
-| LINK2_TX | 48 |
+| Signal | GPIO | Note |
+|---|---|---|
+| LCD_R3 | 1 | |
+| LCD_R4 | 2 | |
+| LCD_R5 | 4 | |
+| LCD_R6 | 5 | |
+| LCD_R7 | 6 | |
+| LCD_G2 | 7 | |
+| LCD_G3 | 8 | |
+| LCD_G4 | 9 | |
+| LCD_G5 | 10 | |
+| LCD_G6 | 11 | |
+| LCD_G7 | 12 | |
+| LCD_B3 | 13 | |
+| LCD_B4 | 14 | |
+| LCD_B5 | 15 | |
+| LCD_B6 | 16 | |
+| LCD_B7 | 17 | |
+| LCD_DCLK | 18 | |
+| LCD_HSYNC | 21 | |
+| LCD_VSYNC | 38 | |
+| LCD_DE | 39 | JTAG MTCK |
+| TOUCH_SDA | 40 | JTAG MTDO, 4.7k pull-up |
+| TOUCH_SCL | 41 | JTAG MTDI, 4.7k pull-up |
+| TOUCH_INT | 42 | JTAG MTMS, must be driveable |
+| LINK2_TX | 47 | to board 3 |
+| LINK1_TX | 43 | U0TXD, use UART1 |
+| LINK1_RX | 44 | U0RXD, use UART1 |
+| TOUCH_RESET | 48 | shares onboard WS2812, asserts once at startup |
 
 Spare: none
 
-## Board 3, generator
+### Board 3, generator
 
-| Signal | GPIO |
-|---|---|
-| DAC_D0 | 4 |
-| DAC_D1 | 5 |
-| DAC_D2 | 6 |
-| DAC_D3 | 7 |
-| DAC_D4 | 8 |
-| DAC_D5 | 9 |
-| DAC_D6 | 10 |
-| DAC_D7 | 11 |
-| OUT_EN | 12 |
-| LINK2_RX | 44 |
+| Signal | GPIO | Note |
+|---|---|---|
+| DAC_D0 | 4 | |
+| DAC_D1 | 5 | |
+| DAC_D2 | 6 | |
+| DAC_D3 | 7 | |
+| DAC_D4 | 8 | |
+| DAC_D5 | 9 | |
+| DAC_D6 | 10 | |
+| DAC_D7 | 11 | |
+| OUT_EN | 12 | 10k pull-down, output off at boot |
+| LINK2_RX | 44 | U0RXD, use UART1 |
 
 Spare: 1, 2, 13, 14, 15, 16, 17, 18, 21, 38, 39, 40, 41, 42, 43, 47, 48
 
+### Reserved on all three boards
 
-GPIO48 drives the onboard RGB LED. On board 1 that is the ARM status LED.
-On board 2 it carries LINK2_TX, so the LED flickers with generator traffic.
+| Range | Why |
+|---|---|
+| 26-32 | SPI flash |
+| 33-37 | octal PSRAM (N16R8) |
+| 19-20 | native USB Serial/JTAG |
+| 0, 3, 45, 46 | strapping |
+
+Leaves 27 usable: 1, 2, 4-18, 21, 38-44, 47, 48.
+
 
 LINK2 is TX only. Board 2 sends generator settings and gets nothing back.
 That is what makes board 2 fit in 27 pins.
+
+Every GPIO comes out of reset as an input with no pull. Both ADC chip
+selects need a 10k pull-up so the converters are deselected before firmware
+runs, and OUT_EN needs a 10k pull-down so the generator output is off at
+boot.
+
+GPIO39-42 are the external JTAG pins. Using them as GPIO means no external
+JTAG adapter. The built-in USB JTAG does not use them, so debugging over
+USB is unaffected.
+
+GPIO43/44 are UART0's default pins. Route the inter-board links through
+UART1 and put the console on USB Serial/JTAG
+(CONFIG_ESP_CONSOLE_USB_SERIAL_JTAG), or the boot log goes out the link
+cable. UART0 download mode is gone either way.
+
+Board 3 DAC_D0-D7 sit on GPIO4-11, contiguous inside the GPIO_OUT register
+(GPIO0-31). All eight bits write in one masked register write. Keep them in
+that range if this gets rearranged.
+
+GPIO48 is the onboard WS2812, an addressable LED, not a plain one. On board
+1 it is the status LED. On board 2 it shares TOUCH_RESET, which asserts once
+at startup, so the LED stays quiet.
+
+Acquisition sheet. Both ADS7883s on separate SPI hosts, encoders,
+buttons, LEDs, LINK1 header.
+
+Pull-ups on both CS lines. Every GPIO floats until firmware sets it
+up, so without them the ADCs could think they're selected at boot.

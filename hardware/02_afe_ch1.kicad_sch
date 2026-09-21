@@ -3662,28 +3662,28 @@
 			)
 		)
 		(pin "6"
-			(uuid "9f24c6c1-196e-4741-8d69-4e39d2d0b141")
+			(uuid "9f24c6c1-196e-4741-8d69-4e39d2d0b142")
 		)
 		(pin "1"
 			(uuid "0c1766b4-c449-427a-8430-9266a9fbcf48")
 		)
 		(pin "8"
-			(uuid "fa5a8f79-6efc-4e7e-90fe-b8c7f32070e9")
+			(uuid "fa5a8f79-6efc-4e7e-90fe-b8c7f32070ea")
 		)
 		(pin "2"
 			(uuid "b5aae7f8-fa26-4ea1-9c75-e5831c251ab9")
 		)
 		(pin "4"
-			(uuid "a56f13b0-cb61-4086-890d-fab1f48e7ef6")
+			(uuid "a56f13b0-cb61-4086-890d-fab1f48e7ef7")
 		)
 		(pin "5"
-			(uuid "fe10c9ef-9d19-47e7-8875-5ec80680efbf")
+			(uuid "fe10c9ef-9d19-47e7-8875-5ec80680efc0")
 		)
 		(pin "3"
 			(uuid "45b43e27-ffb1-4889-bd9d-3a0b9308065b")
 		)
 		(pin "7"
-			(uuid "0d650ba5-1ec7-4304-98ee-c12a0dceebc2")
+			(uuid "0d650ba5-1ec7-4304-98ee-c12a0dceebc3")
 		)
 		(instances
 			(project "oscil"

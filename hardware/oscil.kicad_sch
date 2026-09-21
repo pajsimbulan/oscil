@@ -12,6 +12,106 @@
 		(comment 2 "ESP32-S3 / ESP-IDF / FreeRTOS")
 	)
 	(lib_symbols)
+	(wire
+		(pts
+			(xy 90.17 118.11) (xy 90.17 152.4)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0aa1cf11-9427-4c51-8325-23c0f4233120")
+	)
+	(wire
+		(pts
+			(xy 294.64 88.9) (xy 290.83 88.9)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2e09d9ca-6a31-4d3e-9360-da52bf5cc266")
+	)
+	(wire
+		(pts
+			(xy 220.98 87.63) (xy 220.98 118.11)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3c4cb7ee-5fdf-4378-aeb5-a993c7f861c1")
+	)
+	(wire
+		(pts
+			(xy 217.17 87.63) (xy 220.98 87.63)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "4179af5a-b6e6-460a-b122-c489f75e1ccb")
+	)
+	(wire
+		(pts
+			(xy 294.64 120.65) (xy 294.64 88.9)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5ebf3719-8890-4c54-ac42-228eeecabc7c")
+	)
+	(wire
+		(pts
+			(xy 90.17 152.4) (xy 93.98 152.4)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6985c7cc-39f9-4418-8a53-52e323c2b67a")
+	)
+	(wire
+		(pts
+			(xy 93.98 160.02) (xy 86.36 160.02)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "71f90780-a71e-4b0c-b442-a43d463a9ecd")
+	)
+	(wire
+		(pts
+			(xy 86.36 160.02) (xy 86.36 120.65)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e364ac52-1067-4bbb-8148-ae57d6aada6c")
+	)
+	(wire
+		(pts
+			(xy 220.98 118.11) (xy 90.17 118.11)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f8af3e06-cbc4-4f12-983b-97c0fab86568")
+	)
+	(wire
+		(pts
+			(xy 86.36 120.65) (xy 294.64 120.65)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ffd058d9-cdef-4111-ace7-c19770bbb04d")
+	)
 	(sheet
 		(at 240.03 69.85)
 		(size 50.8 38.1)
@@ -104,6 +204,46 @@
 					(size 1.27 1.27)
 				)
 				(justify left top)
+			)
+		)
+		(pin "CH1_ANALOG" output
+			(at 93.98 152.4 180)
+			(uuid "09cd1061-848c-4cb2-9f9a-a19e1cfb8d53")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "CH2_ANALOG" output
+			(at 93.98 160.02 180)
+			(uuid "a53afc97-9dec-4189-8921-a3eaf0777c6f")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "LINK1_RX" input
+			(at 144.78 153.67 0)
+			(uuid "7c3a4495-eb9f-4ef1-954b-931ad78ecc77")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(pin "LINK1_TX" output
+			(at 144.78 160.02 0)
+			(uuid "25dbd074-5882-48d8-9076-5d07439e0f3a")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
 			)
 		)
 		(instances
