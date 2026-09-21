@@ -87,3 +87,95 @@ sheet exists.
 
 Copied ch1 to ch2. Designators auto-incremented, but the notes carry
 part numbers so those had to be retyped.
+
+# Pin map
+
+First pass. Verify against the Lonely Binary header diagram before wiring.
+
+## Board 1, acquisition
+
+| Signal | GPIO |
+|---|---|
+| CH1_SCLK | 12 |
+| CH1_SDO | 13 |
+| CH1_CS | 10 |
+| CH2_SCLK | 15 |
+| CH2_SDO | 16 |
+| CH2_CS | 17 |
+| ENC1_A | 4 |
+| ENC1_B | 5 |
+| ENC1_SW | 6 |
+| ENC2_A | 7 |
+| ENC2_B | 8 |
+| ENC2_SW | 9 |
+| ENC3_A | 18 |
+| ENC3_B | 21 |
+| ENC3_SW | 38 |
+| BTN_RUN | 39 |
+| BTN_SINGLE | 40 |
+| BTN_GEN | 41 |
+| LED_RUN | 42 |
+| LED_TRIG | 47 |
+| LED_ARM | 48 |
+| LINK1_TX | 43 |
+| LINK1_RX | 44 |
+
+Spare: 1, 2, 11, 14
+
+## Board 2, display and hub
+
+| Signal | GPIO |
+|---|---|
+| LCD_R3 | 1 |
+| LCD_R4 | 2 |
+| LCD_R5 | 4 |
+| LCD_R6 | 5 |
+| LCD_R7 | 6 |
+| LCD_G2 | 7 |
+| LCD_G3 | 8 |
+| LCD_G4 | 9 |
+| LCD_G5 | 10 |
+| LCD_G6 | 11 |
+| LCD_G7 | 12 |
+| LCD_B3 | 13 |
+| LCD_B4 | 14 |
+| LCD_B5 | 15 |
+| LCD_B6 | 16 |
+| LCD_B7 | 17 |
+| LCD_DCLK | 18 |
+| LCD_HSYNC | 21 |
+| LCD_VSYNC | 38 |
+| LCD_DE | 39 |
+| TOUCH_SDA | 40 |
+| TOUCH_SCL | 41 |
+| TOUCH_INT | 42 |
+| TOUCH_RESET | 47 |
+| LINK1_TX | 43 |
+| LINK1_RX | 44 |
+| LINK2_TX | 48 |
+
+Spare: none
+
+## Board 3, generator
+
+| Signal | GPIO |
+|---|---|
+| DAC_D0 | 4 |
+| DAC_D1 | 5 |
+| DAC_D2 | 6 |
+| DAC_D3 | 7 |
+| DAC_D4 | 8 |
+| DAC_D5 | 9 |
+| DAC_D6 | 10 |
+| DAC_D7 | 11 |
+| OUT_EN | 12 |
+| LINK2_RX | 44 |
+
+Spare: 1, 2, 13, 14, 15, 16, 17, 18, 21, 38, 39, 40, 41, 42, 43, 47, 48
+
+
+GPIO48 drives the onboard RGB LED. On board 1 that is the ARM status LED.
+On board 2 it carries LINK2_TX, so the LED flickers with generator traffic.
+
+LINK2 is TX only. Board 2 sends generator settings and gets nothing back.
+That is what makes board 2 fit in 27 pins.

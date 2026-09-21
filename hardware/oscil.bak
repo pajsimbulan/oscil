@@ -1073,10 +1073,10 @@
 		)
 		(symbol "ESP32-S3-N16R8-DEVBOARD_1_1"
 			(text "RESERVED, do not use as GPIO:\nGPIO26-32 SPI flash\nGPIO33-37 octal PSRAM (N16R8)\nGPIO19-20 native USB / USB-JTAG\nSTRAPPING, use with care: GPIO0, 3, 45, 46\nSource: ESP32-S3 Series Datasheet, Boot Configurations\n"
-				(at 50.292 -31.242 0)
+				(at 1.016 -34.036 0)
 				(effects
 					(font
-						(size 1.27 1.27)
+						(size 0.635 0.635)
 					)
 				)
 			)
