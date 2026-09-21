@@ -84,3 +84,6 @@ inputs floating, which on a CMOS part means the output sits on a rail.
 
 One ERC error left, CH1_ANALOG has nowhere to go until the acquisition
 sheet exists.
+
+Copied ch1 to ch2. Designators auto-incremented, but the notes carry
+part numbers so those had to be retyped.
