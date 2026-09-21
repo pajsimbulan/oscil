@@ -230,3 +230,12 @@ Board 2's 3V3 regulator feeds the panel and touch, not +3V3_A.
 
 Crossed LINK1 on the root sheet by pin order, TX opposite RX, so
 the wires run straight.
+
+Generator sheet. 8-bit R-2R ladder off GPIO4-11, Sallen-Key filter,
+51R out to the BNC.
+
+The ladder's own 10k output impedance is the filter's first resistor,
+so one op-amp does filter and buffer.
+
+Dropped OUT_EN from the pin map. Nothing to switch, and the ladder
+already sits at 0V at boot through the terminator.

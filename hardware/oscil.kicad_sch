@@ -94,6 +94,16 @@
 	)
 	(wire
 		(pts
+			(xy 218.44 153.67) (xy 238.76 153.67)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ceec0029-d60f-47bd-94f9-f3ee24e9b202")
+	)
+	(wire
+		(pts
 			(xy 86.36 160.02) (xy 86.36 120.65)
 		)
 		(stroke
@@ -412,6 +422,16 @@
 					(size 1.27 1.27)
 				)
 				(justify left top)
+			)
+		)
+		(pin "LINK2_RX" input
+			(at 238.76 153.67 180)
+			(uuid "7e6ea74b-437d-4912-9863-e8639aa670cd")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
 			)
 		)
 		(instances
