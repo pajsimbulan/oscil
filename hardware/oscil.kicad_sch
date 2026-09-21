@@ -188,6 +188,16 @@
 				(justify left top)
 			)
 		)
+		(pin "CH1_ANALOG" output
+			(at 217.17 87.63 0)
+			(uuid "34deb93f-e503-48bd-ac59-f0cbc32503bd")
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
 		(instances
 			(project "oscil"
 				(path "/c207b121-aeb4-4662-bb5d-c71f93f47474"

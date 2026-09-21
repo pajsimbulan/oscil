@@ -75,3 +75,12 @@ Buffer on ch1. MCP6292 as a follower off the divider junction.
 
 The divider is 188k out. The ADS7883 wants under 200 ohm, so the
 buffer isn't optional.
+
+Filter and sheet exit on ch1. 150R with two 2.2nF C0G in parallel,
+241kHz corner. C0G because X7R shifts with temperature and DC bias.
+
+Tied off U3B as a grounded follower. No-connects would have left the
+inputs floating, which on a CMOS part means the output sits on a rail.
+
+One ERC error left, CH1_ANALOG has nowhere to go until the acquisition
+sheet exists.
