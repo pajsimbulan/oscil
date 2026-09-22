@@ -1,0 +1,14 @@
+# ESP-IDF build output, one build/ per project
+firmware/**/build/
+firmware/**/managed_components/
+
+# Generated from sdkconfig.defaults. Commit the defaults, never this.
+firmware/**/sdkconfig
+firmware/**/sdkconfig.old
+
+# Editors and OS
+.history/
+.vscode/
+Thumbs.db
+desktop.ini
+.DS_Store
