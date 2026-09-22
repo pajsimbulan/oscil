@@ -6,8 +6,8 @@
 	(paper "A4")
 	(title_block
 		(title "Oscil")
-		(date "2026-09-18")
-		(rev "0.1")
+		(date "2026-09-21")
+		(rev "A")
 		(comment 1 "Two-channel Digital Oscilloscope and Function Generator")
 		(comment 2 "ESP32-S3 / ESP-IDF / FreeRTOS")
 	)
@@ -2133,7 +2133,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_Coaxial:BNC_PanelMountable_Vertical"
 			(at 38.1 40.64 0)
 			(hide yes)
 			(show_name no)
@@ -2293,7 +2293,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_Trimmer_Murata_TZB4-A"
 			(at 77.47 44.45 0)
 			(hide yes)
 			(show_name no)
@@ -2530,7 +2530,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm"
+		(property "Footprint" "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm"
 			(at 150.8252 54.61 0)
 			(hide yes)
 			(show_name no)
@@ -2610,7 +2610,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Package_TO_SOT_SMD:SOT-353_SC-70-5"
+		(property "Footprint" "Package_DIP:DIP-8_W7.62mm"
 			(at 157.48 81.28 0)
 			(hide yes)
 			(show_name no)
@@ -2869,7 +2869,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Package_TO_SOT_SMD:SOT-353_SC-70-5"
+		(property "Footprint" "Package_DIP:DIP-8_W7.62mm"
 			(at 123.19 71.12 0)
 			(hide yes)
 			(show_name no)
@@ -3129,7 +3129,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 			(at 142.24 48.768 90)
 			(hide yes)
 			(show_name no)
@@ -3375,7 +3375,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 			(at 60.452 60.96 90)
 			(hide yes)
 			(show_name no)
@@ -3544,7 +3544,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Package_TO_SOT_SMD:SOT-353_SC-70-5"
+		(property "Footprint" "Package_DIP:DIP-8_W7.62mm"
 			(at 124.46 46.99 0)
 			(hide yes)
 			(show_name no)
@@ -3728,7 +3728,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_SMD:C_Trimmer_Murata_TZB4-A"
 			(at 77.47 60.96 0)
 			(hide yes)
 			(show_name no)
@@ -3888,7 +3888,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm"
+		(property "Footprint" "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm"
 			(at 130.5052 76.2 0)
 			(hide yes)
 			(show_name no)
@@ -4048,7 +4048,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 			(at 60.452 45.72 90)
 			(hide yes)
 			(show_name no)
@@ -4140,7 +4140,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm"
+		(property "Footprint" "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm"
 			(at 158.4452 54.61 0)
 			(hide yes)
 			(show_name no)

@@ -6,10 +6,12 @@
 	(paper "A4")
 	(title_block
 		(title "Oscil")
-		(date "2026-09-18")
-		(rev "0.1")
+		(date "2026-09-21")
+		(rev "A")
+		(company "Paul Simbulan")
 		(comment 1 "Two-channel Digital Oscilloscope and Function Generator")
 		(comment 2 "ESP32-S3 / ESP-IDF / FreeRTOS")
+		(comment 3 "Rev A: breadboard build on ESP32-S3 dev boards")
 	)
 	(lib_symbols
 		(symbol "Amplifier_Operational:Opamp_Dual"
@@ -1541,6 +1543,12 @@
 		(uuid "9adcb04c-058a-43ac-9c92-97039e4db52b")
 	)
 	(junction
+		(at 93.98 59.69)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "b1dc3688-7ec1-4b5e-b551-af6d30e87547")
+	)
+	(junction
 		(at 144.78 68.58)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -1750,6 +1758,16 @@
 	)
 	(wire
 		(pts
+			(xy 93.98 59.69) (xy 97.79 59.69)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "87c7f1b2-f00d-47d7-a84f-6574bed8d99f")
+	)
+	(wire
+		(pts
 			(xy 144.78 68.58) (xy 153.67 68.58)
 		)
 		(stroke
@@ -1830,7 +1848,7 @@
 	)
 	(wire
 		(pts
-			(xy 91.44 59.69) (xy 97.79 59.69)
+			(xy 91.44 59.69) (xy 93.98 59.69)
 		)
 		(stroke
 			(width 0)
@@ -1867,6 +1885,16 @@
 			(type default)
 		)
 		(uuid "c569c92c-ff1f-4a72-bdca-66786343afbd")
+	)
+	(wire
+		(pts
+			(xy 93.98 53.34) (xy 93.98 59.69)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c5e735b0-c278-44f4-b573-aa28a527dbb8")
 	)
 	(wire
 		(pts
@@ -1927,6 +1955,16 @@
 			(type default)
 		)
 		(uuid "f77fade6-829b-460a-b47d-8eaba4d690d2")
+	)
+	(label "+5V_A"
+		(at 93.98 53.34 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "d24a25ef-1656-4b5b-b783-d0e8c6f5870b")
 	)
 	(global_label "VREF_2V2"
 		(shape output)
@@ -2069,7 +2107,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm"
 			(at 92.4052 67.31 0)
 			(hide yes)
 			(show_name no)
@@ -2385,7 +2423,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm"
 			(at 122.8852 67.31 0)
 			(hide yes)
 			(show_name no)
@@ -2467,7 +2505,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Connector_RJ:RJ45_Abracon_ARJP11A-MA_Horizontal"
+		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical"
 			(at 55.88 62.23 0)
 			(hide yes)
 			(show_name no)
@@ -2625,7 +2663,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Package_TO_SOT_SMD:SOT-353_SC-70-5"
+		(property "Footprint" "Package_DIP:DIP-8_W7.62mm"
 			(at 228.6 71.12 0)
 			(hide yes)
 			(show_name no)
@@ -2888,7 +2926,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 			(at 143.002 63.5 90)
 			(hide yes)
 			(show_name no)
@@ -3046,7 +3084,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Package_TO_SOT_SMD:SOT-353_SC-70-5"
+		(property "Footprint" "Package_DIP:DIP-8_W7.62mm"
 			(at 161.29 71.12 0)
 			(hide yes)
 			(show_name no)
@@ -3539,7 +3577,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Package_TO_SOT_THT:TO-92_Inline"
+		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 			(at 86.36 61.468 90)
 			(hide yes)
 			(show_name no)
@@ -3698,7 +3736,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm"
 			(at 199.0852 80.01 0)
 			(hide yes)
 			(show_name no)
@@ -3779,7 +3817,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm"
 			(at 134.3152 77.47 0)
 			(hide yes)
 			(show_name no)
@@ -3940,7 +3978,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 			(at 143.002 72.39 90)
 			(hide yes)
 			(show_name no)
@@ -4175,7 +4213,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Package_TO_SOT_SMD:SOT-353_SC-70-5"
+		(property "Footprint" "Package_DIP:DIP-8_W7.62mm"
 			(at 190.5 72.39 0)
 			(hide yes)
 			(show_name no)

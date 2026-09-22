@@ -6,8 +6,8 @@
 	(paper "A4")
 	(title_block
 		(title "Oscil")
-		(date "2026-09-18")
-		(rev "0.1")
+		(date "2026-09-21")
+		(rev "A")
 		(comment 1 "Two-channel Digital Oscilloscope and Function Generator")
 		(comment 2 "ESP32-S3 / ESP-IDF / FreeRTOS")
 	)
@@ -4908,7 +4908,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Rotary_Encoder:RotaryEncoder_Bourns_Horizontal_PEC09-2xxxF-Sxxxx"
 			(at 231.14 61.976 0)
 			(hide yes)
 			(show_name no)
@@ -4997,7 +4997,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Button_Switch_THT:SW_NKK_GW12LJP"
+		(property "Footprint" "Button_Switch_THT:SW_PUSH_6mm"
 			(at 254 93.98 0)
 			(hide yes)
 			(show_name no)
@@ -5233,7 +5233,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 			(at 166.37 61.468 90)
 			(hide yes)
 			(show_name no)
@@ -5313,7 +5313,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Button_Switch_THT:SW_NKK_GW12LJP"
+		(property "Footprint" "Button_Switch_THT:SW_PUSH_6mm"
 			(at 254 106.68 0)
 			(hide yes)
 			(show_name no)
@@ -5393,7 +5393,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 			(at 204.47 113.538 90)
 			(hide yes)
 			(show_name no)
@@ -5708,7 +5708,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm"
 			(at 120.3452 40.64 0)
 			(hide yes)
 			(show_name no)
@@ -5866,7 +5866,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Button_Switch_THT:SW_NKK_GW12LJP"
+		(property "Footprint" "Button_Switch_THT:SW_PUSH_6mm"
 			(at 254 81.28 0)
 			(hide yes)
 			(show_name no)
@@ -5947,7 +5947,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm"
 			(at 120.3452 101.6 0)
 			(hide yes)
 			(show_name no)
@@ -6029,7 +6029,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector:FanPinHeader_1x03_P2.54mm_Vertical"
 			(at 240.03 137.16 0)
 			(hide yes)
 			(show_name no)
@@ -6425,7 +6425,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "LED_THT:LED_D5.0mm"
 			(at 214.63 111.76 0)
 			(hide yes)
 			(show_name no)
@@ -6516,7 +6516,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 			(at 168.91 122.428 90)
 			(hide yes)
 			(show_name no)
@@ -6596,7 +6596,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Rotary_Encoder:RotaryEncoder_Bourns_Horizontal_PEC09-2xxxF-Sxxxx"
 			(at 231.14 22.606 0)
 			(hide yes)
 			(show_name no)
@@ -6868,7 +6868,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 			(at 204.47 100.838 90)
 			(hide yes)
 			(show_name no)
@@ -6948,7 +6948,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "LED_THT:LED_D5.0mm"
 			(at 214.63 99.06 0)
 			(hide yes)
 			(show_name no)
@@ -7196,7 +7196,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Rotary_Encoder:RotaryEncoder_Bourns_Horizontal_PEC09-2xxxF-Sxxxx"
 			(at 231.14 41.656 0)
 			(hide yes)
 			(show_name no)
@@ -7286,7 +7286,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm"
 			(at 125.4252 101.6 0)
 			(hide yes)
 			(show_name no)
@@ -7444,7 +7444,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 			(at 204.47 86.868 90)
 			(hide yes)
 			(show_name no)
@@ -8096,7 +8096,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "LED_THT:LED_D5.0mm"
 			(at 214.63 85.09 0)
 			(hide yes)
 			(show_name no)
@@ -8265,7 +8265,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm"
 			(at 125.4252 40.64 0)
 			(hide yes)
 			(show_name no)

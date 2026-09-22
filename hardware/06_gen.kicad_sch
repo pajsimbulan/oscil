@@ -6,8 +6,8 @@
 	(paper "A4")
 	(title_block
 		(title "Oscil")
-		(date "2026-09-18")
-		(rev "0.1")
+		(date "2026-09-21")
+		(rev "A")
 		(comment 1 "Two-channel Digital Oscilloscope and Function Generator")
 		(comment 2 "ESP32-S3 / ESP-IDF / FreeRTOS")
 	)
@@ -3661,7 +3661,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 			(at 121.92 135.382 90)
 			(hide yes)
 			(show_name no)
@@ -3821,7 +3821,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 			(at 109.982 129.54 90)
 			(hide yes)
 			(show_name no)
@@ -3903,7 +3903,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 			(at 28.702 129.54 90)
 			(hide yes)
 			(show_name no)
@@ -3985,7 +3985,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" "Package_LCC:PLCC-44_16.6x16.6mm_P1.27mm"
+		(property "Footprint" "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical"
 			(at 166.37 90.17 0)
 			(hide yes)
 			(show_name no)
@@ -4145,7 +4145,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 			(at 69.342 129.54 90)
 			(hide yes)
 			(show_name no)
@@ -4225,7 +4225,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 			(at 236.22 141.478 90)
 			(hide yes)
 			(show_name no)
@@ -4383,7 +4383,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 			(at 40.64 135.382 90)
 			(hide yes)
 			(show_name no)
@@ -4540,7 +4540,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Package_TO_SOT_SMD:SOT-353_SC-70-5"
+		(property "Footprint" "Package_DIP:DIP-8_W7.62mm"
 			(at 228.6 95.25 0)
 			(hide yes)
 			(show_name no)
@@ -4724,7 +4724,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm"
 			(at 239.7252 97.79 0)
 			(hide yes)
 			(show_name no)
@@ -4884,7 +4884,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Connector_Coaxial:BNC_PanelMountable_Vertical"
 			(at 247.65 139.7 0)
 			(hide yes)
 			(show_name no)
@@ -4964,7 +4964,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 			(at 162.56 135.382 90)
 			(hide yes)
 			(show_name no)
@@ -5046,7 +5046,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 			(at 49.022 129.54 90)
 			(hide yes)
 			(show_name no)
@@ -5128,7 +5128,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 			(at 89.662 129.54 90)
 			(hide yes)
 			(show_name no)
@@ -5416,7 +5416,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 			(at 170.942 129.54 90)
 			(hide yes)
 			(show_name no)
@@ -5496,7 +5496,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm"
 			(at 191.77 123.4948 0)
 			(hide yes)
 			(show_name no)
@@ -5578,7 +5578,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 			(at 130.302 129.54 90)
 			(hide yes)
 			(show_name no)
@@ -5738,7 +5738,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 			(at 28.702 143.51 90)
 			(hide yes)
 			(show_name no)
@@ -5896,7 +5896,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 			(at 101.6 135.382 90)
 			(hide yes)
 			(show_name no)
@@ -5978,7 +5978,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Capacitor_THT:C_Disc_D5.0mm_W2.5mm_P5.00mm"
 			(at 196.5452 146.05 0)
 			(hide yes)
 			(show_name no)
@@ -6058,7 +6058,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 			(at 60.96 135.382 90)
 			(hide yes)
 			(show_name no)
@@ -6138,7 +6138,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Package_TO_SOT_SMD:SOT-353_SC-70-5"
+		(property "Footprint" "Package_DIP:DIP-8_W7.62mm"
 			(at 220.98 139.7 0)
 			(hide yes)
 			(show_name no)
@@ -6398,7 +6398,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 			(at 142.24 135.382 90)
 			(hide yes)
 			(show_name no)
@@ -6478,7 +6478,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 			(at 81.28 135.382 90)
 			(hide yes)
 			(show_name no)
@@ -6714,7 +6714,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Package_TO_SOT_SMD:SOT-353_SC-70-5"
+		(property "Footprint" "Package_DIP:DIP-8_W7.62mm"
 			(at 195.58 92.71 0)
 			(hide yes)
 			(show_name no)
@@ -6898,7 +6898,7 @@
 				(justify left)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 			(at 150.622 129.54 90)
 			(hide yes)
 			(show_name no)
@@ -6978,7 +6978,7 @@
 				)
 			)
 		)
-		(property "Footprint" ""
+		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
 			(at 187.96 135.382 90)
 			(hide yes)
 			(show_name no)
