@@ -14,7 +14,7 @@
 	(lib_symbols)
 	(text "Footprints assigned for BOM and Rev B. Dev board, LCD\nconnector and GT911 have none: Rev A uses the modules\ndirectly on a breadboard."
 		(exclude_from_sim no)
-		(at 99.822 196.85 0)
+		(at 190.246 197.866 0)
 		(effects
 			(font
 				(size 1.27 1.27)
