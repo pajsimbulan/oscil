@@ -6,7 +6,7 @@ breadboards: one acquires, one drives the display, one generates signals.
 **[Schematic PDF, Rev A](docs/Oscil-Schematic-RevA-05-Final.pdf)**
 · [Pin map](docs/pin-map.md)
 · [BOM](../Oscil_bill_of_materials_bom.xlsx)
-· [Datasheets](datasheets/)
+· [Datasheets](../datasheets/)
 
 Status: schematic complete, ERC clean. Breadboard bring-up is next.
 
