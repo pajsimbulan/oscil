@@ -4,11 +4,17 @@
 
 ESP32-S3 · ESP-IDF · FreeRTOS · Supabase
 
-![status](https://img.shields.io/badge/status-design%20phase-orange)
-![rev](https://img.shields.io/badge/design-Rev%200.1-blue)
+![status](https://img.shields.io/badge/status-firmware%20bring--up-yellow)
+![hardware](https://img.shields.io/badge/hardware-Rev%20A-blue)
 ![platform](https://img.shields.io/badge/platform-ESP32--S3-informational)
 
-> **Rev 0.1 — design phase.** Requirements and architecture are drafted; hardware is on order. Nothing is built yet.
+>> **Hardware Rev A done, firmware started.** The schematic is complete and
+> ERC clean. Breadboard bring-up and firmware happen together from here.
+
+| Folder | What's in it |
+|---|---|
+| [`hardware/`](hardware/) | Rev A schematic, pin map, build log |
+| [`firmware/`](firmware/) | One ESP-IDF project per board, plus shared code |
 
 ---
 
@@ -79,6 +85,7 @@ PNG versions of each diagram are in [`screenshots/`](screenshots/).
 | Rev | Date | Change |
 |---|---|---|
 | 0.1 | 2026-09-16 | Initial design: use cases, requirements, architecture. Nothing built. |
+| 0.2 | 2026-09-22 | Hardware Rev A schematic complete. Firmware started. |
 
 ---
 
