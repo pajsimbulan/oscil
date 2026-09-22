@@ -12,5 +12,5 @@ typedef struct {
 #define OSCIL_AFE_CAL_NOMINAL {.gain = 4.0f, .offset_v = 1.65f, .vref = 3.3f}
 #define OSCIL_ADC_CODES 4096u
 
-float oscil_afe_code_to_voltes(uint16_t code, const oscil_afe_cal_t *cal);
+float oscil_afe_code_to_volts(uint16_t code, const oscil_afe_cal_t *cal);
 uint16_t  oscil_afe_volts_to_code(float volts, const oscil_afe_cal_t *cal);

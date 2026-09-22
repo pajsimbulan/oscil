@@ -12,3 +12,6 @@ firmware/**/sdkconfig.old
 Thumbs.db
 desktop.ini
 .DS_Store
+
+# Generated PC test build
+/build-host/
