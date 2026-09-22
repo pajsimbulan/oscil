@@ -7,6 +7,7 @@ ESP32-S3 · ESP-IDF · FreeRTOS · Supabase
 ![status](https://img.shields.io/badge/status-firmware%20bring--up-yellow)
 ![hardware](https://img.shields.io/badge/hardware-Rev%20A-blue)
 ![platform](https://img.shields.io/badge/platform-ESP32--S3-informational)
+![firmware](https://github.com/pajsimbulan/oscil/actions/workflows/firmware.yml/badge.svg)
 
 >> **Hardware Rev A done, firmware started.** The schematic is complete and
 > ERC clean. Breadboard bring-up and firmware happen together from here.
