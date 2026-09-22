@@ -13,3 +13,13 @@ in earlier lab work, so each build gets checked against sdkconfig.
 
 Pin numbers from pin-map.md are in a header per board. Firmware
 never uses a raw GPIO number.
+
+AFE scaling in shared. The divider bottom sits on 2.2 V instead of
+ground, so 0 V at the BNC reads 1.65 V at the ADC. Vbnc = 4 x (Vadc - 1.65).
+
+First build couldn't find oscil_pins_acq.h. An include path would've
+found the header but not compiled the .c, so shared is a real component
+now. Also caught display and gen still named project(acq).
+
+Host tests with Unity run the real oscil_afe.c on my PC. 4/4 pass.
+They check the math, not the hardware.
