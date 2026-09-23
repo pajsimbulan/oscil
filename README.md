@@ -22,10 +22,10 @@ ESP32-S3 · ESP-IDF · FreeRTOS · Supabase
 ## Contents
 
 - [Use cases / functionality](#use-cases--functionality)
+- [Architecture](#architecture)
 - [Hardware requirements](#hardware-requirements)
 - [Firmware requirements](#firmware-requirements)
 - [Software requirements](#software-requirements)
-- [Architecture](#architecture)
 - [Design documents](#design-documents)
 
 ---
@@ -35,6 +35,14 @@ ESP32-S3 · ESP-IDF · FreeRTOS · Supabase
 What a user can do with Oscil.
 
 ![Use cases and functionality](screenshots/use_case_functionality_svg.svg)
+
+---
+
+## Architecture
+
+Three ESP32-S3 boards (acquisition, display, generator) linked over UART, with Supabase as the backend.
+
+![Architecture](screenshots/architecture_screenshort_svg.svg)
 
 ---
 
@@ -62,13 +70,6 @@ The cloud side: accounts, screenshot metadata, and file storage on Supabase.
 
 ---
 
-## Architecture
-
-Three ESP32-S3 boards (acquisition, display, generator) linked over UART, with Supabase as the backend.
-
-![Architecture](screenshots/architecture_screenshort_svg.svg)
-
----
 
 ## Design documents
 
