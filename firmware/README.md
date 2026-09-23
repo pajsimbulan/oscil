@@ -33,7 +33,7 @@ From the ESP-IDF terminal, in a board folder:
 | 01 | Host tests for the AFE math, CI on every push | Done |
 | 02 | All three boards flash and report 16 MB flash, 8 MB PSRAM, 1 kHz tick | Done |
 | 03 | Register-level GPIO, bit-banged WS2812 heartbeat on all three | Done |
-| 04 | Pin walk: every GPIO checked against the schematic on the analyzer | Board 1 done |
+| 04 | Pin walk: every GPIO checked against the schematic on the analyzer | Boards 1 and 2 done |
 
 ---
 

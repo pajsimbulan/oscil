@@ -112,3 +112,62 @@ Batch 4:
 | D1 | 20 | 14 | spare | 26 | ✓ |
 
 ![Batch 4: the two spares, 25 and 26](screenshots_videos/pin_walk_board1_batch4_logic_analyzer.png)
+
+Pin walk on board 2. Same 26-pin idea, same header order as board 1, so
+the analyzer wiring for each batch didn't change between boards. Every
+count matched. GPIO48 stays off the list: it's the status LED now and
+the touch reset later, so it gets checked when the touch panel goes on.
+
+Batch 1:
+
+| Ch | Header | GPIO | Signal | Pulses | Seen |
+|---|---|---|---|---|---|
+| D0 | 4 | 4 | LCD_R5 | 1 | ✓ |
+| D1 | 5 | 5 | LCD_R6 | 2 | ✓ |
+| D2 | 6 | 6 | LCD_R7 | 3 | ✓ |
+| D3 | 7 | 7 | LCD_G2 | 4 | ✓ |
+| D4 | 12 | 8 | LCD_G3 | 5 | ✓ |
+| D5 | 15 | 9 | LCD_G4 | 6 | ✓ |
+| D6 | 8 | 15 | LCD_B5 | 7 | ✓ |
+| D7 | 9 | 16 | LCD_B6 | 8 | ✓ |
+
+![Board 2 batch 1: 1 to 8 pulses, red and green data lines](screenshots_videos/pin_walk_board2_batch1_logic_analyzer.png)
+
+Batch 2:
+
+| Ch | Header | GPIO | Signal | Pulses | Seen |
+|---|---|---|---|---|---|
+| D0 | 10 | 17 | LCD_B7 | 9 | ✓ |
+| D1 | 16 | 10 | LCD_G5 | 10 | ✓ |
+| D2 | 11 | 18 | LCD_DCLK | 11 | ✓ |
+| D3 | 18 | 12 | LCD_G7 | 12 | ✓ |
+| D4 | 19 | 13 | LCD_B3 | 13 | ✓ |
+| D5 | 27 | 21 | LCD_HSYNC | 14 | ✓ |
+| D6 | 35 | 38 | LCD_VSYNC | 15 | ✓ |
+| D7 | 36 | 39 | LCD_DE | 16 | ✓ |
+
+![Board 2 batch 2: 9 to 16 pulses, the rest of the RGB bus and its sync lines](screenshots_videos/pin_walk_board2_batch2_logic_analyzer.png)
+
+Batch 3:
+
+| Ch | Header | GPIO | Signal | Pulses | Seen |
+|---|---|---|---|---|---|
+| D0 | 37 | 40 | TOUCH_SDA | 17 | ✓ |
+| D1 | 38 | 41 | TOUCH_SCL | 18 | ✓ |
+| D2 | 39 | 42 | TOUCH_INT | 19 | ✓ |
+| D3 | 28 | 47 | LINK2_TX | 20 | ✓ |
+| D4 | 41 | 1 | LCD_R3 | 21 | ✓ |
+| D5 | 43 (TX) | 43 | LINK1_TX | 22 | ✓ |
+| D6 | 42 (RX) | 44 | LINK1_RX | 23 | ✓ |
+| D7 | 40 | 2 | LCD_R4 | 24 | ✓ |
+
+![Board 2 batch 3: 17 to 24 pulses, touch, both links, two red lines](screenshots_videos/pin_walk_board2_batch3_logic_analyzer.png)
+
+Batch 4:
+
+| Ch | Header | GPIO | Signal | Pulses | Seen |
+|---|---|---|---|---|---|
+| D0 | 17 | 11 | LCD_G6 | 25 | ✓ |
+| D1 | 20 | 14 | LCD_B4 | 26 | ✓ |
+
+![Board 2 batch 4: 25 and 26](screenshots_videos/pin_walk_board2_batch4_logic_analyzer.png)
