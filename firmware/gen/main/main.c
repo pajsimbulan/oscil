@@ -7,8 +7,15 @@
 #include "esp_psram.h"
 #include "oscil_pins_gen.h"
 #include "oscil_status.h"
+#include "oscil_pinwalk.h"
 
 static const char *TAG = "gen";
+static const oscil_pin_t GEN_PINS[] = {
+    { GEN_DAC_D0, "D0" }, { GEN_DAC_D1, "D1" }, { GEN_DAC_D2, "D2" }, { GEN_DAC_D3, "D3" },
+    { GEN_DAC_D4, "D4" }, { GEN_DAC_D5, "D5" }, { GEN_DAC_D6, "D6" }, { GEN_DAC_D7, "D7" },
+    { GEN_LINK2_RX, "LINK2_RX" },
+};
+
 
 void app_main(void)
 {
@@ -28,4 +35,5 @@ void app_main(void)
     ESP_ERROR_CHECK(oscil_status_init(GEN_STATUS_RGB));
     ESP_ERROR_CHECK(oscil_status_start_heartbeat(0,0,16)); //blue
     ESP_LOGI(TAG,"heartbeat on GPIO%d", GEN_STATUS_RGB);
+    test_pinwalk(GEN_PINS, sizeof GEN_PINS / sizeof GEN_PINS[0]);
 }

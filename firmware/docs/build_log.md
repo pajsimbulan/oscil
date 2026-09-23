@@ -171,3 +171,25 @@ Batch 4:
 | D1 | 20 | 14 | LCD_B4 | 26 | ✓ |
 
 ![Board 2 batch 4: 25 and 26](screenshots_videos/pin_walk_board2_batch4_logic_analyzer.png)
+
+Pin walk on board 3. Only nine pins: the eight R-2R bits and LINK2's
+receive line. The DAC bits are the ones that have to be exact, since
+all eight get written in one store to GPIO_OUT later. All eight matched,
+and LINK2_RX on the RX pad showed its 9 pulses. Step 04 done on all
+three boards, 61 pins, no mismatches.
+
+| Ch | Header | GPIO | Signal | Pulses | Seen |
+|---|---|---|---|---|---|
+| D0 | 4 | 4 | DAC_D0 | 1 | ✓ |
+| D1 | 5 | 5 | DAC_D1 | 2 | ✓ |
+| D2 | 6 | 6 | DAC_D2 | 3 | ✓ |
+| D3 | 7 | 7 | DAC_D3 | 4 | ✓ |
+| D4 | 12 | 8 | DAC_D4 | 5 | ✓ |
+| D5 | 15 | 9 | DAC_D5 | 6 | ✓ |
+| D6 | 16 | 10 | DAC_D6 | 7 | ✓ |
+| D7 | 17 | 11 | DAC_D7 | 8 | ✓ |
+| D0 (batch 2) | 42 (RX) | 44 | LINK2_RX | 9 | ✓ |
+
+![Board 3 batch 1: the eight DAC bits, 1 to 8 pulses](screenshots_videos/pin_walk_board3_batch1_logic_analyzer.png)
+
+![Board 3 batch 2: LINK2_RX, 9 pulses](screenshots_videos/pin_walk_board3_batch2_logic_analyzer.png)
