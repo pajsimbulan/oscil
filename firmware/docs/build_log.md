@@ -22,7 +22,8 @@ found the header but not compiled the .c, so shared is a real component
 now. Also caught display and gen still named project(acq).
 
 Host tests with Unity run the real oscil_afe.c on my PC. 4/4 pass.
-They check the math, not the hardware.
+They check the math, not the hardware. CI runs them on every push
+that touches firmware, and the badge on the README shows the result.
 
 Status LED heartbeat on all three boards. GPIO goes through registers
 in oscil_gpio.h, no driver. The WS2812 is bit-banged off the CPU cycle
@@ -40,3 +41,74 @@ still booting an old lab.
 ![After: all three boot, heartbeat on GPIO48](screenshots_videos/heartbeat_test_after_success.png)
 
 [![Three boards blinking, click for video](screenshots_videos/heartbeat_3_mcus.JPG)](screenshots_videos/heartbeat_3_mcus.MP4)
+
+Pin walk on board 1. The first pin in the list pulses once, the second
+twice, and so on, then every pin is read back with the pull-up on.
+26 pins, four batches of eight on the logic analyzer, every count
+matched the schematic header. GPIO43 and 44 are the TX and RX pads
+on the silkscreen, not numbered.
+
+First read pass came back with random 0s. I was reading right after
+turning on the 45k pull-up, and the pin had just been driven low, so it
+hadn't charged yet. Pull-ups on for everything, 10 ms settle, then read:
+all 1s every pass.
+
+Each batch: analyzer GND to header 22, D0 to D7 on eight header pins,
+1 MHz capture. Counting the pulses on a channel tells you which GPIO
+is on that pin.
+
+![Board 1 wired to the analyzer, batch 1](screenshots_videos/pin_walk_mcu1_batch1.JPG)
+
+Batch 1:
+
+| Ch | Header | GPIO | Signal | Pulses | Seen |
+|---|---|---|---|---|---|
+| D0 | 4 | 4 | ENC1_A | 1 | ✓ |
+| D1 | 5 | 5 | ENC1_B | 2 | ✓ |
+| D2 | 6 | 6 | ENC1_SW | 3 | ✓ |
+| D3 | 7 | 7 | ENC2_A | 4 | ✓ |
+| D4 | 12 | 8 | ENC2_B | 5 | ✓ |
+| D5 | 15 | 9 | ENC2_SW | 6 | ✓ |
+| D6 | 8 | 15 | CH2_SCLK | 7 | ✓ |
+| D7 | 9 | 16 | CH2_SDO | 8 | ✓ |
+
+![Batch 1: 1 to 8 pulses](screenshots_videos/pin_walk_board1_batch1_logic_analyzer.png)
+
+Batch 2:
+
+| Ch | Header | GPIO | Signal | Pulses | Seen |
+|---|---|---|---|---|---|
+| D0 | 10 | 17 | CH2_CS | 9 | ✓ |
+| D1 | 16 | 10 | CH1_CS | 10 | ✓ |
+| D2 | 11 | 18 | ENC3_A | 11 | ✓ |
+| D3 | 18 | 12 | CH1_SCLK | 12 | ✓ |
+| D4 | 19 | 13 | CH1_SDO | 13 | ✓ |
+| D5 | 27 | 21 | ENC3_B | 14 | ✓ |
+| D6 | 35 | 38 | ENC3_SW | 15 | ✓ |
+| D7 | 36 | 39 | BTN_RUN | 16 | ✓ |
+
+![Batch 2: 9 to 16 pulses](screenshots_videos/pin_walk_board1_batch2_logic_analyzer.png)
+
+Batch 3:
+
+| Ch | Header | GPIO | Signal | Pulses | Seen |
+|---|---|---|---|---|---|
+| D0 | 37 | 40 | BTN_SINGLE | 17 | ✓ |
+| D1 | 38 | 41 | BTN_GEN | 18 | ✓ |
+| D2 | 39 | 42 | LED_RUN | 19 | ✓ |
+| D3 | 28 | 47 | LED_TRIG | 20 | ✓ |
+| D4 | 41 | 1 | LED_ARM | 21 | ✓ |
+| D5 | 43 (TX) | 43 | LINK1_TX | 22 | ✓ |
+| D6 | 42 (RX) | 44 | LINK1_RX | 23 | ✓ |
+| D7 | 40 | 2 | spare | 24 | ✓ |
+
+![Batch 3: 17 to 24 pulses, TX and RX included](screenshots_videos/pin_walk_board1_batch3_logic_analyzer.png)
+
+Batch 4:
+
+| Ch | Header | GPIO | Signal | Pulses | Seen |
+|---|---|---|---|---|---|
+| D0 | 17 | 11 | spare | 25 | ✓ |
+| D1 | 20 | 14 | spare | 26 | ✓ |
+
+![Batch 4: the two spares, 25 and 26](screenshots_videos/pin_walk_board1_batch4_logic_analyzer.png)

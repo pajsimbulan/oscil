@@ -7,8 +7,22 @@
 #include "esp_psram.h"
 #include "oscil_pins_acq.h"
 #include "oscil_status.h"
+#include "oscil_pinwalk.h"
 
 static const char *TAG = "acq";
+
+static const oscil_pin_t ACQ_PINS[] = {
+    { ACQ_ENC1_A, "ENC1_A" }, { ACQ_ENC1_B, "ENC1_B" }, { ACQ_ENC1_SW, "ENC1_SW" },
+    { ACQ_ENC2_A, "ENC2_A" }, { ACQ_ENC2_B, "ENC2_B" }, { ACQ_ENC2_SW, "ENC2_SW" },
+    { ACQ_CH2_SCLK, "CH2_SCLK" }, { ACQ_CH2_SDO, "CH2_SDO" }, { ACQ_CH2_CS, "CH2_CS" },
+    { ACQ_CH1_CS, "CH1_CS" }, { ACQ_ENC3_A, "ENC3_A" }, { ACQ_CH1_SCLK, "CH1_SCLK" },
+    { ACQ_CH1_SDO, "CH1_SDO" }, { ACQ_ENC3_B, "ENC3_B" }, { ACQ_ENC3_SW, "ENC3_SW" },
+    { ACQ_BTN_RUN, "BTN_RUN" }, { ACQ_BTN_SINGLE, "BTN_SINGLE" }, { ACQ_BTN_GEN, "BTN_GEN" },
+    { ACQ_LED_RUN, "LED_RUN" }, { ACQ_LED_TRIG, "LED_TRIG" }, { ACQ_LED_ARM, "LED_ARM" },
+    { ACQ_LINK1_TX, "LINK1_TX" }, { ACQ_LINK1_RX, "LINK1_RX" },
+    { 2, "spare" }, { 11, "spare" }, { 14, "spare" },
+};
+
 
 void app_main(void)
 {
@@ -28,4 +42,5 @@ void app_main(void)
     ESP_ERROR_CHECK(oscil_status_init(ACQ_STATUS_RGB));
     ESP_ERROR_CHECK(oscil_status_start_heartbeat(0,16,0)); //green
     ESP_LOGI(TAG,"heartbeat on GPIO%d", ACQ_STATUS_RGB);
+    test_pinwalk(ACQ_PINS, sizeof ACQ_PINS / sizeof ACQ_PINS[0]);
 }
