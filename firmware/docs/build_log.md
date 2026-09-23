@@ -23,3 +23,20 @@ now. Also caught display and gen still named project(acq).
 
 Host tests with Unity run the real oscil_afe.c on my PC. 4/4 pass.
 They check the math, not the hardware.
+
+Status LED heartbeat on all three boards. GPIO goes through registers
+in oscil_gpio.h, no driver. The WS2812 is bit-banged off the CPU cycle
+counter: 24 bits GRB, 0.4 or 0.85 us high in a 1.25 us bit, interrupts
+masked for the ~30 us frame. Blink task pinned to core 0.
+Acq green, display red, gen blue.
+
+First build died on -Werror=misleading-indentation. A `while (...);`
+wait loop with the next line one space off. Empty loops get `{ }` now.
+First flash wasn't one either: only the monitor ran, and board 1 was
+still booting an old lab.
+
+![Before: three projects, one command each](screenshots_videos/heartbeat_test_before.png)
+
+![After: all three boot, heartbeat on GPIO48](screenshots_videos/heartbeat_test_after_success.png)
+
+[![Three boards blinking, click for video](screenshots_videos/heartbeat_3_mcus.JPG)](screenshots_videos/heartbeat_3_mcus.MP4)

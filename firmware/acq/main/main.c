@@ -6,6 +6,7 @@
 #include "esp_flash.h"
 #include "esp_psram.h"
 #include "oscil_pins_acq.h"
+#include "oscil_status.h"
 
 static const char *TAG = "acq";
 
@@ -24,4 +25,7 @@ void app_main(void)
     ESP_LOGI(TAG, "psram %u MB", (unsigned)(esp_psram_get_size() / (1024 * 1024)));
     ESP_LOGI(TAG, "tick %d Hz, LINK1 on GPIO%d/%d",
              configTICK_RATE_HZ, ACQ_LINK1_TX, ACQ_LINK1_RX);
+    ESP_ERROR_CHECK(oscil_status_init(ACQ_STATUS_RGB));
+    ESP_ERROR_CHECK(oscil_status_start_heartbeat(0,16,0)); //green
+    ESP_LOGI(TAG,"heartbeat on GPIO%d", ACQ_STATUS_RGB);
 }

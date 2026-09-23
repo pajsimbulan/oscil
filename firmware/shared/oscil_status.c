@@ -52,19 +52,19 @@ void IRAM_ATTR oscil_status_set(uint8_t r, uint8_t g, uint8_t b) {
         uint32_t t0 = esp_cpu_get_cycle_count();
         uint32_t high = ((grb >> i) &1u)?  T1H : T0H;
        
-         *set = m; //rising edge starts the bit
-        while((esp_cpu_get_cycle_count() - t0) < high);
-         *clr = m; // failling edge: the width sets 0 or 1 
-        while ((esp_cpu_get_cycle_count() -t0) <TBIT);
+        *set = m; //rising edge starts the bit
+        while((esp_cpu_get_cycle_count() - t0) < high) {};
+        *clr = m; // failling edge: the width sets 0 or 1 
+        while ((esp_cpu_get_cycle_count() -t0) <TBIT) {};
     }
     portCLEAR_INTERRUPT_MASK_FROM_ISR(irq);
     esp_rom_delay_us(T_RESET_US);  //hold low
 }
-
+ 
 static void heartbeat_task(void *arg) {
     while(1) {
         oscil_status_set(s_r, s_g, s_b);
-        vTaskDelay(pdMS_TO_TICKS(50));
+        vTaskDelay(pdMS_TO_TICKS(950));
         oscil_status_set(0,0,0);
         vTaskDelay(pdMS_TO_TICKS(950));
     }
