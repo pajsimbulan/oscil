@@ -35,6 +35,7 @@ From the ESP-IDF terminal, in a board folder:
 | 03 | Register-level GPIO, bit-banged WS2812 heartbeat on all three | Done |
 | 04 | Pin walk: every GPIO checked against the schematic on the analyzer | Done |
 | 05 | SPI speed test: GP-SPI2 from registers, frame rate measured | Done |
+| 06 | Analog rail: MCP1700 makes +3V3_A (3.314 V) | Done |
 
 ---
 

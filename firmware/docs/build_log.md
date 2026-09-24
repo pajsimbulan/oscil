@@ -251,3 +251,24 @@ Analyzer on board 1, 24 MHz sample rate:
 24 MHz sampling, so the CS period is the proof here, not the edges.
 
 ![26.67 MHz block, CS period](screenshots_videos/spi_speed_test_logic_analyzer_26_67_mhz.png)
+
+Step 06, the analog rail. MCP1700 on the breadboard, 1 uF ceramics for
+C1 and C2 from the MLCC kit, jumper wire for R1. Nothing else on
++3V3_A yet.
+
++5V comes from the ELEGOO breadboard power module for now instead of
+board 1's 5V pin, so the USB backfeed check is skipped. Its USB-C input
+only gave 4.648 V (passthrough plus the drops along the way). The
+barrel jack goes through the module's own regulator and gives 4.987 V,
+so that's what I'm using.
+
+| Node | Reading |
+|---|---|
+| +5V_A (VIN) | 4.987 V |
+| +3V3_A (VOUT) | 3.314 V |
+
+3.314 V is 0.4% high, well inside the MCP1700's +/-3% spec.
+
+![+5V_A from the barrel jack](screenshots_videos/rail_setup_5v.JPG)
+
+![+3V3_A at the MCP1700 output](screenshots_videos/rail_setup_3v3.JPG)
