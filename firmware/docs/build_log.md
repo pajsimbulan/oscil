@@ -193,3 +193,15 @@ three boards, 61 pins, no mismatches.
 ![Board 3 batch 1: the eight DAC bits, 1 to 8 pulses](screenshots_videos/pin_walk_board3_batch1_logic_analyzer.png)
 
 ![Board 3 batch 2: LINK2_RX, 9 pulses](screenshots_videos/pin_walk_board3_batch2_logic_analyzer.png)
+
+## 2026-09-23
+
+Wrote the SPI side for the ADCs: GP-SPI2 set up straight from its
+registers, no driver. Clock on, pins on the IO MUX, 80 MHz module clock
+divided down, mode 1, 16 clocks per frame, single or dual line. The
+fastest legal clock is 26.67 MHz (80 MHz / 3), since /2 would be 40 and
+the ADS7883 tops out at 32 at 3.3 V.
+
+Speed test is written too: times 10,000 frames on the cycle counter for
+five settings and holds each for 2 s so the analyzer can catch it.
+Nothing plugged in yet; the analyzer run is next.

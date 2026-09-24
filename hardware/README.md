@@ -8,7 +8,9 @@ breadboards: one acquires, one drives the display, one generates signals.
 · [BOM](../Oscil_bill_of_materials_bom.xlsx)
 · [Datasheets](../datasheets/)
 
-Status: schematic complete, ERC clean. Breadboard bring-up is next.
+Status: schematic complete, ERC clean. Breadboard bring-up in progress:
+every assigned GPIO on all three boards checked against the schematic
+(firmware step 04).
 
 ## Sheets
 

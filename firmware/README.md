@@ -34,6 +34,7 @@ From the ESP-IDF terminal, in a board folder:
 | 02 | All three boards flash and report 16 MB flash, 8 MB PSRAM, 1 kHz tick | Done |
 | 03 | Register-level GPIO, bit-banged WS2812 heartbeat on all three | Done |
 | 04 | Pin walk: every GPIO checked against the schematic on the analyzer | Done |
+| 05 | SPI speed test: GP-SPI2 from registers, frame rate measured | In progress |
 
 ---
 
