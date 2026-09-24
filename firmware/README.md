@@ -36,6 +36,7 @@ From the ESP-IDF terminal, in a board folder:
 | 04 | Pin walk: every GPIO checked against the schematic on the analyzer | Done |
 | 05 | SPI speed test: GP-SPI2 from registers, frame rate measured | Done |
 | 06 | Analog rail: MCP1700 makes +3V3_A (3.314 V) | Done |
+| 07 | 2.2 V reference: divider + U2A buffer, VREF_2V2 = 2.214 V | Done |
 
 ---
 

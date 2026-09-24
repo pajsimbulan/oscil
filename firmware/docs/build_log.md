@@ -272,3 +272,17 @@ so that's what I'm using.
 ![+5V_A from the barrel jack](screenshots_videos/rail_setup_5v.JPG)
 
 ![+3V3_A at the MCP1700 output](screenshots_videos/rail_setup_3v3.JPG)
+
+Step 07, the 2.2 V reference. R2/R3 (10k/20k) off +3V3_A with C3 on
+the midpoint, U2A as a unity-gain buffer, C4 right on pin 8. U2B is
+parked as a follower with its input on GND, same as the schematic.
+
+| Node | Reading |
+|---|---|
+| Divider (pin 3) | 2.214 V |
+| VREF_2V2 (pin 1) | 2.214 V |
+
+Expected 3.314 x 20k/30k = 2.209 V, so 5 mV off, inside 1% resistor
+tolerance. Pin 1 matches pin 3, so the buffer adds nothing.
+
+![VREF_2V2 at the buffer output](screenshots_videos/raiL_setup_vref_2v2.JPG)
