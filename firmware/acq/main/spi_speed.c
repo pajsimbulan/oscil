@@ -31,15 +31,22 @@ void test_spi_speed(void) //never returns
             for(int i=0; i<N; i++) sink += spi2_adc_frame();
             uint32_t cyc = esp_cpu_get_cycle_count() - t0;
             portCLEAR_INTERRUPT_MASK_FROM_ISR(irq);
+             vTaskDelay(pdMS_TO_TICKS(10));                        // let the USB console settle
+            printf("cfg %d: %lu cycles for %d frames\n", c, (unsigned long)cyc, N);
 
             float per = (float)cyc / N; //cpu cycles per frame, 4.17ns each
             printf("SCLK %5.2f MHz  %-6s  mode %d  %6.1f cycles  %5.0f ns  %5.0f kSa/s\n",
                    80.0f / CFG[c].div, CFG[c].dual ? "dual" : "single", CFG[c].mode,
                    per, per * 1000.0f / 240.0f, 240000.0f / per);
             
+            fflush(stdout);
+
             //keep framing for 2s so the analyzer can catch this setting
             TickType_t end = xTaskGetTickCount() + pdMS_TO_TICKS(2000);
-            while(xTaskGetTickCount() < end) sink += spi2_adc_frame();
+            while (xTaskGetTickCount() < end) {
+                for (int k = 0; k < 500; k++) sink += spi2_adc_frame();
+                vTaskDelay(1);
+            }
         }
         printf("---\n");
     }
