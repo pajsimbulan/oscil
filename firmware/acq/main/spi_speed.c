@@ -4,6 +4,7 @@
 #include "esp_cpu.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
+#include "spi_speed.h"
 
 #define N 10000
 

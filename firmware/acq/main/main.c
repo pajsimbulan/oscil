@@ -8,11 +8,13 @@
 #include "oscil_pins_acq.h"
 #include "oscil_status.h"
 #include "oscil_pinwalk.h"
-#include "spi2_adc.h"
+#include "spi_speed.h"
 
 static const char *TAG = "acq";
 
-static const oscil_pin_t ACQ_PINS[] = {
+/**
+ * 
+ static const oscil_pin_t ACQ_PINS[] = {
     { ACQ_ENC1_A, "ENC1_A" }, { ACQ_ENC1_B, "ENC1_B" }, { ACQ_ENC1_SW, "ENC1_SW" },
     { ACQ_ENC2_A, "ENC2_A" }, { ACQ_ENC2_B, "ENC2_B" }, { ACQ_ENC2_SW, "ENC2_SW" },
     { ACQ_CH2_SCLK, "CH2_SCLK" }, { ACQ_CH2_SDO, "CH2_SDO" }, { ACQ_CH2_CS, "CH2_CS" },
@@ -24,6 +26,7 @@ static const oscil_pin_t ACQ_PINS[] = {
     { 2, "spare" }, { 11, "spare" }, { 14, "spare" },
 };
 
+*/
 
 void app_main(void)
 {
@@ -43,6 +46,6 @@ void app_main(void)
     ESP_ERROR_CHECK(oscil_status_init(ACQ_STATUS_RGB));
     ESP_ERROR_CHECK(oscil_status_start_heartbeat(0,16,0)); //green
     ESP_LOGI(TAG,"heartbeat on GPIO%d", ACQ_STATUS_RGB);
-    test_pinwalk(ACQ_PINS, sizeof ACQ_PINS / sizeof ACQ_PINS[0]);
+    //test_pinwalk(ACQ_PINS, sizeof ACQ_PINS / sizeof ACQ_PINS[0]);
     test_spi_speed();
 }
