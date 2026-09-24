@@ -205,3 +205,49 @@ the ADS7883 tops out at 32 at 3.3 V.
 Speed test is written too: times 10,000 frames on the cycle counter for
 five settings and holds each for 2 s so the analyzer can catch it.
 Nothing plugged in yet; the analyzer run is next.
+
+## 2026-09-24
+
+Ran the speed test on board 1. JTAG flashing kept failing in OpenOCD,
+so flashed over UART on COM7 instead.
+
+First run tripped the task watchdog: the 2 s hold loop spun and IDLE0
+never ran. It yields every 500 frames now. The result lines also went
+missing until I added a 10 ms delay after unmasking interrupts, plus
+fflush.
+
+| SCLK | Mode | Lines | Cycles/frame | ns/frame | kSa/s |
+|---|---|---|---|---|---|
+| 10 MHz | 1 | single | 525 | 2188 | 457 |
+| 10 MHz | 1 | dual | 525 | 2188 | 457 |
+| 26.67 MHz | 0 | single | 261 | 1088 | 919 |
+| 26.67 MHz | 1 | single | 261 | 1088 | 919 |
+| 26.67 MHz | 1 | dual | 261 | 1088 | 919 |
+
+At 26.67 MHz the 16 clocks take 600 ns, so about 490 ns of each frame
+is overhead from the CPU starting each frame. DMA fixes that later.
+Dual line costs nothing, so it's Plan B: one SCLK and CS for both ADCs,
+CH1 on GPIO13, CH2 on GPIO11.
+
+![Speed test output on the monitor](screenshots_videos/spi_speed_test_terminal.png)
+
+Analyzer on board 1, 24 MHz sample rate:
+
+| Analyzer | GPIO | Signal |
+|---|---|---|
+| D0 | 12 | SCLK |
+| D1 | 10 | CS |
+
+![Analyzer wired to board 1](screenshots_videos/spi_speed_test_connections.JPG)
+
+![Five frames back to back](screenshots_videos/spi_peed_test_logic_analyzer_5_frames.png)
+
+10 MHz: CS period 2208 ns, matches the 2188 from the cycle counter.
+16 clocks per frame.
+
+![10 MHz block, 16 clocks inside one CS low](screenshots_videos/spi_speed_test_logic_analyzer_10_mhz.png)
+
+26.67 MHz: CS period 1084 ns, matches 1088. The clock itself aliases at
+24 MHz sampling, so the CS period is the proof here, not the edges.
+
+![26.67 MHz block, CS period](screenshots_videos/spi_speed_test_logic_analyzer_26_67_mhz.png)
