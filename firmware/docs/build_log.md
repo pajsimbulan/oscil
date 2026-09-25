@@ -175,7 +175,7 @@ Batch 4:
 Pin walk on board 3. Only nine pins: the eight R-2R bits and LINK2's
 receive line. The DAC bits are the ones that have to be exact, since
 all eight get written in one store to GPIO_OUT later. All eight matched,
-and LINK2_RX on the RX pad showed its 9 pulses. Step 04 done on all
+and LINK2_RX on the RX pad showed its 9 pulses. Pin walk done on all
 three boards, 61 pins, no mismatches.
 
 | Ch | Header | GPIO | Signal | Pulses | Seen |
@@ -252,7 +252,7 @@ Analyzer on board 1, 24 MHz sample rate:
 
 ![26.67 MHz block, CS period](screenshots_videos/spi_speed_test_logic_analyzer_26_67_mhz.png)
 
-Step 06, the analog rail. MCP1700 on the breadboard, 1 uF ceramics for
+The analog rail. MCP1700 on the breadboard, 1 uF ceramics for
 C1 and C2 from the MLCC kit, jumper wire for R1. Nothing else on
 +3V3_A yet.
 
@@ -273,7 +273,7 @@ so that's what I'm using.
 
 ![+3V3_A at the MCP1700 output](screenshots_videos/rail_setup_3v3.JPG)
 
-Step 07, the 2.2 V reference. R2/R3 (10k/20k) off +3V3_A with C3 on
+The 2.2 V reference. R2/R3 (10k/20k) off +3V3_A with C3 on
 the midpoint, U2A as a unity-gain buffer, C4 right on pin 8. U2B is
 parked as a follower with its input on GND, same as the schematic.
 
@@ -287,7 +287,7 @@ tolerance. Pin 1 matches pin 3, so the buffer adds nothing.
 
 ![VREF_2V2 at the buffer output](screenshots_videos/raiL_setup_vref_2v2.JPG)
 
-Prep for step 08: the parts that don't fit a breadboard.
+Prep for the front end: the parts that don't fit a breadboard.
 
 BNCs (Superbat panel mount) got jumper wires soldered on: centre pin for
 signal, solder lug for ground. Continuity centre to jack pin and lug to
@@ -312,3 +312,16 @@ is cleaned up.
 ![BNCs and BAV99 adapters, continuity](screenshots_videos/soldered_bnc_bav99__continuity_test.JPG)
 
 ![BAV99s on their adapters](screenshots_videos/soldered_bav99_pcb_continuity_test.JPG)
+
+CH1 front end on the breadboard: R4 750k, R5 250k to VREF_2V2, BAV99
+clamp, U3A buffer. Trimmers and the ADC filter stay off for now. Output
+measured at U3 pin 1.
+
+| Input | Expected | Measured |
+|---|---|---|
+| Nothing connected | 2.21 V (no current, so it sits at VREF) | 2.2 V |
+| IN to GND | 1.66 V (0.75 x VREF) | 1.66 V |
+
+![Input open, output at VREF](screenshots_videos/afe_ch1_input_open_2v21.JPG)
+
+![Input grounded, output at the 1.66 V offset](screenshots_videos/afe_ch1_input_gnd_1v66.JPG)

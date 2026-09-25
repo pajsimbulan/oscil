@@ -27,7 +27,7 @@ From the ESP-IDF terminal, in a board folder:
 
 ## Progress
 
-| Step | What | Status |
+| # | What | Status |
 |---|---|---|
 | 00 | Three projects, shared component, pin headers, sdkconfig defaults | Done |
 | 01 | Host tests for the AFE math, CI on every push | Done |
@@ -42,4 +42,4 @@ From the ESP-IDF terminal, in a board folder:
 
 ## Build log
 
-Every step, including the mistakes, with photos and analyzer captures: [docs/build_log.md](docs/build_log.md)
+Everything, including the mistakes, with photos and analyzer captures: [docs/build_log.md](docs/build_log.md)

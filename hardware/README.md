@@ -10,7 +10,7 @@ breadboards: one acquires, one drives the display, one generates signals.
 
 Status: schematic complete, ERC clean. Breadboard bring-up in progress:
 every assigned GPIO on all three boards checked against the schematic
-(firmware step 04).
+(see the firmware build log).
 
 ## Sheets
 
