@@ -7,20 +7,20 @@ ESP32-S3 N16R8 dev board.
 
 | Signal | GPIO | Header pin | Note |
 |---|---|---|---|
-| CH1_SCLK | 12 | 18 | SPI2 IO_MUX |
-| CH1_SDO | 13 | 19 | SPI2 IO_MUX |
-| CH1_CS | 10 | 16 | SPI2 IO_MUX, 10k pull-up |
-| CH2_SCLK | 15 | 8 | SPI3, GPIO matrix |
-| CH2_SDO | 16 | 9 | SPI3, GPIO matrix |
-| CH2_CS | 17 | 10 | SPI3, 10k pull-up |
+| ADC_SCLK | 12 | 18 | SPI2 IO_MUX (FSPICLK), to both ADCs |
+| ADC_CS | 10 | 16 | SPI2 IO_MUX (FSPICS0), to both ADCs, 10k pull-up |
+| CH1_SDO | 13 | 19 | SPI2 IO_MUX (FSPIQ) |
+| CH2_SDO | 11 | 17 | SPI2 IO_MUX (FSPID), dual-line read |
 | ENC1_A / B / SW | 4 / 5 / 6 | 4 / 5 / 6 | |
-| ENC2_A / B / SW | 7 / 8 / 9 | 7 / 12 / 15 | |
-| ENC3_A / B / SW | 18 / 21 / 38 | 11 / 27 / 35 | |
+| ENC2_A / B / SW | 7 / 15 / 16 | 7 / 8 / 9 | |
+| ENC3_A / B / SW | 17 / 18 / 8 | 10 / 11 / 12 | |
 | BTN_RUN / SINGLE / GEN | 39 / 40 / 41 | 36 / 37 / 38 | |
 | LED_RUN / TRIG / ARM | 42 / 2 / 1 | 39 / 40 / 41 | 330R each |
 | LINK1_TX / RX | 43 / 44 | 43 / 42 | UART1 |
 
-Spare: 11, 14, 47. GPIO48 is the onboard WS2812.
+Spare: 9, 14, 21, 38, 47. GPIO48 is the onboard WS2812. GPIO15/16 can
+host an optional 32 kHz crystal; the dev board doesn't fit one, so they
+are plain GPIOs here.
 
 ## Board 2, display
 

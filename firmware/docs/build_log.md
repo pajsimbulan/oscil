@@ -370,3 +370,29 @@ and one release per push, no doubles.
 ![Panel test running, events on the monitor](screenshots_videos/panel_buttons_leds_test.JPG)
 
 [Video: buttons toggling the LEDs](screenshots_videos/panel_buttons_leds_test.MP4)
+
+Put the dual-line SPI decision into the schematic and pin map. Both
+ADCs now share one clock and one chip select on SPI2's IO MUX pins, and
+CH2's data comes in on GPIO11 (FSPID) next to CH1's on GPIO13 (FSPIQ).
+The old second bus on GPIO15-17 is gone, and so is R11: one 10k pull-up
+on the shared CS covers both converters.
+
+That freed three pins right where the encoders were scattered, so the
+encoders moved too. All nine encoder lines now sit on headers 4-12, one
+knob after another.
+
+| Signal | Was | Now | Header |
+|---|---|---|---|
+| ADC_SCLK | 12 (CH1) + 15 (CH2) | 12 | 18 |
+| ADC_CS | 10 (CH1) + 17 (CH2) | 10 | 16 |
+| CH1_SDO | 13 | 13 | 19 |
+| CH2_SDO | 16 | 11 | 17 |
+| ENC2_B | 8 | 15 | 8 |
+| ENC2_SW | 9 | 16 | 9 |
+| ENC3_A | 18 | 17 | 10 |
+| ENC3_B | 21 | 18 | 11 |
+| ENC3_SW | 38 | 8 | 12 |
+
+Spares now 9, 14, 21, 38, 47. Nothing was wired to the old pins yet, so
+this is paper only; the encoders get checked on the new pins when they
+count.

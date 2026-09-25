@@ -2758,9 +2758,9 @@
 		)
 		(uuid "73cd4af1-f142-4c89-b15a-12f53148811e")
 	)
-	(text "R10, R11: every GPIO floats until firmware configures\nit. Pull-ups hold both converters deselected at boot."
+	(text "R10: every GPIO floats until firmware configures it. One pull-up on the shared CS holds both converters deselected at boot."
 		(exclude_from_sim no)
-		(at 166.37 83.566 0)
+		(at 139.192 82.042 0)
 		(effects
 			(font
 				(size 0.635 0.635)
@@ -2845,16 +2845,20 @@
 		(uuid "011a79b7-9943-4b56-be14-e5ccaf8b81b8")
 	)
 	(no_connect
-		(at 31.75 83.82)
-		(uuid "157d50fb-9321-4108-b722-4aa1bb1d8f89")
-	)
-	(no_connect
 		(at 64.77 68.58)
 		(uuid "162d9984-d92d-4885-ab30-7ff2fead6ea4")
 	)
 	(no_connect
+		(at 64.77 86.36)
+		(uuid "17cd6dc4-0368-4e64-88a4-ba44c2bd95d2")
+	)
+	(no_connect
 		(at 64.77 83.82)
 		(uuid "266b697c-65e7-4355-98c9-0c444173a2a4")
+	)
+	(no_connect
+		(at 31.75 78.74)
+		(uuid "2aea124a-b518-477e-8e5c-0498c67132fa")
 	)
 	(no_connect
 		(at 31.75 45.72)
@@ -2901,8 +2905,22 @@
 		(uuid "cc864025-a8a6-47b4-b647-d5547c33d6ea")
 	)
 	(no_connect
+		(at 64.77 66.04)
+		(uuid "e14a5e19-36d0-4bec-a795-d380917caefc")
+	)
+	(no_connect
 		(at 64.77 91.44)
 		(uuid "ea9ca02b-fa4c-47bf-bfad-c4275f2230bd")
+	)
+	(wire
+		(pts
+			(xy 148.59 120.65) (xy 151.13 120.65)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "01ca3da2-810c-4bda-b8a9-13bb21a56c1b")
 	)
 	(wire
 		(pts
@@ -2996,16 +3014,6 @@
 	)
 	(wire
 		(pts
-			(xy 64.77 66.04) (xy 67.31 66.04)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "2603fcc5-3dd6-4b9b-976d-aae2f72eb0ed")
-	)
-	(wire
-		(pts
 			(xy 64.77 55.88) (xy 67.31 55.88)
 		)
 		(stroke
@@ -3053,16 +3061,6 @@
 			(type default)
 		)
 		(uuid "2ccfd1e5-ba38-42ab-a4dc-d7a97919f7e6")
-	)
-	(wire
-		(pts
-			(xy 148.59 120.65) (xy 165.1 120.65)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "2d0a2106-05cf-4c18-a407-b811bfd85b71")
 	)
 	(wire
 		(pts
@@ -3336,16 +3334,6 @@
 	)
 	(wire
 		(pts
-			(xy 172.72 120.65) (xy 177.8 120.65)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "7333c5fd-628f-4978-8eec-1b1354f1b357")
-	)
-	(wire
-		(pts
 			(xy 148.59 118.11) (xy 151.13 118.11)
 		)
 		(stroke
@@ -3523,26 +3511,6 @@
 			(type default)
 		)
 		(uuid "a1883223-516f-4d38-8158-5c5be96c02bc")
-	)
-	(wire
-		(pts
-			(xy 29.21 78.74) (xy 31.75 78.74)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "a24efcab-5b5d-4305-9d18-132cb1434099")
-	)
-	(wire
-		(pts
-			(xy 64.77 86.36) (xy 67.31 86.36)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "a4a3aca6-c384-48bb-ac10-af75a38efaf2")
 	)
 	(wire
 		(pts
@@ -3796,6 +3764,16 @@
 	)
 	(wire
 		(pts
+			(xy 29.21 83.82) (xy 31.75 83.82)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e8959bb3-1fbe-4c32-b59c-6e43d1142ed5")
+	)
+	(wire
+		(pts
 			(xy 148.59 59.69) (xy 162.56 59.69)
 		)
 		(stroke
@@ -3884,6 +3862,16 @@
 		)
 		(uuid "01ca3008-223c-486d-8778-8c98afc6d5bb")
 	)
+	(label "ENC2_B"
+		(at 29.21 60.96 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "1425178f-99a8-4460-846f-a4cd53f82ffb")
+	)
 	(label "LINK1_RX"
 		(at 232.41 137.16 180)
 		(effects
@@ -3944,16 +3932,6 @@
 		)
 		(uuid "2fee6f19-e8eb-4134-aa84-d632ef73255c")
 	)
-	(label "ENC3_A"
-		(at 29.21 68.58 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "31550af9-a485-4442-a9fb-0fee9a6bb003")
-	)
 	(label "ENC1_A"
 		(at 224.79 24.13 180)
 		(effects
@@ -3984,7 +3962,17 @@
 		)
 		(uuid "45478955-2d05-451e-821f-661e8d6e07cb")
 	)
-	(label "CH2_CS"
+	(label "ENC3_A"
+		(at 29.21 66.04 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "480c4c6f-da6e-4119-98b3-be98d3279ef4")
+	)
+	(label "ADC_CS"
 		(at 151.13 120.65 0)
 		(effects
 			(font
@@ -3993,6 +3981,16 @@
 			(justify left bottom)
 		)
 		(uuid "6786e7a1-4cde-4fed-97f4-e9a14e6b8e3e")
+	)
+	(label "ADC_SCLK"
+		(at 151.13 54.61 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "68fb6f1d-5f3f-42af-977f-439e9b511f36")
 	)
 	(label "LED_ARM"
 		(at 198.12 111.76 180)
@@ -4004,17 +4002,27 @@
 		)
 		(uuid "72b7d810-f68a-4ee4-b4a1-3bdc121bfa24")
 	)
-	(label "ENC2_B"
-		(at 29.21 71.12 180)
+	(label "ENC3_B"
+		(at 29.21 68.58 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify right bottom)
 		)
-		(uuid "7a221602-1e95-42e2-ab00-0b11bd771fb3")
+		(uuid "783adb50-fdc9-4ca4-90c3-991378d59ca5")
 	)
-	(label "CH1_CS"
+	(label "CH2_SDO"
+		(at 29.21 83.82 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "78868cbe-61a6-4f86-bbaa-36173fca34b4")
+	)
+	(label "ADC_CS"
 		(at 151.13 59.69 0)
 		(effects
 			(font
@@ -4034,25 +4042,15 @@
 		)
 		(uuid "7fdde896-7b17-4272-bf08-e44425913d01")
 	)
-	(label "CH2_CS"
-		(at 29.21 66.04 180)
+	(label "ENC2_SW"
+		(at 29.21 63.5 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify right bottom)
 		)
-		(uuid "868f52ec-f75f-4e6b-bdcb-98eda914996d")
-	)
-	(label "ENC3_SW"
-		(at 67.31 66.04 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "890c0745-6758-43fd-a195-71be450575dd")
+		(uuid "8f195887-56af-4f62-b407-1d35c0e5517d")
 	)
 	(label "ENC2_A"
 		(at 224.79 43.18 180)
@@ -4094,16 +4092,6 @@
 		)
 		(uuid "9aa1e4e4-e977-43f1-b16c-39d4c5a8b198")
 	)
-	(label "ENC2_SW"
-		(at 29.21 78.74 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "9f18807e-05d2-400a-9b50-37f596d6c912")
-	)
 	(label "BTN_RUN"
 		(at 246.38 86.36 180)
 		(effects
@@ -4113,16 +4101,6 @@
 			(justify right bottom)
 		)
 		(uuid "a6a711c0-4431-4063-a6d7-fc939d6eb97b")
-	)
-	(label "CH2_SDO"
-		(at 29.21 63.5 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "aeaf2e04-b7c8-4cb6-945b-1d4e0d5dc906")
 	)
 	(label "LED_TRIG"
 		(at 198.12 99.06 180)
@@ -4154,17 +4132,7 @@
 		)
 		(uuid "ba625a3f-07b1-4ec5-a70a-7c41ceeaae63")
 	)
-	(label "CH1_SCLK"
-		(at 151.13 54.61 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "bc258ada-1924-4878-9459-46f7b8d5b5e5")
-	)
-	(label "CH1_CS"
+	(label "ADC_CS"
 		(at 29.21 81.28 180)
 		(effects
 			(font
@@ -4184,7 +4152,7 @@
 		)
 		(uuid "be3ef065-1115-41c4-8e6d-63be6c41e8e1")
 	)
-	(label "CH1_SCLK"
+	(label "ADC_SCLK"
 		(at 29.21 86.36 180)
 		(effects
 			(font
@@ -4224,16 +4192,6 @@
 		)
 		(uuid "cc4a9b6e-4857-4dfb-8060-36dddce35310")
 	)
-	(label "ENC3_B"
-		(at 67.31 86.36 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "ce394483-e335-4a04-9338-14764d87e3f3")
-	)
 	(label "LED_RUN"
 		(at 198.12 85.09 180)
 		(effects
@@ -4254,7 +4212,17 @@
 		)
 		(uuid "d782da2b-7125-4bcd-a8f1-434af94356b8")
 	)
-	(label "CH2_SCLK"
+	(label "ENC3_SW"
+		(at 29.21 71.12 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "d9d68bd7-9b34-4d13-8b69-e14b3bb88fbf")
+	)
+	(label "ADC_SCLK"
 		(at 151.13 115.57 0)
 		(effects
 			(font
@@ -4262,17 +4230,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "e386164e-3c42-4498-88c9-093101e89bbb")
-	)
-	(label "CH2_SCLK"
-		(at 29.21 60.96 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "f5d795e1-3c69-45f7-b785-1a40aff6101c")
+		(uuid "db4aa7b6-eb9c-4970-8738-42acc85fae5f")
 	)
 	(label "ENC1_A"
 		(at 29.21 50.8 180)
@@ -5040,84 +4998,6 @@
 			(project "oscil"
 				(path "/c207b121-aeb4-4662-bb5d-c71f93f47474/3c115426-904e-47a1-b9a9-68daedbcec42"
 					(reference "SW5")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:+3V3")
-		(at 177.8 120.65 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "2fb5a562-b95d-4e05-988e-8b577e9fcc6b")
-		(property "Reference" "#PWR039"
-			(at 177.8 124.46 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "+3V3_A"
-			(at 177.8 115.57 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 177.8 120.65 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 177.8 120.65 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"+3V3\""
-			(at 177.8 120.65 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "166a2cbe-1660-42e2-9968-60bbb379f07a")
-		)
-		(instances
-			(project "oscil"
-				(path "/c207b121-aeb4-4662-bb5d-c71f93f47474/3c115426-904e-47a1-b9a9-68daedbcec42"
-					(reference "#PWR039")
 					(unit 1)
 				)
 			)
@@ -6479,86 +6359,6 @@
 			(project "oscil"
 				(path "/c207b121-aeb4-4662-bb5d-c71f93f47474/3c115426-904e-47a1-b9a9-68daedbcec42"
 					(reference "D5")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:R")
-		(at 168.91 120.65 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "86b87c41-aa2c-40e0-87fa-bde405343cc1")
-		(property "Reference" "R11"
-			(at 168.91 114.935 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "10k"
-			(at 168.91 117.475 90)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal"
-			(at 168.91 122.428 90)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 168.91 120.65 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" "Resistor"
-			(at 168.91 120.65 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "2"
-			(uuid "2534a2cb-0421-4d68-b22f-ae7bee83828f")
-		)
-		(pin "1"
-			(uuid "1e617c05-9bb4-432e-bffb-ef4c49baa7d7")
-		)
-		(instances
-			(project "oscil"
-				(path "/c207b121-aeb4-4662-bb5d-c71f93f47474/3c115426-904e-47a1-b9a9-68daedbcec42"
-					(reference "R11")
 					(unit 1)
 				)
 			)

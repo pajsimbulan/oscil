@@ -29,15 +29,15 @@ void spi2_adc_init(int div, int mode, bool dual) {
     portEXIT_CRITICAL(&s_rcc_lock);
 
     //2.  Pins.  SCLK GPIO12, CS GPIO10, Q QPIO13, D GPIO11 are SPI2's IO MUX pins (soc/spi_pins.h).
-    iomux_out(ACQ_CH1_SCLK);
-    iomux_out(ACQ_CH1_CS);
+    iomux_out(ACQ_ADC_SCLK);
+    iomux_out(ACQ_ADC_CS);
     iomux_out(ACQ_CH1_SDO); //CH1 data on Q
     iomux_in(ACQ_CH1_SDO, FSPIQ_IN_IDX);  //CH1 data on Q
     
     // CH2 data on D, GPIO11 (Plan B)
     if (dual) {
-        iomux_out(11);  
-        iomux_in(11, FSPID_IN_IDX);
+        iomux_out(ACQ_CH2_SDO);
+        iomux_in(ACQ_CH2_SDO, FSPID_IN_IDX);
     }
 
     //3. Module clock on, master, CPI-controlled (no DMA). spi_ll_master_init().

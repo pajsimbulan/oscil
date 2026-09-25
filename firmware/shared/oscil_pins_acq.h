@@ -3,26 +3,23 @@
 // Plain integers so host tests can include this without ESP-IDF.
 // Comments give the Lonely Binary header pin.
 
-// ADS7883 channel 1, SPI2 through IO_MUX
-#define ACQ_CH1_SCLK      12  // header 18
-#define ACQ_CH1_SDO       13  // header 19
-#define ACQ_CH1_CS        10  // header 16, 10k pull-up
-
-// ADS7883 channel 2, SPI3 through the GPIO matrix
-#define ACQ_CH2_SCLK      15  // header 8
-#define ACQ_CH2_SDO       16  // header 9
-#define ACQ_CH2_CS        17  // header 10, 10k pull-up
+// Both ADS7883s on SPI2 through IO_MUX, one clock and one chip select,
+// data read on two lines at once (dual-line read)
+#define ACQ_ADC_SCLK      12  // header 18, FSPICLK, to both ADCs
+#define ACQ_ADC_CS        10  // header 16, FSPICS0, to both ADCs, 10k pull-up
+#define ACQ_CH1_SDO       13  // header 19, FSPIQ
+#define ACQ_CH2_SDO       11  // header 17, FSPID
 
 // Encoders, active low, internal pull-ups
 #define ACQ_ENC1_A         4  // header 4
 #define ACQ_ENC1_B         5  // header 5
 #define ACQ_ENC1_SW        6  // header 6
 #define ACQ_ENC2_A         7  // header 7
-#define ACQ_ENC2_B         8  // header 12
-#define ACQ_ENC2_SW        9  // header 15
-#define ACQ_ENC3_A        18  // header 11
-#define ACQ_ENC3_B        21  // header 27
-#define ACQ_ENC3_SW       38  // header 35
+#define ACQ_ENC2_B        15  // header 8
+#define ACQ_ENC2_SW       16  // header 9
+#define ACQ_ENC3_A        17  // header 10
+#define ACQ_ENC3_B        18  // header 11
+#define ACQ_ENC3_SW        8  // header 12
 
 // Buttons, active low, internal pull-ups
 #define ACQ_BTN_RUN       39  // header 36
