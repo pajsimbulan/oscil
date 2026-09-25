@@ -2853,8 +2853,8 @@
 		(uuid "162d9984-d92d-4885-ab30-7ff2fead6ea4")
 	)
 	(no_connect
-		(at 64.77 53.34)
-		(uuid "2708638b-a8b0-4a6d-b0a1-837858ff9418")
+		(at 64.77 83.82)
+		(uuid "266b697c-65e7-4355-98c9-0c444173a2a4")
 	)
 	(no_connect
 		(at 31.75 45.72)
@@ -3283,16 +3283,6 @@
 			(type default)
 		)
 		(uuid "6831c1e0-db4f-4d0a-8181-945b369bd968")
-	)
-	(wire
-		(pts
-			(xy 64.77 83.82) (xy 67.31 83.82)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "6d750fbf-c620-4c90-b28f-44e317aa29d0")
 	)
 	(wire
 		(pts
@@ -3776,6 +3766,16 @@
 	)
 	(wire
 		(pts
+			(xy 64.77 53.34) (xy 67.31 53.34)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e5defef9-25f2-4440-bff1-e13518d1d523")
+	)
+	(wire
+		(pts
 			(xy 67.31 93.98) (xy 67.31 96.52)
 		)
 		(stroke
@@ -3914,6 +3914,16 @@
 		)
 		(uuid "28fe66e9-b1b7-4f69-b1e5-7f25591257e8")
 	)
+	(label "LED_TRIG"
+		(at 67.31 53.34 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "2d31c6c9-aadd-4219-bcd6-5bfcd9f3d016")
+	)
 	(label "BTN_SINGLE"
 		(at 246.38 99.06 180)
 		(effects
@@ -3973,16 +3983,6 @@
 			(justify left bottom)
 		)
 		(uuid "45478955-2d05-451e-821f-661e8d6e07cb")
-	)
-	(label "LED_TRIG"
-		(at 67.31 83.82 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "45c66fe7-3174-461c-b596-0214874601c0")
 	)
 	(label "CH2_CS"
 		(at 151.13 120.65 0)

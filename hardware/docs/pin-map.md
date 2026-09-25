@@ -17,10 +17,10 @@ ESP32-S3 N16R8 dev board.
 | ENC2_A / B / SW | 7 / 8 / 9 | 7 / 12 / 15 | |
 | ENC3_A / B / SW | 18 / 21 / 38 | 11 / 27 / 35 | |
 | BTN_RUN / SINGLE / GEN | 39 / 40 / 41 | 36 / 37 / 38 | |
-| LED_RUN / TRIG / ARM | 42 / 47 / 1 | 39 / 28 / 41 | 330R each |
+| LED_RUN / TRIG / ARM | 42 / 2 / 1 | 39 / 40 / 41 | 330R each |
 | LINK1_TX / RX | 43 / 44 | 43 / 42 | UART1 |
 
-Spare: 2, 11, 14. GPIO48 is the onboard WS2812.
+Spare: 11, 14, 47. GPIO48 is the onboard WS2812.
 
 ## Board 2, display
 

@@ -31,7 +31,7 @@
 
 // Panel LEDs, active high, 330R each
 #define ACQ_LED_RUN       42  // header 39
-#define ACQ_LED_TRIG      47  // header 28
+#define ACQ_LED_TRIG       2  // header 40
 #define ACQ_LED_ARM        1  // header 41
 #define ACQ_STATUS_RGB    48  // header 29, onboard WS2812
 
