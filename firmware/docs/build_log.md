@@ -325,3 +325,17 @@ measured at U3 pin 1.
 ![Input open, output at VREF](screenshots_videos/afe_ch1_input_open_2v21.JPG)
 
 ![Input grounded, output at the 1.66 V offset](screenshots_videos/afe_ch1_input_gnd_1v66.JPG)
+
+CH2 front end, same circuit: R7 750k, R8 250k to VREF_2V2, the second
+BAV99, U4A buffer. Output measured at U4 pin 1.
+
+| Input | Expected | Measured |
+|---|---|---|
+| Nothing connected | 2.21 V | 2.21 V |
+| IN to GND | 1.66 V | 1.66 V |
+
+Both channels match each other and the math.
+
+![CH2 input open, output at VREF](screenshots_videos/afe_ch2_input_open_2v21.JPG)
+
+![CH2 input grounded, output at the 1.66 V offset](screenshots_videos/afe_ch2_input_gnd_1v66.JPG)
