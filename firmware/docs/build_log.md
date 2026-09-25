@@ -286,3 +286,29 @@ Expected 3.314 x 20k/30k = 2.209 V, so 5 mV off, inside 1% resistor
 tolerance. Pin 1 matches pin 3, so the buffer adds nothing.
 
 ![VREF_2V2 at the buffer output](screenshots_videos/raiL_setup_vref_2v2.JPG)
+
+Prep for step 08: the parts that don't fit a breadboard.
+
+BNCs (Superbat panel mount) got jumper wires soldered on: centre pin for
+signal, solder lug for ground. Continuity centre to jack pin and lug to
+barrel beep; centre to shell reads OL.
+
+BAV99s are SOT-23-3, so they went on the adapter boards. Tiny and
+sloppy without proper tools, but continuity passes. The adapter
+silkscreen doesn't match the part:
+
+| BAV99 pin | Job | Adapter pad |
+|---|---|---|
+| 1 | lower anode, to GND | 6 |
+| 2 | upper cathode, to +3V3_A | 2 |
+| 3 | common, to JCT | 4 |
+
+One of the two has pins 2 and 3 bridged. That shorts the upper diode
+and ties JCT straight to +3V3_A, so it's not going in until the bridge
+is cleaned up.
+
+![BNC with soldered leads, continuity](screenshots_videos/soldered_jumper_wires_bnc_continuity_test.JPG)
+
+![BNCs and BAV99 adapters, continuity](screenshots_videos/soldered_bnc_bav99__continuity_test.JPG)
+
+![BAV99s on their adapters](screenshots_videos/soldered_bav99_pcb_continuity_test.JPG)
