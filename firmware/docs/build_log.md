@@ -339,3 +339,34 @@ Both channels match each other and the math.
 ![CH2 input open, output at VREF](screenshots_videos/afe_ch2_input_open_2v21.JPG)
 
 ![CH2 input grounded, output at the 1.66 V offset](screenshots_videos/afe_ch2_input_gnd_1v66.JPG)
+
+Front panel on board 1: three LEDs and three buttons on their own
+breadboard, wired to the board's headers.
+
+Moved LED_TRIG from GPIO47 to GPIO2 first. There was no reason for it
+to sit apart from the other two, and now the LEDs are on headers 39-41
+right above the buttons on 36-38. Schematic, pin map and pin header
+updated together.
+
+| Part | GPIO | Header | Notes |
+|---|---|---|---|
+| LED_RUN (green) | 42 | 39 | 330R, active high |
+| LED_TRIG (yellow) | 2 | 40 | 330R, active high |
+| LED_ARM (red) | 1 | 41 | 330R, active high |
+| BTN_RUN | 39 | 36 | to GND, internal 45k pull-up |
+| BTN_SINGLE | 40 | 37 | to GND, internal 45k pull-up |
+| BTN_GEN | 41 | 38 | to GND, internal 45k pull-up |
+
+panel.c polls all six inputs (the three buttons plus the encoder
+switches) every 1 ms and only takes a change after 20 scans in a row
+agree, so bounce never gets through. Each clean press or release goes
+on a FreeRTOS queue as an event. Polling instead of edge interrupts:
+the 20 ms debounce sets the response time either way, and a bouncing
+contact would fire dozens of interrupts per press.
+
+The test prints every event and toggles an LED per button. One press
+and one release per push, no doubles.
+
+![Panel test running, events on the monitor](screenshots_videos/panel_buttons_leds_test.JPG)
+
+[Video: buttons toggling the LEDs](screenshots_videos/panel_buttons_leds_test.MP4)

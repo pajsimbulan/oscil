@@ -38,6 +38,7 @@ From the ESP-IDF terminal, in a board folder:
 | 06 | Analog rail: MCP1700 makes +3V3_A (3.314 V) | Done |
 | 07 | 2.2 V reference: divider + U2A buffer, VREF_2V2 = 2.214 V | Done |
 | 08 | CH1 and CH2 front ends: offset (1.66 V) and open input (VREF) checked | Done |
+| 09 | Front panel: 3 LEDs, 3 buttons debounced by a 1 kHz scan, events on a queue | Done |
 
 ---
 
