@@ -9,6 +9,8 @@
 #include "oscil_status.h"
 #include "oscil_pinwalk.h"
 #include "spi_speed.h"
+#include "panel.h"
+#include "panel_test.h"          // with the other includes
 
 static const char *TAG = "acq";
 
@@ -47,5 +49,6 @@ void app_main(void)
     ESP_ERROR_CHECK(oscil_status_start_heartbeat(0,16,0)); //green
     ESP_LOGI(TAG,"heartbeat on GPIO%d", ACQ_STATUS_RGB);
     //test_pinwalk(ACQ_PINS, sizeof ACQ_PINS / sizeof ACQ_PINS[0]);
-    test_spi_speed();
+    //test_spi_speed();
+    test_panel();
 }
