@@ -340,6 +340,8 @@ Both channels match each other and the math.
 
 ![CH2 input grounded, output at the 1.66 V offset](screenshots_videos/afe_ch2_input_gnd_1v66.JPG)
 
+## 2026-09-25
+
 Front panel on board 1: three LEDs and three buttons on their own
 breadboard, wired to the board's headers.
 
@@ -414,3 +416,31 @@ The knob presses come through the button code as ENC1-3 press/release.
 ![Encoders, buttons and LEDs on the panel breadboard](screenshots_videos/panel_encoders_test.JPG)
 
 [Video: turning and pressing the knobs](screenshots_videos/panel_encoders_test.MP4)
+
+## 2026-09-26
+
+Soldered both ADS7883s onto SOT23-6 adapters. Took about four hours,
+with no magnifier, no clamps or helping hands, and 0.8 mm solder, which
+is too thick for 0.95 mm pitch. Lost two chips along the way; two made
+it, which is what the design needs.
+
+What finally worked: tin one corner pad only, hold the chip with
+tweezers, reflow that blob to tack one leg, then do the opposite
+corner, then the rest. Once one leg is down the chip stops moving.
+Headers went on first with the breadboard as a jig, chip after.
+
+Checks on both boards, nothing powered yet:
+
+- Continuity from every chip leg to its header pin: all six pass.
+- Adjacent pins shorted: none.
+- Orientation from the diode test on the first chip: pin 2 conducts to
+  every other pin with the red probe on it, so it's GND and the chip
+  is the right way round.
+
+Next time: 0.5 mm solder, tacky flux paste and fine tweezers.
+
+![Soldering setup](screenshots_videos/ads7883_soldering_setup.JPG)
+
+![First ADS7883 on its adapter, next to a bare SC70 one](screenshots_videos/ads7883_first_on_adapter.JPG)
+
+![Both ADS7883 adapters, continuity checks](screenshots_videos/ads7883_both_continuity_test.JPG)
