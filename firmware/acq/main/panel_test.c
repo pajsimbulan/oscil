@@ -18,6 +18,10 @@ void test_panel(void) {
 
         //sleeps until an event arrives
         if(xQueueReceive(q, &ev, portMAX_DELAY)) {
+            if(ev.type == PANEL_EV_TURN) {
+                printf("enc%d %+d \n", ev.id+1, ev.delta); //e.g "enc1 +1"
+                continue;
+            }
             printf("%s %s\n", NAME[ev.id], ev.type == PANEL_EV_PRESS? "press":"release");
 
             if(ev.type == PANEL_EV_PRESS && ev.id <3) {
