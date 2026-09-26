@@ -396,3 +396,21 @@ knob after another.
 Spares now 9, 14, 21, 38, 47. Nothing was wired to the old pins yet, so
 this is paper only; the encoders get checked on the new pins when they
 count.
+
+Three EC11 encoders on the panel breadboard, on the new pins (headers
+4-12). Each one: A and B to their GPIOs, the middle pin C to GND, push
+switch between its SW GPIO and GND. Internal pull-ups, no extra parts.
+
+The decoder is a 16-entry table indexed by the last and current A/B
+state, run in the same 1 ms scan as the buttons. A legal step gives +1
+or -1, no change or an illegal jump gives 0. Contact bounce toggles one
+line back and forth, which reads as +1, -1, +1, -1 and cancels, so
+there's no separate debounce. Four steps make one detent on these
+(one full A/B cycle per click), and only whole detents become events.
+
+One click prints enc1 +1, back prints enc1 -1, on all three knobs.
+The knob presses come through the button code as ENC1-3 press/release.
+
+![Encoders, buttons and LEDs on the panel breadboard](screenshots_videos/panel_encoders_test.JPG)
+
+[Video: turning and pressing the knobs](screenshots_videos/panel_encoders_test.MP4)
