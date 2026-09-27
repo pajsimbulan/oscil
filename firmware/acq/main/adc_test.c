@@ -81,3 +81,22 @@ void test_noise(void) //never returns
         vTaskDelay(pdMS_TO_TICKS(3000));
     }
 }
+
+//never returns
+void test_dual(void) {
+    spi2_adc_init(3, ADC_MODE_FULL, true); //26.67 MHz, dual-line
+    for(int i=0; i<3; i++) (void) spi2_adc_frame();
+    while(1) {
+        uint32_t s1 =0;
+        uint32_t s2 =0;
+        for(int i=0; i<64; i++) {
+            uint16_t a;
+            uint16_t b;
+            ads7883_split(spi2_adc_frame(), &a, &b);
+            s1 +=a;
+            s2 +=b;
+        }
+        printf("ch1 %.1f  ch2 %.1f  diff %.1f\n", s1 / 64.0f, s2 / 64.0f, (s1 - (float)s2) / 64.0f);
+        vTaskDelay(pdMS_TO_TICKS(500));
+    }
+} 

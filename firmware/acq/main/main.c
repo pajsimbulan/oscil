@@ -53,5 +53,6 @@ void app_main(void)
     //test_spi_speed();
     // test_panel();
     //test_adc();
-    test_noise();
+    //test_noise();
+    test_dual();
 }
