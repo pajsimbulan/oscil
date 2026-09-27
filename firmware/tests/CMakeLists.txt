@@ -18,3 +18,8 @@ if(NOT MSVC)
     target_link_libraries(test_afe PRIVATE m)
 endif()
 add_test(NAME afe COMMAND test_afe)
+
+add_executable(test_split test_split.c)
+target_include_directories(test_split PRIVATE ${SHARED})
+target_link_libraries(test_split PRIVATE unity)
+add_test(NAME split COMMAND test_split)
