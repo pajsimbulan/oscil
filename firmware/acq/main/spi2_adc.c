@@ -78,6 +78,9 @@ void spi2_adc_init(int div, int mode, bool dual) {
     GPSPI2.misc.cs4_dis = 1;
     GPSPI2.misc.cs5_dis = 1;
 
+    GPSPI2.user1.cs_setup_time = 0; // 0 encodes one clock
+GPSPI2.user.cs_setup = 1;       // enable delay before first clock
+    
     //7. Copy the configratuion form the APB clock domain into the SPI clock domain.
     GPSPI2.cmd.update = 1;
     while(GPSPI2.cmd.update) {}
