@@ -517,3 +517,34 @@ offset to the measured value and the BNC reading sits at 0.001 V,
 steady to one code.
 
 ![Calibrated: 0.001 V at the BNC with IN grounded](screenshots_videos/adc_calibrated_0v_monitor.png)
+
+## 2026-09-27
+
+Noise floor at full speed. SCLK at 26.67 MHz, IN grounded, 16384
+samples per run, both SPI modes back to back.
+
+Both modes were clean over about 100k samples, no bit-slips, and the
+noise is the same: about 4 codes rms, 13 mV at the BNC. Went with mode 1
+anyway. At this clock the ADC's data can show up 20 ns after the falling
+edge, and mode 0 samples 18.75 ns after it, so mode 0 has negative
+worst-case margin on paper. Mode 1 samples a full clock later.
+
+![Mode 0 and mode 1 side by side on the monitor](screenshots_videos/adc_noise_mode0_vs_mode1_monitor.png)
+
+![Bench during the noise test](screenshots_videos/adc_noise_test_bench.JPG)
+
+Dumped one run to the PC for a histogram. First try came back with a
+third of the lines missing and one corrupted value (061 instead of
+2061) that dragged the rms to 19 codes. The board was printing faster
+than the USB console could drain. A 10 ms pause every 128 lines fixed
+it, and the capture script now rejects anything short or malformed.
+
+![Histogram, 16384 samples, IN grounded](screenshots_videos/adc_noise_hist_26mhz.png)
+
+Most samples sit within 4 codes of the mean. The rms is pulled up by a
+few lone samples 40 to 60 codes out, which looks like pickup on the
+breadboard rather than the ADC. The filter as built (165R and 4.4 nF)
+puts the corner at about 219 kHz.
+
+The mean at 26.67 MHz is about 2062, 5 codes lower than at 10 MHz, so
+the offset calibration has to be done at the speed it runs at.
