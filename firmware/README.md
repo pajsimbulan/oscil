@@ -41,6 +41,8 @@ From the ESP-IDF terminal, in a board folder:
 | 09 | Front panel: 3 LEDs, 3 buttons debounced by a 1 kHz scan, events on a queue | Done |
 | 10 | Encoders: 3 EC11s, table-driven quadrature decoder, one event per click | Done |
 | 11 | First ADC reads: both ADS7883s clean at 10 MHz, CH1 calibrated to 0.001 V with IN grounded | Done |
+| 12 | Noise floor at 26.67 MHz: 3.9 codes rms (12.6 mV at the BNC), SPI mode chosen from measurement | Done |
+| 13 | Both channels from one dual-line SPI frame, bit de-interleave host-tested | Done |
 
 ---
 

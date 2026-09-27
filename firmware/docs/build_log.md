@@ -548,3 +548,23 @@ puts the corner at about 219 kHz.
 
 The mean at 26.67 MHz is about 2062, 5 codes lower than at 10 MHz, so
 the offset calibration has to be done at the speed it runs at.
+
+Both channels in one read. The two ADCs share SCLK and CS, and CH2's
+data comes in on the second SPI data line, so one 16-clock frame
+brings in 32 bits with the two channels interleaved bit by bit. A
+five-step shift-and-mask pulls every other bit back together.
+
+Moved the ADC frame decoding into its own header with no ESP-IDF
+includes, so the same code builds on the PC. The host test interleaves
+two known words the way the hardware does and checks the fast split
+against a plain bit-by-bit loop on 10,000 random pairs.
+
+![Host tests passing on the PC](screenshots_videos/host_tests_afe_split_passing.png)
+
+On the board, both inputs grounded at 26.67 MHz: CH1 about 2062, CH2
+about 2069. The 7-code gap (about 24 mV at the BNC) is steady, so it's
+an offset between the two front ends, and it gets calibrated per
+channel. CH1 in the dual read matches CH1 read on its own at the same
+speed, so the channels aren't swapped.
+
+![Both channels from one frame, inputs grounded](screenshots_videos/adc_dual_read_both_grounded_monitor.png)
