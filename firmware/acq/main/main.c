@@ -51,6 +51,7 @@ void app_main(void)
     ESP_LOGI(TAG,"heartbeat on GPIO%d", ACQ_STATUS_RGB);
     //test_pinwalk(ACQ_PINS, sizeof ACQ_PINS / sizeof ACQ_PINS[0]);
     //test_spi_speed();
-   // test_panel();
-   test_adc();
+    // test_panel();
+    //test_adc();
+    test_noise();
 }

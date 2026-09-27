@@ -4,6 +4,10 @@
 #include "soc/spi_struct.h" //GPSPI2: the GP-SPI2 register block
 #include "soc/spi_reg.h" //SPI_USR
 
+// SPI mode for full speed (26.67 MHz), measured: modes 0 and 1 both clean,
+// 1 has positive setup/hold margin on paper
+#define ADC_MODE_FULL 1
+
 //SCLCK = 80/Mhz / div.  div 3 = 26.67 MHz (fastest legal for the ADS7883 part),  div 8 = 10 MHz.
 //spi2 is the one with dma
 void spi2_adc_init(int div, int mode, bool dual);
