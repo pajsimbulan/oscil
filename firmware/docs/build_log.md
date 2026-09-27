@@ -444,3 +444,76 @@ Next time: 0.5 mm solder, tacky flux paste and fine tweezers.
 ![First ADS7883 on its adapter, next to a bare SC70 one](screenshots_videos/ads7883_first_on_adapter.JPG)
 
 ![Both ADS7883 adapters, continuity checks](screenshots_videos/ads7883_both_continuity_test.JPG)
+
+Wired both ADCs into the front ends. U6 on CH1, U7 on CH2, sharing
+SCLK (IO12) and CS (IO10), data on IO13 and IO11. R6/R9 are two 330R in
+parallel (165R) instead of 150R, still under the ADS7883's 200R source
+limit. C8/C9 and C13/C14 (2.2 nF) are on each ADC input. Trimmers and
+BNCs still off; IN is a jumper for now.
+
+Both chips are soldered 180 degrees round on their adapters, so the
+silkscreen is off by three: chip pins 1-6 are silk 4, 5, 6, 1, 2, 3.
+Wired by chip pin, not silkscreen.
+
+First read with the single-line test: code 0.0 on every frame, which
+prints as -6.644 V at the BNC. The firmware checks out, and 0 is what
+the ADC should report for 0 V in, so the problem is upstream. VREF
+wasn't connected to the dividers at first; with that fixed, the R4/R5
+junction reads 1.63 V as expected, but VIN at the ADC was still near
+0 V. Swapping the two ADCs gave the same result. Still tracing.
+
+![Setup for the first ADC read](screenshots_videos/adc_first_read_setup.JPG)
+
+![Monitor stuck at code 0](screenshots_videos/adc_first_read_code0_monitor.png)
+
+Found one: SCLK and CS were swapped on the breadboard. The ADC was being
+clocked on its CS pin and selected by the clock, so it never produced a
+real frame. With them swapped back the codes move off zero (about 25,
+with some frames near 88), so the SPI link is alive. Still well under
+the ~2000 expected for 1.63 V in, so VIN is next.
+
+![Codes off zero after the SCLK/CS fix](screenshots_videos/adc_sclk_cs_fixed_code25_monitor.png)
+
+Printed every raw frame instead of the average. About a third of the
+frames were wrong, and always the same way: the good code shifted left
+one bit (2059 came back as 22). The ADC was one clock ahead, like it
+counted an extra SCLK edge right after CS fell.
+
+Put the logic analyzer on it. Two things in the captures: the PulseView
+decoder has to match the ADC (mode 0, CS active-low) or it shows garbage
+of its own, and the shifted frames were really on the wire. On a bad
+frame both SDO lines flick high for about 40 ns after the first falling
+edge, then drop, so both chips stepped twice on one edge.
+
+![Decoder in mode 1: frames shifted](screenshots_videos/adc_analyzer_mode1_bitslip.png)
+
+![Decoder in mode 0: good and shifted frames mixed](screenshots_videos/adc_analyzer_mode0_bimodal.png)
+
+Tried, in order:
+
+- SPI mode 1 to mode 0. No real change.
+- One clock of CS setup before the first SCLK. Bad frames went from 35%
+  to 9%.
+- 50R in series with SCLK. Worse, about half the frames bad.
+- New jumper, rerouted. Still about 40%.
+- Unplugged the logic analyzer. Zero bad frames.
+
+The analyzer was the problem. Its leads on the shared SCLK line plus its
+ground going back through USB were enough to make both ADCs double
+count a clock edge. The 9% run was the only one taken before it was
+clipped on. Lesson: the probe is part of the circuit.
+
+With it off: clean at 4 MHz and at 10 MHz, both channels. Checked CH2 by
+moving its SDO wire onto IO13 and touching its input to VREF (code jumps
+to about 2720). Kept the CS setup delay, dropped the resistor.
+
+![Bench while chasing it](screenshots_videos/adc_bench_setup.JPG)
+
+![Raw frames at 10 MHz, all good](screenshots_videos/adc_raw_dump_clean_10mhz.png)
+
+Last bit was calibration. With IN grounded the ADC reads 2067, which is
+1.672 V against a 3.314 V supply, not the 1.661 V I'd assumed. Set the
+offset to the measured value and the BNC reading sits at 0.001 V,
+steady to one code.
+
+![Calibrated: 0.001 V at the BNC with IN grounded](screenshots_videos/adc_calibrated_0v_monitor.png)
