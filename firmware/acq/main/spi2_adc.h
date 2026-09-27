@@ -3,6 +3,7 @@
 #include <stdbool.h>
 #include "soc/spi_struct.h" //GPSPI2: the GP-SPI2 register block
 #include "soc/spi_reg.h" //SPI_USR
+#include "oscil_ads7883.h"  //frame decode helpers (host-testable)
 
 // SPI mode for full speed (26.67 MHz), measured: modes 0 and 1 both clean,
 // 1 has positive setup/hold margin on paper
@@ -19,14 +20,3 @@ static inline __attribute__((always_inline)) uint32_t spi2_adc_frame(void)  {
     return GPSPI2.data_buf[0]; //W0: first byte recieved is in bits 7..0
 }
 
-// SLAS594 p.9:  two leading zeros,  and then data  D11..D0  two trailing zeros, MSB first
-static inline uint16_t ads7883_decode(uint16_t word) {
-    return (word >> 2) & 0x0FFF;
-}
-
-
-// Single-line frame: W0 holds the first byte received in bits 7..0, the second in 15..8.
-static inline uint16_t spi2_adc_single_code(uint32_t raw) {
-    uint16_t word = (uint16_t)(((raw & 0xFFu) << 8) | ((raw >> 8) & 0xFFu)); // swap bytes
-    return ads7883_decode(word);
-}
