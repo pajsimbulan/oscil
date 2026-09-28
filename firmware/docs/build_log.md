@@ -720,3 +720,30 @@ suites pass.
 
 ![Loopback on the bench, LINK1 pins on the schematic](screenshots_videos/uart_loopback_bench.JPG)
 
+Board 1 to board 2. The two boards are now wired to each other: each
+TX through a 220R to the other's RX, grounds joined. Board 1 sends every
+decimated frame (a 64-byte header plus min and max for both channels,
+6.5 KB) and every panel event; board 2 sends pings and settings back,
+and board 1 answers settings with its run state and actual sample rate.
+One shared header defines every message so all three boards agree.
+
+About 31.8 frames/s arrive, which is what 2 Mbaud allows for 6.5 KB
+frames, with zero CRC, length or dropped-byte errors. Every encoder
+turn, press and release shows up on board 2. RUN reports STOP, SINGLE
+reports SINGLE then STOP after one frame, and a settings change from
+board 2 comes back confirmed. Ping round trip is about 40 ms because a
+ping waits behind a frame that takes 33 ms to send.
+
+The COBS and framing errors in the screenshot are from unplugging. With
+one board unpowered, the other kept driving its RX pin, which back-powers
+the dead chip through its pin; it then came up with a stuck USB port
+until reset. The counts stay flat while both run, so no new errors. The
+220R resistors are there to keep that current small. Rule for the bench:
+power both boards together, or reset the one plugged in last.
+
+![Both monitors: frames, keys and state messages](screenshots_videos/link1_both_monitors_side_by_side.png)
+
+![Board 1 and board 2 on the bench, crossed LINK1](screenshots_videos/link1_two_boards_bench.JPG)
+
+[Video: LEDs and keys with the link running](screenshots_videos/link1_leds_keys_demo.MP4)
+
