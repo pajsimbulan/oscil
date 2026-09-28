@@ -670,3 +670,27 @@ timer or polling. And the screen only shows about 30 frames a second
 out of roughly 190 bursts, so it only pays off for something like a
 glitch search over every burst. Staying with one-shot for now; the
 ring is a later experiment, untested.
+
+Acquisition task. Board 1 now runs on its own: a FreeRTOS task pinned
+to core 1 loops capture, trigger, min/max, and builds the frame that
+will go to the display board. A settings struct under a mutex holds the
+rate, trigger level, edge and source, and RUN/STOP/SINGLE, so the panel
+buttons (and later the display board) can change it safely from other
+tasks. AUTO mode shows an untriggered frame after three missed bursts,
+so a flat line still draws instead of freezing.
+
+Default rate is 320 kSa/s (500 us/div at 1600 samples). 800 kSa/s for
+200 us/div was the plan on paper, but it's above the 620 kSa/s I
+measured, so at full record length that setting is out.
+
+With the 1 kHz bench signal on CH1: 70 frames/s, every frame triggered,
+0 errors, about 2 KB of the task's 4 KB stack left. One burst is
+3200 samples at 320 kSa/s, 10 ms, so the ceiling is 100 frames/s; 70
+means about 4 ms per frame of trigger, decimation and re-arming the
+burst, roughly 30% dead time. RUN stops and restarts with all three
+LEDs following, SINGLE captures one frame and holds.
+
+![Stats line: 70 frames/s, every frame triggered, no errors](screenshots_videos/acq_task_stats_70fps_terminal.png)
+
+![Board 1 running on its own, RUN, TRIG and ARM lit](screenshots_videos/acq_task_running_leds_bench.JPG)
+

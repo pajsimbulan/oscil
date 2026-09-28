@@ -46,6 +46,7 @@ From the ESP-IDF terminal, in a board folder:
 | 14 | DMA burst capture: 3200 samples per burst, rate set by a hardware counter, checked against an on-board 1 kHz reference, up to about 620 kSa/s | Done |
 | 15 | Edge trigger with hysteresis and sub-sample position, host-tested | Done |
 | 16 | Min/max decimation to 800 display columns, single-sample spikes kept, host-tested | Done |
+| 17 | Acquisition task on core 1: capture, trigger, min/max frame, RUN/STOP/SINGLE, 70 frames/s | Done |
 
 ---
 
