@@ -36,3 +36,8 @@ add_executable(test_decimate test_decimate.c ${SHARED}/oscil_decimate.c)
 target_include_directories(test_decimate PRIVATE ${SHARED})
 target_link_libraries(test_decimate PRIVATE unity)
 add_test(NAME decimate COMMAND test_decimate)
+
+add_executable(test_link test_link.c ${SHARED}/oscil_link.c)
+target_include_directories(test_link PRIVATE ${SHARED})
+target_link_libraries(test_link PRIVATE unity)
+add_test(NAME link COMMAND test_link)
