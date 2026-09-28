@@ -1,8 +1,9 @@
-"""Save the next BEGIN..END block a board prints. Usage: python capture.py COM5 out.csv"""
+"""Save the next BEGIN..END block a board prints. Usage: python capture.py COM5 out.csv [count]"""
 import sys, serial
 
 port, out = sys.argv[1], sys.argv[2]
-vals,inside = [], False
+count = int(sys.argv[3]) if len(sys.argv) > 3 else 16384
+vals, inside = [], False
 with serial.Serial(port, 115200, timeout=15) as s:
     while True:
         line = s.readline().decode(errors="ignore").strip()
@@ -15,7 +16,7 @@ with serial.Serial(port, 115200, timeout=15) as s:
         elif inside:
             vals.append(line)
 
-if len(vals) != 16384 or not all(v.isdigit() and len(v) == 4 for v in vals):
+if len(vals) != count or not all(v.isdigit() and len(v) == 4 for v in vals):
     sys.exit(f"bad capture: {len(vals)} lines, some corrupted; run again")
 with open(out, "w") as f:
     f.write("value\n" + "\n".join(vals) + "\n")
