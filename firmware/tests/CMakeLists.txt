@@ -41,3 +41,8 @@ add_executable(test_link test_link.c ${SHARED}/oscil_link.c)
 target_include_directories(test_link PRIVATE ${SHARED})
 target_link_libraries(test_link PRIVATE unity)
 add_test(NAME link COMMAND test_link)
+
+add_executable(test_ring test_ring.c)
+target_include_directories(test_ring PRIVATE ${SHARED})
+target_link_libraries(test_ring PRIVATE unity)
+add_test(NAME ring COMMAND test_ring)
