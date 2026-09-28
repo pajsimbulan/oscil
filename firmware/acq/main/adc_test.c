@@ -12,7 +12,7 @@
 #define ADC_DIV 8 // 80 Mhz / 8 = 10 MHz to start, 20 for the analyzer capture
 #define ADC_MODE 0
 #define NOISE_N 16384
-#define NOISE_DUMP 1 //1: also print the mode 1 sampels between BEGIN and END for capture.py
+#define NOISE_DUMP 0 //1: also print the mode 1 sampels between BEGIN and END for capture.py
 
 //measured: VREF offset = 0.75 x 2.214 V, +3V3_A = 3.314V
 static oscil_afe_cal_t s_cal1 = {
