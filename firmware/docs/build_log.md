@@ -618,3 +618,17 @@ falling edge, and a noisy sine that still triggers once per period. All
 three host test suites pass.
 
 ![Host tests, trigger added](screenshots_videos/host_tests_trigger_passing.png)
+
+Decimation. A capture has more samples than the screen has columns, so
+each of the 800 columns has to stand for a group of samples. Averaging
+or picking one sample per group would make a short glitch vanish. So
+each column keeps both the lowest and the highest sample in its group,
+and the screen draws a line between them. A spike one sample wide still
+shows up.
+
+Also pure C and host-tested: a one-sample spike survives, constant input
+stays constant, 800 samples into 800 columns comes out unchanged, and a
+ramp whose length isn't a multiple of 800 has every sample land in
+exactly one column with no gaps. All four host test suites pass.
+
+![Host tests, decimation added](screenshots_videos/host_tests_decimate_passing.png)
