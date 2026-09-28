@@ -2,11 +2,18 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include "esp_err.h"
+#include "oscil_link_uart.h"
 
 #define ACQ_R 1600 //record length, samples per channel per frame
 #define ACQ_COLS 800 // screen columns: one(min, max) pair per col per channel
 
-typedef enum { ACQ_RUN, ACQ_STOP, ACQ_SINGLE} acq_run_t;
+typedef enum { ACQ_RUN, ACQ_STOP, ACQ_SINGLE} acq_run_t; // numbering is on the wire (oscil_proto.h)
+
+// Board 1's LINK1 to board 2 and its capture-error count. Global because main.c and the
+// status line use them too; they keep the s_ prefix they had as file statics.
+extern link_t s_link1;
+extern volatile uint32_t s_cap_errors;      // failed bursts since boot
+
 
 //one decimated frame, what board 1 will send to board 2 over link1
 typedef struct {

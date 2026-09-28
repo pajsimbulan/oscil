@@ -61,6 +61,6 @@ void app_main(void)
     //test_dual();
     //test_burst();
     testsig_start(47, 1000);        // bench signal on header 28 until board 3 exists
-    //ESP_ERROR_CHECK(acq_start());
-    test_link_loop();
+    ESP_ERROR_CHECK(acq_start());
+    //test_link_loop();
 }

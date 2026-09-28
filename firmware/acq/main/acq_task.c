@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdbool.h>
+#include <string.h>
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "freertos/semphr.h"
@@ -8,6 +9,8 @@
 #include "oscil_gpio.h"
 #include "oscil_trigger.h"
 #include "oscil_decimate.h"
+#include "oscil_proto.h"
+#include "oscil_pins_acq.h"
 #include "panel.h"
 #include "spi2_adc.h"
 #include "sampler.h"
@@ -17,6 +20,7 @@
 #define TIMING_PIN    14               // spare GPIO14, header 20
 #define TRIG_LED_MS   30               // TRIG flash length
 #define AUTO_BURSTS   3                // AUTO: show an untriggered frame after this many misses
+#define LINK_BAUD     2000000          // same on all three boards
 
 #define TIMING(v) do { if (v) oscil_gpio_set(TIMING_PIN); else oscil_gpio_clr(TIMING_PIN); } while (0)
 
@@ -42,7 +46,17 @@ static SemaphoreHandle_t s_set_lock;
 static SemaphoreHandle_t s_wake;        // given to leave STOP (the task notification is the sampler's)
 static acq_frame_t s_frame;            // the link to board 2 sends this; until then it is just built
 
-typedef struct { uint32_t frames, trigs, autos, errors; } acq_stats_t;
+link_t s_link1 = { .uart = { .port = 1, .tx_pin = ACQ_LINK1_TX, .rx_pin = ACQ_LINK1_RX, .baud = LINK_BAUD } };
+volatile uint32_t s_cap_errors;
+
+// MSG_FRAME payload: header, then CH1 min, CH1 max, CH2 min, CH2 max (800 x u16 each).
+#define FRAME_BYTES (sizeof(proto_frame_hdr_t) + 4u * ACQ_COLS * sizeof(uint16_t))   // 6464
+static uint8_t s_tx[FRAME_BYTES] __attribute__((aligned(4)));
+static_assert(ACQ_COLS == PROTO_COLS, "board 2 draws PROTO_COLS columns");
+static_assert(FRAME_BYTES <= LINK_MAX_PAYLOAD, "frame too big for one link frame");
+
+
+typedef struct { uint32_t frames, trigs, autos, errors, busy; } acq_stats_t;
 static acq_stats_t s_stats;
 
 void acq_set_run(acq_run_t r)
@@ -57,12 +71,31 @@ void acq_set_run(acq_run_t r)
 static void frame_build(const uint16_t *c1, const uint16_t *c2, const sampler_info_t *info,
                         float frac, bool triggered)
 {
-    decimate_minmax(c1, ACQ_R, s_frame.mn[0], s_frame.mx[0], ACQ_COLS);
-    decimate_minmax(c2, ACQ_R, s_frame.mn[1], s_frame.mx[1], ACQ_COLS);
-    s_frame.seq++;
-    s_frame.rate_hz = info->rate_hz;
-    s_frame.frac = frac;
-    s_frame.triggered = triggered;
+    static uint32_t frame_no;
+    proto_frame_hdr_t *hdr = (proto_frame_hdr_t *)s_tx;
+    uint16_t *d = (uint16_t *)(s_tx + sizeof *hdr);       // 64-byte header: d stays 4-aligned
+    decimate_minmax(c1, ACQ_R, &d[0 * ACQ_COLS], &d[1 * ACQ_COLS], ACQ_COLS);
+    decimate_minmax(c2, ACQ_R, &d[2 * ACQ_COLS], &d[3 * ACQ_COLS], ACQ_COLS);
+    hdr->frame_no  = ++frame_no;
+    hdr->rate_hz   = info->rate_hz;
+    hdr->cols      = ACQ_COLS;
+    hdr->triggered = triggered;
+    hdr->ch_mask   = 0x3;
+    hdr->trig_frac = frac;
+    memset(hdr->meas, 0, sizeof hdr->meas);                // measurements arrive later
+}
+
+// MSG_ACQ_STATE whenever the run state or the requested rate changes: first byte = run state.
+static void state_send(const acq_settings_t *st, uint32_t achieved_hz)
+{
+    static acq_run_t sent_run = (acq_run_t)-1;
+    static uint32_t sent_rate;
+    if (st->run == sent_run && st->rate_hz == sent_rate) return;
+    const proto_acq_state_t m = { .run = (uint8_t)st->run, .rate_hz = achieved_hz };
+    if (link_send(&s_link1, MSG_ACQ_STATE, &m, sizeof m) == ESP_OK) {
+        sent_run = st->run;
+        sent_rate = st->rate_hz;
+    }
 }
 
 // Once a second: throughput and the worst-case stack use of this task.
@@ -70,10 +103,10 @@ static void stats_line(TickType_t *last)
 {
     TickType_t now = xTaskGetTickCount();
     if (now - *last < pdMS_TO_TICKS(1000)) return;
-    printf("acq: %lu frames/s  trig %lu  auto %lu  errors %lu  stack free %u words\n",
+    printf("acq: %lu frames/s  trig %lu  auto %lu  errors %lu  link busy %lu  stack free %u bytes\n",
            (unsigned long)s_stats.frames, (unsigned long)s_stats.trigs,
            (unsigned long)s_stats.autos, (unsigned long)s_stats.errors,
-           (unsigned)uxTaskGetStackHighWaterMark(NULL));
+           (unsigned long)s_stats.busy, (unsigned)uxTaskGetStackHighWaterMark(NULL));
     s_stats = (acq_stats_t){ 0 };
     *last = now;
 }
@@ -83,6 +116,7 @@ static void acq_task(void *arg)
     static uint16_t ch1[R2];
     static uint16_t ch2[R2];
     int misses = 0;
+    uint32_t achieved_hz = s_set.rate_hz;
     TickType_t trig_led_off = 0;
     TickType_t last_stats = xTaskGetTickCount();
     ESP_ERROR_CHECK(esp_task_wdt_add(NULL));           // watch this task, not core 1's idle task
@@ -92,6 +126,7 @@ static void acq_task(void *arg)
         xSemaphoreTake(s_set_lock, portMAX_DELAY);
         st = s_set;
         xSemaphoreGive(s_set_lock);
+        state_send(&st, achieved_hz);
 
         if (st.run == ACQ_STOP) {
             panel_led(PANEL_LED_ARM, false);
@@ -115,8 +150,10 @@ static void acq_task(void *arg)
         TIMING(0);
         if (e != ESP_OK) {                              // never draw a failed burst
             s_stats.errors++;
+            s_cap_errors++;
             continue;
         }
+        achieved_hz = info.rate_hz;
 
         const uint16_t *src = st.trig_src ? ch2 : ch1;
         float frac = 0.0f;
@@ -140,7 +177,9 @@ static void acq_task(void *arg)
         TIMING(1);
         frame_build(&ch1[start], &ch2[start], &info, frac, triggered);
         TIMING(0);
-          s_stats.frames++;                                // the link to board 2 will send s_frame here
+        if (link_send(&s_link1, MSG_FRAME, s_tx, FRAME_BYTES) == ESP_OK) s_stats.frames++;
+        else s_stats.busy++;                             // link still sending the last one: skip
+
         if (st.run == ACQ_SINGLE) {                      // one frame done; stop unless RUN was pressed meanwhile
             xSemaphoreTake(s_set_lock, portMAX_DELAY);
             if (s_set.run == ACQ_SINGLE) s_set.run = ACQ_STOP;
@@ -155,7 +194,10 @@ static void acq_panel_task(void *arg)
     QueueHandle_t q = (QueueHandle_t)arg;
     panel_event_t ev;
     while (1) {
-        if (!xQueueReceive(q, &ev, portMAX_DELAY) || ev.type != PANEL_EV_PRESS) continue;
+        if (!xQueueReceive(q, &ev, portMAX_DELAY)) continue;
+        const proto_key_t k = { .type = (uint8_t)ev.type, .id = ev.id, .delta = ev.delta };
+        link_send(&s_link1, MSG_KEY, &k, sizeof k);
+        if (ev.type != PANEL_EV_PRESS) continue;
         if (ev.id == PANEL_BTN_RUN) {
             xSemaphoreTake(s_set_lock, portMAX_DELAY);
             acq_run_t now = s_set.run;
@@ -166,6 +208,28 @@ static void acq_panel_task(void *arg)
             acq_set_run(ACQ_SINGLE);
             panel_led(PANEL_LED_RUN, false);
         }
+    }
+}
+
+// LINK1 RX task (core 0): copy out and return, never block for long.
+static void on_link1(const link_frame_t *f, void *ctx)
+{
+    if (f->type == MSG_PING) {
+        link_send(&s_link1, MSG_PONG, f->payload, f->len);        // echo the timestamp
+    } else if (f->type == MSG_ACQ_SET && f->len == sizeof(proto_acq_set_t)) {
+        proto_acq_set_t m;
+        memcpy(&m, f->payload, sizeof m);                        // packed, maybe unaligned
+        if (m.run > ACQ_SINGLE || m.trig_src > 1 || m.rate_hz == 0) return;
+        xSemaphoreTake(s_set_lock, portMAX_DELAY);
+        s_set.rate_hz = m.rate_hz;
+        s_set.trig = (trig_cfg_t){ .level = m.trig_level, .hyst = m.trig_hyst,
+                                   .edge = m.trig_edge ? TRIG_FALLING : TRIG_RISING };
+        s_set.trig_src = m.trig_src;
+        s_set.mode = m.trig_mode ? TRIG_NORMAL : TRIG_AUTO;
+        s_set.run = (acq_run_t)m.run;
+        xSemaphoreGive(s_set_lock);
+        if (m.run != ACQ_STOP) xSemaphoreGive(s_wake);
+        panel_led(PANEL_LED_RUN, m.run == ACQ_RUN);
     }
 }
 
@@ -180,6 +244,11 @@ esp_err_t acq_start(void)
     for (int i = 0; i < 3; i++) (void)spi2_adc_frame();  // ADS7883 p.4: first frames invalid
     esp_err_t e = sampler_init(R2);
     if (e != ESP_OK) return e;
+
+    s_link1.on_frame = on_link1;
+    e = link_start(&s_link1);                            // this core (0) gets the UART interrupt
+    if (e != ESP_OK) return e;
+
 
     QueueHandle_t q = panel_start();                     // LEDs, buttons, encoders
     panel_led(PANEL_LED_RUN, true);
