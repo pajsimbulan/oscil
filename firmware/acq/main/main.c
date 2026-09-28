@@ -13,6 +13,8 @@
 #include "panel_test.h"        
 #include "adc_test.h"
 #include "burst_test.h"
+#include "testsig.h"
+#include "acq_task.h"
 
 static const char *TAG = "acq";
 
@@ -56,5 +58,7 @@ void app_main(void)
     //test_adc();
     //test_noise();
     //test_dual();
-    test_burst();
+    //test_burst();
+    testsig_start(47, 1000);        // bench signal on header 28 until board 3 exists
+    ESP_ERROR_CHECK(acq_start());
 }
