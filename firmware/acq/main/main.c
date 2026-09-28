@@ -12,6 +12,7 @@
 #include "panel.h"
 #include "panel_test.h"        
 #include "adc_test.h"
+#include "burst_test.h"
 
 static const char *TAG = "acq";
 
@@ -54,5 +55,6 @@ void app_main(void)
     // test_panel();
     //test_adc();
     //test_noise();
-    test_dual();
+    //test_dual();
+    test_burst();
 }

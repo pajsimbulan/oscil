@@ -5,6 +5,7 @@
 #include "soc/spi_reg.h" //SPI_USR
 #include "oscil_ads7883.h"  //frame decode helpers (host-testable)
 
+
 // SPI mode for full speed (26.67 MHz), measured: modes 0 and 1 both clean,
 // 1 has positive setup/hold margin on paper
 #define ADC_MODE_FULL 1
