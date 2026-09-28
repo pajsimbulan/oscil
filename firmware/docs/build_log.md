@@ -619,6 +619,8 @@ three host test suites pass.
 
 ![Host tests, trigger added](screenshots_videos/host_tests_trigger_passing.png)
 
+## 2026-09-28
+
 Decimation. A capture has more samples than the screen has columns, so
 each of the 800 columns has to stand for a group of samples. Averaging
 or picking one sample per group would make a short glitch vanish. So
@@ -632,3 +634,32 @@ ramp whose length isn't a multiple of 800 has every sample land in
 exactly one column with no gaps. All four host test suites pass.
 
 ![Host tests, decimation added](screenshots_videos/host_tests_decimate_passing.png)
+
+How capture actually runs. Each burst is one-shot: the CPU starts it,
+the DMA fills 3200 samples on its own, the SPI block stops after the
+last segment and fires one interrupt. Then the CPU triggers, decimates
+and sends the frame, and only then starts the next burst. Whatever the
+signal does in between is never recorded. That's dead time, and every
+digital scope has it; the spec is called waveform update rate.
+
+![Burst coverage, the capture loop, and a damped signal](screenshots_videos/oscil_burst_capture.png)
+
+How much of the signal one burst holds depends on the ratio of signal
+frequency to sample rate: cycles = f x 3200 / fs. A 1 kHz sine at
+100 kSa/s is 32 cycles; at 620 kSa/s about 5. Frames are never stitched
+together, so a one-time event like a damped oscillation has to fit
+inside a single burst: slow the sample rate until it does, and use
+single-shot so it's captured once and held.
+
+Could the dead time go away? Checked the TRM (30.5.8.5): the segmented
+transfer keeps going as long as each segment's CONF sets
+usr_conf_nxt = 1, and my last segment clears it on purpose. Loop the
+descriptor chains back to the start and set it everywhere, and it
+should run as a continuous ring at the same data rate a burst already
+proves. The catch is knowing when half the ring is full: the SPI
+done interrupt only fires at the end, which never comes, and the GDMA
+per-descriptor interrupt would fire on every sample. It would need a
+timer or polling. And the screen only shows about 30 frames a second
+out of roughly 190 bursts, so it only pays off for something like a
+glitch search over every burst. Staying with one-shot for now; the
+ring is a later experiment, untested.
