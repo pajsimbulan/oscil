@@ -43,6 +43,7 @@ From the ESP-IDF terminal, in a board folder:
 | 11 | First ADC reads: both ADS7883s clean at 10 MHz, CH1 calibrated to 0.001 V with IN grounded | Done |
 | 12 | Noise floor at 26.67 MHz: 3.9 codes rms (12.6 mV at the BNC), SPI mode chosen from measurement | Done |
 | 13 | Both channels from one dual-line SPI frame, bit de-interleave host-tested | Done |
+| 14 | DMA burst capture: 3200 samples per burst, rate set by a hardware counter, checked against an on-board 1 kHz reference, up to about 620 kSa/s | Done |
 
 ---
 

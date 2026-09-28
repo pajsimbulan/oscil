@@ -568,3 +568,37 @@ channel. CH1 in the dual read matches CH1 read on its own at the same
 speed, so the channels aren't swapped.
 
 ![Both channels from one frame, inputs grounded](screenshots_videos/adc_dual_read_both_grounded_monitor.png)
+
+Burst capture with DMA. Until now every sample was the CPU starting an
+SPI frame and waiting for it. Now the SPI block and the DMA engine run
+a whole burst on their own: a list of 3200 small segments, each one a
+full ADC frame, with the gap between frames set by a hardware counter
+in 12.5 ns steps. The CPU starts the burst, sleeps, and gets one
+interrupt at the end.
+
+To check the timing I needed a signal I trust, so board 1 makes its
+own: a 1 kHz square from the LEDC peripheral on a spare pin, jumpered
+into CH1's input. Samples per period tells you the real sample rate.
+
+![Burst rates on the monitor](screenshots_videos/burst_rates_monitor.png)
+
+100 kSa/s measured 100.26 k, 20 kSa/s measured 20.01 k. The CS-low
+part of each segment turned out much longer than the 51 clocks the
+math gives, about 124 at the bus clock, because each segment also has
+to load its setup from memory. That puts the ceiling at about 620 kSa/s,
+not the 1.43 M I'd worked out on paper.
+
+![First 3 ms of a burst at 100 kSa/s](screenshots_videos/burst_waveform.png)
+
+The square comes through clean, about 2075 to 3090, with an edge
+spread over one or two samples from the front end and the anti-alias
+filter.
+
+Reran the noise test with all of this wired up, and this time mode 0
+fell apart at 26.67 MHz: minimums down around 20 and 35 to 50 codes
+rms, the same bit-slip pattern as before. Mode 1 stayed at about 4
+codes. Earlier both modes were clean, so mode 0 was sitting right on
+the edge, which is exactly what the timing math said. Glad I went with
+mode 1.
+
+![Mode 0 slipping, mode 1 clean](screenshots_videos/adc_noise_mode_comparison_monitor.png)
