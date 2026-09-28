@@ -747,3 +747,26 @@ power both boards together, or reset the one plugged in last.
 
 [Video: LEDs and keys with the link running](screenshots_videos/link1_leds_keys_demo.MP4)
 
+Display prep. Soldered header pins onto the four display boards: the
+Adafruit 40-pin TFT breakout for the panel ribbon, the 6-pin FPC
+adapter for the touch ribbon, the XL6009 boost for the backlight and
+the 5 V input. Beeped every pad against its neighbour for shorts and
+against the pin it should reach. All clean.
+
+Mapped the breakout against Adafruit's schematic before wiring anything.
+The silkscreen matches this panel's RGB, clock, sync, DE and DISP pins,
+but three things differ. The breakout ties ribbon pins 3 and 36 to
+ground and leaves 35 open; on this panel those are the SPI chip select,
+data and clock, so the panel runs its default RGB mode and the CS/SPI
+tie-offs on my schematic are left out. The LA pad has a 24 V clamp
+diode across the LED string for the breakout's own driver; this
+backlight needs 25.6 V, so the diode comes off before the XL6009 drives
+it. And 5VIN powers the breakout's boost chip, so it stays unconnected.
+
+First fit the ribbon went in flipped and every pin came out mirrored
+(pin 1 on YU). Caught it with the meter before powering anything.
+
+![Parts laid out before soldering](screenshots_videos/display_parts_before_soldering.JPG)
+
+![Breakouts soldered, continuity and short check](screenshots_videos/display_breakouts_soldered_continuity_check.JPG)
+
