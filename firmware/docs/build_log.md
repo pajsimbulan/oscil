@@ -635,6 +635,13 @@ exactly one column with no gaps. All four host test suites pass.
 
 ![Host tests, decimation added](screenshots_videos/host_tests_decimate_passing.png)
 
+How the trigger and decimation work, drawn out: frames lining up on the
+rising edge, hysteresis stopping noise at the level from firing it
+again, the crossing placed between two samples, and min/max keeping a
+one-sample glitch that averaging would shrink.
+
+![Trigger and min/max decimation explained](screenshots_videos/oscil_trigger_minmax.png)
+
 How capture actually runs. Each burst is one-shot: the CPU starts it,
 the DMA fills 3200 samples on its own, the SPI block stops after the
 last segment and fires one interrupt. Then the CPU triggers, decimates
