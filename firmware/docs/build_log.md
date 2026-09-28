@@ -694,3 +694,29 @@ LEDs following, SINGLE captures one frame and holds.
 
 ![Board 1 running on its own, RUN, TRIG and ARM lit](screenshots_videos/acq_task_running_leds_bench.JPG)
 
+Link protocol. Board 1 has to send frames to board 2 over a UART, and a
+UART only moves bytes: no message boundaries, no error check, no way to
+find your place if you start listening mid-stream. Each message is now
+type, sequence number, length, payload and a CRC-16, then COBS-encoded
+so the byte 0x00 never appears inside it, then a single 0x00 to end it.
+The receiver collects bytes until 0x00, decodes and checks the CRC;
+after garbage it just waits for the next 0x00 and is back in sync. A
+jump in sequence number counts as a lost frame. Pure C, host-tested: the
+published CRC check value, COBS at its awkward lengths (253, 254, 255),
+a flipped bit caught, garbage ignored, a missing frame counted.
+
+UART driver, written from the registers: UART1 on GPIO43/44 through the
+GPIO matrix, an interrupt handler and a ring buffer each way. Tested in
+loopback, a 220R from TX back to RX on board 1, sending frames of random
+length up to 7 KB at 2 Mbaud. 15,600 frames in about 4.5 minutes, every
+one intact, zero CRC, length, framing, overflow or dropped-byte errors.
+About 55 frames a second of 3.6 KB average, so the wire is running at
+full speed. The ring buffer is host-tested too, and all six host test
+suites pass.
+
+![Six host test suites passing](screenshots_videos/host_tests_link_ring_passing.png)
+
+![UART loopback: 15,600 frames at 2 Mbaud, no errors](screenshots_videos/uart_loopback_15600_frames_terminal.png)
+
+![Loopback on the bench, LINK1 pins on the schematic](screenshots_videos/uart_loopback_bench.JPG)
+

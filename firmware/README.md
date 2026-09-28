@@ -47,6 +47,8 @@ From the ESP-IDF terminal, in a board folder:
 | 15 | Edge trigger with hysteresis and sub-sample position, host-tested | Done |
 | 16 | Min/max decimation to 800 display columns, single-sample spikes kept, host-tested | Done |
 | 17 | Acquisition task on core 1: capture, trigger, min/max frame, RUN/STOP/SINGLE, 70 frames/s | Done |
+| 18 | Board link protocol: COBS framing, CRC-16, resync and loss count, host-tested | Done |
+| 19 | UART driver from the registers: 15,600 frames at 2 Mbaud in loopback, zero errors | Done |
 
 ---
 
