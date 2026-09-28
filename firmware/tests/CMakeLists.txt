@@ -31,3 +31,8 @@ if(NOT MSVC)
     target_link_libraries(test_trigger PRIVATE m)
 endif()
 add_test(NAME trigger COMMAND test_trigger)
+
+add_executable(test_decimate test_decimate.c ${SHARED}/oscil_decimate.c)
+target_include_directories(test_decimate PRIVATE ${SHARED})
+target_link_libraries(test_decimate PRIVATE unity)
+add_test(NAME decimate COMMAND test_decimate)
