@@ -602,3 +602,19 @@ the edge, which is exactly what the timing math said. Glad I went with
 mode 1.
 
 ![Mode 0 slipping, mode 1 clean](screenshots_videos/adc_noise_mode_comparison_monitor.png)
+
+Trigger. It scans a capture for the first point where the signal
+crosses a level in the chosen direction, so a repeating waveform lands
+in the same place every frame instead of sliding across the screen.
+Two things make it usable on real signals: hysteresis, where the signal
+has to drop clearly below the level before a rising crossing counts, so
+noise sitting on the level can't fire it; and a sub-sample position,
+interpolated between the two samples on either side of the crossing,
+so the trace doesn't jump by a whole sample from frame to frame.
+
+It's pure C, so it's tested on the PC: exact crossing on a clean sine,
+a crossing 0.3 samples between two points, chatter at the level ignored,
+falling edge, and a noisy sine that still triggers once per period. All
+three host test suites pass.
+
+![Host tests, trigger added](screenshots_videos/host_tests_trigger_passing.png)
