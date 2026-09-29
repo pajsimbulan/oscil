@@ -5857,7 +5857,7 @@
 		)
 		(uuid "17cbe46d-7773-4ccc-baf1-5a0ed0ca4d8a")
 	)
-	(label "LCD_B7"
+	(label "LCD_B6"
 		(at 34.29 54.61 180)
 		(effects
 			(font
@@ -5877,7 +5877,7 @@
 		)
 		(uuid "223beca0-23fb-402d-8485-aaea73d377b0")
 	)
-	(label "LCD_B5"
+	(label "LCD_B4"
 		(at 34.29 49.53 180)
 		(effects
 			(font
@@ -5897,7 +5897,7 @@
 		)
 		(uuid "31a7e44a-cd97-4d85-abb0-ce0b917bcf5c")
 	)
-	(label "LCD_G4"
+	(label "LCD_G3"
 		(at 34.29 67.31 180)
 		(effects
 			(font
@@ -5957,7 +5957,7 @@
 		)
 		(uuid "495c154a-284f-443f-b716-c9984d681f16")
 	)
-	(label "LCD_G3"
+	(label "LCD_G2"
 		(at 34.29 59.69 180)
 		(effects
 			(font
@@ -6037,7 +6037,7 @@
 		)
 		(uuid "6eed6a48-9fa1-4312-a4a8-13745e07a485")
 	)
-	(label "LCD_G5"
+	(label "LCD_G4"
 		(at 34.29 69.85 180)
 		(effects
 			(font
@@ -6087,7 +6087,7 @@
 		)
 		(uuid "80e37437-6968-483a-a8aa-b6d6ebe45972")
 	)
-	(label "LCD_DCLK"
+	(label "LCD_B7"
 		(at 34.29 57.15 180)
 		(effects
 			(font
@@ -6167,7 +6167,7 @@
 		)
 		(uuid "bd6a0cd4-3c19-44f5-8763-4e094b17c736")
 	)
-	(label "LCD_B4"
+	(label "LCD_DCLK"
 		(at 34.29 80.01 180)
 		(effects
 			(font
@@ -6187,7 +6187,7 @@
 		)
 		(uuid "cb352ab0-1892-4af7-ae2f-fe0adaf1fbd1")
 	)
-	(label "LCD_G6"
+	(label "LCD_G5"
 		(at 34.29 72.39 180)
 		(effects
 			(font
@@ -6207,7 +6207,7 @@
 		)
 		(uuid "d9fb72bf-74bf-4603-910f-7dcf8bdd896c")
 	)
-	(label "LCD_G7"
+	(label "LCD_G6"
 		(at 34.29 74.93 180)
 		(effects
 			(font
@@ -6217,7 +6217,7 @@
 		)
 		(uuid "da1e6684-c1ab-4947-b5d3-c2fe42e870ce")
 	)
-	(label "LCD_G2"
+	(label "LCD_B3"
 		(at 34.29 46.99 180)
 		(effects
 			(font
@@ -6237,7 +6237,7 @@
 		)
 		(uuid "def4ad2f-1541-4e03-9e21-9bec3ab94b44")
 	)
-	(label "LCD_B6"
+	(label "LCD_B5"
 		(at 34.29 52.07 180)
 		(effects
 			(font
@@ -6247,7 +6247,7 @@
 		)
 		(uuid "e2ba12fe-e1d1-4157-8458-8a95f533bf62")
 	)
-	(label "LCD_B3"
+	(label "LCD_G7"
 		(at 34.29 77.47 180)
 		(effects
 			(font
