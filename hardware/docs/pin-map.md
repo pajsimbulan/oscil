@@ -27,15 +27,19 @@ are plain GPIOs here.
 | Signal | GPIO | Header pin |
 |---|---|---|
 | LCD_R3–R7 | 1, 2, 4, 5, 6 | 41, 40, 4, 5, 6 |
-| LCD_G2–G7 | 7, 8, 9, 10, 11, 12 | 7, 12, 15, 16, 17, 18 |
-| LCD_B3–B7 | 13, 14, 15, 16, 17 | 19, 20, 8, 9, 10 |
-| LCD_DCLK / HSYNC / VSYNC / DE | 18 / 21 / 38 / 39 | 11 / 27 / 35 / 36 |
+| LCD_B3–B7 | 7, 15, 16, 17, 18 | 7, 8, 9, 10, 11 |
+| LCD_G2–G7 | 8, 9, 10, 11, 12, 13 | 12, 15, 16, 17, 18, 19 |
+| LCD_DCLK / HSYNC / VSYNC / DE | 14 / 21 / 38 / 39 | 20 / 27 / 35 / 36 |
 | TOUCH_SDA / SCL / INT | 40 / 41 / 42 | 37 / 38 / 39 |
 | TOUCH_RESET | 48 | 29 |
 | LINK1_TX / RX | 43 / 44 | 43 / 42 |
 | LINK2_TX | 47 | 28 |
 
 Spare: none. All 27 usable GPIOs are taken.
+
+The left header runs in the Adafruit breakout's pad order (R, then B, then
+G, then DCLK) so the RGB wires lie in parallel groups. The LCD signals go
+through the GPIO matrix, so any free pin can carry any bit.
 
 ## Board 3, generator
 
