@@ -811,3 +811,8 @@ ribbon.
 
 ![First bring-up: test running, panel still white](screenshots_videos/lcd_first_bringup_white_screen.JPG)
 
+What it should show, drawn from the test code: colour bars, then one band
+per data wire (dim to bright blue, green, red), then a 1-pixel border.
+
+![Expected test patterns](screenshots_videos/lcd_test_patterns_expected.gif)
+
