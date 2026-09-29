@@ -791,3 +791,23 @@ yet, so the glow is plain white.
 
 ![Backlight lit at 40 mA from the XL6009](screenshots_videos/backlight_lit_40ma_xl6009.JPG)
 
+Colour bars, first attempt. Before wiring, reordered board 2's LCD pins
+so the left header runs in the breakout's pad order: reds, then all five
+blues, then all six greens, then the pixel clock. The LCD peripheral
+reaches its pins through the GPIO matrix, so any free pin can carry any
+bit; same 27 GPIOs, only the labels and the pin header changed. Wired
+the 16 data lines, clock, HSYNC, VSYNC and DE, tied the unused low bits
+(R0 to R2, G0, G1, B0 to B2) to ground and ON/OFF high through 10k. The
+breakout already grounds the panel's SPI chip select and data pins, so
+the CS/SPI tie-offs on my schematic have nowhere to go and are left
+out. Touch ribbon wired too, with 2k pull-ups on SCL and SDA for margin.
+
+The firmware side is up: the panel driver starts at 800 x 480, 16 MHz
+pixel clock, 32.8 Hz refresh, and the test cycles bars, bits and border.
+The panel stays plain white, which is what it shows with backlight but
+no working logic. Next: DC-check the 3.3V, GND, ON/OFF, CLK (should
+average about half the rail), HSYNC, VSYNC and DE pads, and reseat the
+ribbon.
+
+![First bring-up: test running, panel still white](screenshots_videos/lcd_first_bringup_white_screen.JPG)
+
