@@ -770,3 +770,24 @@ First fit the ribbon went in flipped and every pin came out mirrored
 
 ![Breakouts soldered, continuity and short check](screenshots_videos/display_breakouts_soldered_continuity_check.JPG)
 
+Backlight, alone. Set the XL6009 with nothing on its output first: it
+turns down to about 5 V (a boost can't go below its input) and up past
+22 V, so the module regulates. Parked it at 20 V, below where the LED
+string turns on. Then wired OUT+ through a 100R to LA and LK to ground,
+and crept the trimpot up with the meter across the resistor.
+
+Almost no current at first, then it came up fast once the string
+turned on, the knee 8 LEDs in series predict. At 25.5 V out it was
+3.0 V across the 100R (30 mA). Stopped at 4.0 V across the 100R:
+40 mA, two thirds of the rated 60 mA and well under the 75 mA maximum.
+The booster reads 27 V, so the string drops about 23 V. Used 100R
+instead of the schematic's 75R (the resistor kit has no 75R); it
+dissipates 0.16 W at 40 mA, inside its rating.
+
+The breakout's own 24 V clamp sits across the string. At 23 V it stays
+below its threshold, and after a minute everything on the breakout was
+cool, so it stayed on the board. Nothing else of the panel is connected
+yet, so the glow is plain white.
+
+![Backlight lit at 40 mA from the XL6009](screenshots_videos/backlight_lit_40ma_xl6009.JPG)
+
