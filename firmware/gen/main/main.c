@@ -10,6 +10,8 @@
 #include "oscil_pinwalk.h"
 #include "r2r.h"
 #include "r2r_test.h"
+#include "gen.h"
+#include "gen_test.h"
 
 static const char *TAG = "gen";
 static const oscil_pin_t GEN_PINS[] __attribute__((unused)) = {
@@ -38,7 +40,9 @@ void app_main(void)
     ESP_LOGI(TAG, "heartbeat on GPIO%d", GEN_STATUS_RGB);
     // test_pinwalk(GEN_PINS, sizeof GEN_PINS / sizeof GEN_PINS[0]);
 
-    r2r_init();                                      // D0-D7 outputs, code 0
+    // r2r_init();                                      // D0-D7 outputs, code 0
     //test_dac_bits();
-    test_dac_ramp();
+    //test_dac_ramp();
+    gen_start();                                     // DDS interrupt on core 1, output at code 0
+    test_gen();
 }
