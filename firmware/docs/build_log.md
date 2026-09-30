@@ -902,3 +902,17 @@ the rail came back to 3.288 V.
 ![Ladder built beside the generator sheet](screenshots_videos/gen_r2r_ladder_beside_schematic.JPG)
 
 ![Bit test running, code 0 at the ladder output](screenshots_videos/gen_r2r_bit_test_running.JPG)
+
+
+Ladder staircase. Swapped the bit test for the ramp: codes 0 to 255,
+20 us each, on repeat. On the scope at the ladder output it's a clean
+sawtooth, 0 to 3.28 V by cursor, repeating every 5.44 ms. That's a bit
+longer than the ideal 5.12 ms (256 x 20 us) because each code also pays
+for the loop and the store, and every 64th ramp yields a tick to the
+idle task, so about 21 us per code in practice. At 2 ms/div the 12.8 mV
+steps are too fine to see, which is expected; the bit-weight table
+above already puts the 127 to 128 step within half an LSB.
+
+![Staircase on the scope, cursors on one ramp](screenshots_videos/gen_r2r_staircase_scope.JPG)
+
+[Video: staircase running](screenshots_videos/gen_r2r_staircase_running.MP4)
