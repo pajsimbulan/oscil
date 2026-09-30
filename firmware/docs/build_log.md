@@ -916,3 +916,32 @@ above already puts the 127 to 128 step within half an LSB.
 ![Staircase on the scope, cursors on one ramp](screenshots_videos/gen_r2r_staircase_scope.JPG)
 
 [Video: staircase running](screenshots_videos/gen_r2r_staircase_running.MP4)
+
+
+Waveforms from a timer interrupt. A 32-bit phase accumulator adds a
+tuning word every sample, and the top 8 bits pick the next code: from a
+256-entry sine table, a compare for square, the index itself for saw,
+folded for triangle. f_out = tw x 100 kHz / 2^32, so 1 kHz is
+tw = 42,949,673 and the step is about 23 uHz. The math is pure C and
+host-tested first: tuning word, 1234 Hz counted over 10 s to +-1 cycle,
+10% duty, range limits, table landmarks. All seven host suites pass.
+
+On the board it runs in a 100 kHz Timer Group 0 interrupt on core 1,
+set up from the registers. The ISR acknowledges, re-arms, then does one
+DDS step and one GPIO_OUT store. Everything it touches lives in IRAM or
+RAM: the sine table isn't const (a const table lands in flash), and the
+shape select is if/else, not a switch that GCC could turn into a jump
+table in flash.
+
+Checked at the ladder output: sine, square 50% and 10%, saw and
+triangle at 1 kHz, sine at 100 Hz, 5, 10 and 20 kHz. At 10 kHz a sine
+is only ten steps per cycle, which is the limit the filter has to work
+with. ISR execution time on the timing pin not measured yet.
+
+![Sine, 1 kHz, unfiltered](screenshots_videos/gen_dds_sine_1khz.JPG)
+
+![Square, 1 kHz](screenshots_videos/gen_dds_square_1khz.JPG)
+
+![Saw, 1 kHz](screenshots_videos/gen_dds_saw_1khz.JPG)
+
+![Triangle, 1 kHz](screenshots_videos/gen_dds_triangle_1khz.JPG)
