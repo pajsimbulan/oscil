@@ -816,3 +816,30 @@ per data wire (dim to bright blue, green, red), then a 1-pixel border.
 
 ![Expected test patterns](screenshots_videos/lcd_test_patterns_expected.gif)
 
+## 2026-09-29
+
+Colour bars, fixed. The white screen was power, not signals. The panel's
+3.3 V read 2.3 V off the breadboard supply, below its 2.7 V minimum, and
+the supply's parts ran hot. Moving the panel to board 2's own 3.3 V (as
+the schematic has it) dragged that rail to 2.2 V too, so something on
+the breakout was loading it.
+
+Adafruit's schematic explains it. The breakout's 3.3V pad is the output
+of its own small regulator, whose input is 5VIN. Feeding 3.3 V into that
+pad leaks back through the regulator onto 5VIN, and 5VIN also powers
+the breakout's backlight boost chip, whose enable pin (PWM) is pulled up
+to 5VIN. So the boost chip switched itself on and pulled hard on my
+3.3 V rail. Tied PWM to ground to hold it in shutdown, left 5VIN
+unconnected, and the rail holds at 3.3 V.
+
+Now the panel's logic, touch, pull-ups and ON/OFF all run from board 2's
+3.3 V, so the panel switches on and off with the board, and the backlight
+stays on its own 5 V through the XL6009. Colour bars come up, and the
+test cycles through the bit bands and the border.
+
+![Colour bars on the panel](screenshots_videos/lcd_colour_bars_working.JPG)
+
+![RGB bus wiring into the breakout](screenshots_videos/lcd_rgb_wiring_breakout.JPG)
+
+[Video: test patterns cycling](screenshots_videos/lcd_test_patterns_running.MP4)
+

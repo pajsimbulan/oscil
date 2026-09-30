@@ -51,6 +51,7 @@ From the ESP-IDF terminal, in a board folder:
 | 19 | UART driver from the registers: 15,600 frames at 2 Mbaud in loopback, zero errors | Done |
 | 20 | Board 1 to board 2 over LINK1: 31.8 frames/s of waveform data, panel events, settings round trip | Done |
 | 21 | Display backlight from an XL6009 boost: 40 mA at 23 V, set and measured by hand | Done |
+| 22 | RGB panel lit from a PSRAM framebuffer at 16 MHz: colour bars, bit bands, border | Done |
 
 ---
 
