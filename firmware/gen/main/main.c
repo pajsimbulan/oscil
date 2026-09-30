@@ -39,5 +39,6 @@ void app_main(void)
     // test_pinwalk(GEN_PINS, sizeof GEN_PINS / sizeof GEN_PINS[0]);
 
     r2r_init();                                      // D0-D7 outputs, code 0
-    test_dac_bits();
+    //test_dac_bits();
+    test_dac_ramp();
 }
