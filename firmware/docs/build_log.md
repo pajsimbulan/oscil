@@ -863,3 +863,42 @@ which moves the Sallen-Key filter from 23 kHz (Q 0.73) to 33 kHz
 corner.
 
 ![Bench set up for the ladder](screenshots_videos/gen_r2r_bench_start.JPG)
+
+
+## 2026-09-30
+
+Ladder bit weights. Each bit set alone, measured at the ladder output
+(the R38 row) against board 3's 3V3 pin, 3.288 V. Expected is
+3.288 x code / 256. Meter zero offset of 0.7 mV subtracted.
+
+| Code | Bit | Expected | Measured | Error |
+|---|---|---|---|---|
+| 0 | none | 0 | 0.7 mV | meter offset |
+| 1 | D0 | 12.8 mV | 12.7 mV | -1% |
+| 2 | D1 | 25.7 mV | 25.7 mV | 0% |
+| 4 | D2 | 51.4 mV | 51.5 mV | +0.2% |
+| 8 | D3 | 102.8 mV | 102.9 mV | +0.1% |
+| 16 | D4 | 205.5 mV | 205.2 mV | -0.1% |
+| 32 | D5 | 411.0 mV | 409.7 mV | -0.3% |
+| 64 | D6 | 822.0 mV | 817.3 mV | -0.6% |
+| 128 | D7 | 1.644 V | 1.651 V | +0.4% |
+| 255 | all | 3.275 V | 3.271 V | -0.1% |
+
+Every bit within 1% on 1% parts, with the all-10k ladder (2R single,
+R as parallel pairs). The MSB is 0.4% high, about half an LSB at the
+127 to 128 carry, so the output stays monotonic.
+
+Two traps on the way. First reading at code 255 was 2.2 V, which was
+the D0 node, not the output: with all bits high, the node next to the
+terminator sits at 2/3 of the rail, and a quick nodal solve matched it
+to the millivolt. Then the single bits read almost zero while 128 and
+255 read the full rail, because I was probing the top of R37, which is
+GPIO11 itself. The output is the bottom of R37, the row R38 starts in.
+
+Also found board 3's 3V3 at 2.9 V on USB. Not the board: the USB hub
+was also charging my phone and its 5 V sagged. Unplugged the phone and
+the rail came back to 3.288 V.
+
+![Ladder built beside the generator sheet](screenshots_videos/gen_r2r_ladder_beside_schematic.JPG)
+
+![Bit test running, code 0 at the ladder output](screenshots_videos/gen_r2r_bit_test_running.JPG)
