@@ -843,3 +843,23 @@ test cycles through the bit bands and the border.
 
 [Video: test patterns cycling](screenshots_videos/lcd_test_patterns_running.MP4)
 
+
+Touch controller answers. A throwaway I2C scan on board 2 found the
+GT911 at 0x14 (it picks 0x14 or 0x5D from the INT level at reset, which
+the scan left floating), and a short poll read its product ID back as
+"911" and printed X/Y as I dragged a finger around. Test code reverted;
+the real driver comes later and will drive INT to pin the address.
+
+Generator next. The resistors arrived, so the R-2R ladder goes on board
+3 tonight. Changed the ladder to use one value only: every 2R leg is a
+single 10k and every R is two 10k in parallel (5k), 23 parts. The ratio
+is what sets linearity, and same-value parts hold 2:1 by construction;
+parallel pairs also sit in one pair of breadboard rows where series
+pairs need a middle row each. Tolerance math for 1% parts gives about
+0.5 LSB typical at the mid-scale carry, so I'll meter the 10ks and put
+the closest ones at the D7/D6 end. Ladder output drops from 10k to 5k,
+which moves the Sallen-Key filter from 23 kHz (Q 0.73) to 33 kHz
+(Q 0.69) with R38 left at 10k. Still flat, just a slightly higher
+corner.
+
+![Bench set up for the ladder](screenshots_videos/gen_r2r_bench_start.JPG)
