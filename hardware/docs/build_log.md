@@ -239,3 +239,12 @@ so one op-amp does filter and buffer.
 
 Dropped OUT_EN from the pin map. Nothing to switch, and the ladder
 already sits at 0V at boot through the terminator.
+
+## 2026-09-30
+
+Generator ladder moved to one value. Every 2R leg is a single 10k and
+every R is two 10k in parallel (5k), 23 parts, no 20k. Same-value parts
+hold the 2:1 ratio, and parallel pairs take less breadboard than series.
+Ladder output is now 5k, so the Sallen-Key corner moves from 23 kHz
+(Q 0.73) to 33 kHz (Q 0.69) with R38 kept at 10k. Filter note and
+ladder note updated on the sheet.

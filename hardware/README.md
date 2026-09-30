@@ -62,8 +62,9 @@ which is why the link to the generator is transmit only.
 ![Generator sheet](docs/screenshots/oscil-06_gen.svg)
 
 Firmware DDS into an 8-bit R-2R ladder, then a Sallen-Key filter at about
-23 kHz. The ladder's own 10k output impedance is the filter's first
-resistor, so one op-amp filters and buffers.
+33 kHz. The ladder is all 10k: each 2R is one 10k and each R is two 10k in
+parallel, so the 2:1 ratio holds by construction. Its own 5k output
+impedance is the filter's first resistor, so one op-amp filters and buffers.
 
 ## For Rev B
 

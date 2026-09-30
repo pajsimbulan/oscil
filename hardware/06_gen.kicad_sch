@@ -2276,15 +2276,25 @@
 			(embedded_fonts no)
 		)
 	)
-	(text "2-pole Sallen-Key, unity gain. Ladder output is 10k,\nR38 10k. fc ~23kHz, Q ~0.73. C0G required."
+	(text "2-pole Sallen-Key, unity gain. Ladder output is 5k, R38 10k, fc ~33kHz, Q ~0.69. C0G required."
 		(exclude_from_sim no)
-		(at 209.804 119.888 0)
+		(at 215.392 122.174 0)
 		(effects
 			(font
 				(size 0.635 0.635)
 			)
 		)
 		(uuid "0350750a-f51c-4e0a-a2b0-528249578407")
+	)
+	(text "R24-R36: 5k = two 10k in parallel. All ladder parts 10k 1%, matched by meter, closest at the D7 end."
+		(exclude_from_sim no)
+		(at 106.68 144.272 0)
+		(effects
+			(font
+				(size 0.635 0.635)
+			)
+		)
+		(uuid "117652d9-0e10-4ae6-9ca5-def7794bde2e")
 	)
 	(text "IO48: onboard WS2812 status LED, driven over RMT."
 		(exclude_from_sim no)
@@ -3651,7 +3661,7 @@
 				)
 			)
 		)
-		(property "Value" "10k"
+		(property "Value" "5k"
 			(at 121.92 133.35 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3810,7 +3820,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "20k"
+		(property "Value" "10k"
 			(at 114.3 130.8099 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3892,7 +3902,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "20k"
+		(property "Value" "10k"
 			(at 33.02 130.8099 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4134,7 +4144,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "20k"
+		(property "Value" "10k"
 			(at 73.66 130.8099 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4373,7 +4383,7 @@
 				)
 			)
 		)
-		(property "Value" "10k"
+		(property "Value" "5k"
 			(at 40.64 133.35 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4954,7 +4964,7 @@
 				)
 			)
 		)
-		(property "Value" "10k"
+		(property "Value" "5k"
 			(at 162.56 133.35 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5035,7 +5045,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "20k"
+		(property "Value" "10k"
 			(at 53.34 130.8099 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5117,7 +5127,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "20k"
+		(property "Value" "10k"
 			(at 93.98 130.8099 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5405,7 +5415,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "20k"
+		(property "Value" "10k"
 			(at 175.26 130.8099 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5567,7 +5577,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "20k"
+		(property "Value" "10k"
 			(at 134.62 130.8099 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5727,7 +5737,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "20k"
+		(property "Value" "10k"
 			(at 33.02 144.7799 0)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5886,7 +5896,7 @@
 				)
 			)
 		)
-		(property "Value" "10k"
+		(property "Value" "5k"
 			(at 101.6 133.35 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6048,7 +6058,7 @@
 				)
 			)
 		)
-		(property "Value" "10k"
+		(property "Value" "5k"
 			(at 60.96 133.35 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6388,7 +6398,7 @@
 				)
 			)
 		)
-		(property "Value" "10k"
+		(property "Value" "5k"
 			(at 142.24 133.35 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6468,7 +6478,7 @@
 				)
 			)
 		)
-		(property "Value" "10k"
+		(property "Value" "5k"
 			(at 81.28 133.35 90)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6887,7 +6897,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "20k"
+		(property "Value" "10k"
 			(at 154.94 130.8099 0)
 			(show_name no)
 			(do_not_autoplace no)
