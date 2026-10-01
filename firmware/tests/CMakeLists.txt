@@ -54,3 +54,12 @@ if(NOT MSVC)
     target_link_libraries(test_dds PRIVATE m)
 endif()
 add_test(NAME dds COMMAND test_dds)
+
+add_executable(test_measure test_measure.c ${SHARED}/oscil_measure.c
+               ${SHARED}/oscil_trigger.c ${SHARED}/oscil_afe.c)
+target_include_directories(test_measure PRIVATE ${SHARED})
+target_link_libraries(test_measure PRIVATE unity)
+if(NOT MSVC)
+    target_link_libraries(test_measure PRIVATE m)
+endif()
+add_test(NAME measure COMMAND test_measure)
