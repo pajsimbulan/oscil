@@ -13,8 +13,16 @@
 #include "gui_test.h"
 #include "touch.h"
 #include "touch_test.h"
+#include "links.h"
+#include "scope_view.h"
+#include "esp_lvgl_port.h"
 
 static const char *TAG = "disp";
+
+static void on_frame(const uint8_t *p, uint16_t len) { scope_view_submit(p, len); }
+static void on_key(const proto_key_t *k) { printf("key %u %u %d\n", k->type, k->id, k->delta); }
+static void on_cal(const oscil_afe_cal_t cal[2]) { scope_view_set_cal(cal); }
+
 
 void app_main(void)
 {
@@ -32,8 +40,15 @@ void app_main(void)
     esp_lcd_panel_handle_t panel = lcd_start(10, 2);                // 10-line bounce buffers, 2 frame buffers
     lv_display_t *disp = gui_start(panel);
     touch_start(disp); 
+    const links_handlers_t lh = { .on_frame = on_frame, .on_key = on_key, .on_cal = on_cal };
+    ESP_ERROR_CHECK(links_start(&lh));
+    lvgl_port_lock(0);
+    scope_view_init(lv_screen_active(), 40);
+    view_t v = { .ch = { { true, 1.0f, 0, false, 0 }, { true, 1.0f, 0, false, 0 } }, .phosphor = false, .meas_panel = true };
+    scope_view_set_view(&v);                                     // step 35: .phosphor = true to try it
+    lvgl_port_unlock();
 
     //test_lcd(panel);
     //test_hello();
-    test_touch();
+    //test_touch();
 }

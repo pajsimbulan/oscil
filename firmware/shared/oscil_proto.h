@@ -8,6 +8,7 @@ enum {
     MSG_FRAME = 0x10,                     // 1 -> 2: proto_frame_hdr_t + min/max columns
     MSG_KEY = 0x20,                       // 1 -> 2: front-panel event
     MSG_ACQ_SET = 0x30,                   // 2 -> 1: acquisition settings
+    MSG_CAL = 0x32,                       // 1 -> 2: oscil_afe_cal_t[2], at boot and after calibration
     MSG_ACQ_STATE = 0x31,                 // 1 -> 2: run state, rate actually achieved
     MSG_GEN_SET = 0x40,                   // 2 -> 3: generator settings
     MSG_STATS = 0x50,                     // either way, optional
