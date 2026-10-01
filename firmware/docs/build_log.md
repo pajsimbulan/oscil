@@ -985,3 +985,40 @@ mirroring or swap needed.
 ![Touch coordinates in the monitor](screenshots_videos/touch_coordinates_log.png)
 
 [Video: dot following the finger](screenshots_videos/touch_dot_following_finger.MP4)
+
+
+Scope view, first try (not working yet). Board 2's links moved into their
+own module, and a scope view draws the min/max frames from board 1 onto
+an 800x400 plot: a graticule drawn once and copied each frame, one
+vertical run per column from min to max, CH1 yellow and CH2 cyan, and
+two frame slots between the link task and the renderer so a slow draw
+drops old frames instead of tearing. Screen comes up with the plot and
+the grid, but no trace.
+
+The LINK line says why: about 1 frame/s gets through instead of the 30
+board 1 sends, and the CRC, COBS and length counters climb fast. FIFO
+overflows, ring drops and framing errors all stay at 0, so board 2 keeps
+up and the baud matches; the bytes are arriving with bits flipped. Since
+the board 1 to 2 test passed at 31.8 frames/s before the
+display was running, this points at the wiring rather than the code:
+the 16 MHz pixel clock and 16 data lines now switch next to the link
+wires, and the grounds run through long breadboard jumpers.
+
+Along the way the bench 5 V sagged to 4.1 V under load. The backlight
+boost draws about 260 mA, and the breadboard module makes 5 V from 9 V
+with a small linear regulator that has to burn 4 V x 0.3 A, about
+1.2 W. Moved the XL6009 to its own bench supply at 5.0 V; the module
+now only feeds the front end and holds 5 V.
+
+Next: short ground between boards 1 and 2 beside the link wires, link
+wires routed away from the display bundle, and 1 Mbaud as a fallback.
+
+What it should look like:
+
+![Expected scope view (illustration)](screenshots_videos/scope_view_expected.png)
+
+What it does today:
+
+![Scope view, grid only, link corrupting frames](screenshots_videos/scope_view_first_try_no_trace.JPG)
+
+[Video: scope view first try](screenshots_videos/scope_view_first_try.MOV)
