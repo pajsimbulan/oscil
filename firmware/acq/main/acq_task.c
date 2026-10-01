@@ -15,6 +15,8 @@
 #include "spi2_adc.h"
 #include "sampler.h"
 #include "acq_task.h"
+#include "oscil_measure.h"
+
 
 #define R2            (2 * ACQ_R)      // burst length: the trigger is searched in the middle half
 #define TIMING_PIN    14               // spare GPIO14, header 20
@@ -82,7 +84,9 @@ static void frame_build(const uint16_t *c1, const uint16_t *c2, const sampler_in
     hdr->triggered = triggered;
     hdr->ch_mask   = 0x3;
     hdr->trig_frac = frac;
-    memset(hdr->meas, 0, sizeof hdr->meas);                // measurements arrive later
+    static const oscil_afe_cal_t CAL_NOM = OSCIL_AFE_CAL_NOMINAL;   // calibration later swaps in cal_get(ch)
+    oscil_measure(c1, ACQ_R, info->rate_hz, &CAL_NOM, &hdr->meas[0]);   // full-resolution record, achieved rate
+    oscil_measure(c2, ACQ_R, info->rate_hz, &CAL_NOM, &hdr->meas[1]);
 }
 
 // MSG_ACQ_STATE whenever the run state or the requested rate changes: first byte = run state.
