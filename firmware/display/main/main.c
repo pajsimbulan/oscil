@@ -11,6 +11,8 @@
 #include "lcd_test.h"
 #include "gui.h"
 #include "gui_test.h"
+#include "touch.h"
+#include "touch_test.h"
 
 static const char *TAG = "disp";
 
@@ -29,8 +31,9 @@ void app_main(void)
 
     esp_lcd_panel_handle_t panel = lcd_start(10, 2);                // 10-line bounce buffers, 2 frame buffers
     lv_display_t *disp = gui_start(panel);
-    (void)disp;
+    touch_start(disp); 
 
     //test_lcd(panel);
-    test_hello();
+    //test_hello();
+    test_touch();
 }
