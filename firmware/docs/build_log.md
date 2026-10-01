@@ -1022,3 +1022,60 @@ What it does today:
 ![Scope view, grid only, link corrupting frames](screenshots_videos/scope_view_first_try_no_trace.JPG)
 
 [Video: scope view first try](screenshots_videos/scope_view_first_try.MOV)
+
+
+## 2026-10-01
+
+Scope view, live. Board 1's frames now draw on board 2's screen: the
+1 kHz test square on CH1 over the graticule, the link at 31.8 frames/s
+with zero errors. Getting there took a day of isolation tests, because
+the failure only showed up with everything running.
+
+The symptom: about 1 good message per second, CRC, length and COBS
+errors climbing, a grid with no trace. Each piece was added back alone,
+one flash per test: link only, then the panel, LVGL, touch, and the
+scope view with no frames fed to it. All clean at 31.8/s. Connecting the
+frame callback broke it again, and leaving the drawing task asleep while
+still receiving and copying frames made it clean. So the trigger was the
+drawing, not the wiring.
+
+Drawing alone exposed the real counter: ovf, the UART's hardware RX FIFO
+overflowing. Each frame the scope task copies a 640 KB background in
+PSRAM and redraws the traces, about 34 ms of heavy memory traffic, and
+the UART interrupt on core 0 couldn't always empty the 128-byte FIFO in
+time. Four changes fixed it:
+
+- UART interrupt raised to level 3 so it runs ahead of the display's.
+- RX FIFO threshold from 64 to 32 bytes: more headroom before overflow.
+- On overflow, reset the RX FIFO instead of only counting it. Before
+  this, one overflow left the receiver broken for good; now it costs a
+  frame and the decoder resyncs on the next delimiter.
+- A 10 ms pause after each draw, so core 1's idle task runs (the task
+  watchdog was firing) and PSRAM gets a gap. ovf stayed at 0 after this.
+
+Then a crash on re-enabling the measurement labels: LVGL's built-in
+printf doesn't do %f, lost its place in the argument list and read a
+float as a string pointer (NULL). Formatting with the C library's
+snprintf first fixed it.
+
+Where it stands: stable, 8 frames/s on screen with the full canvas
+redraw (target 25+), and the trace is live but not clean yet, with
+gaps in the highs. The captured data from board 1 was a clean 50% square
+when dumped earlier, so the next look is board 2's drawing path, along
+with only redrawing what changed to get the frame rate up.
+
+Before the fix, link errors climbing while frames draw:
+
+![LINK errors while drawing](screenshots_videos/link_corrupt_while_drawing.png)
+
+After the fix, link clean at 31.8/s with the scope drawing:
+
+![LINK clean while drawing](screenshots_videos/link_clean_while_drawing.png)
+
+First trace on screen, with the gaps in the highs:
+
+![First live trace](screenshots_videos/scope_view_first_trace_gaps.jpg)
+
+The scope view running on the bench, board 1's 1 kHz square on CH1:
+
+![Live scope view on the bench](screenshots_videos/scope_view_live_square_bench.JPG)

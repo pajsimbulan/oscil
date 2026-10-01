@@ -56,6 +56,7 @@ From the ESP-IDF terminal, in a board folder:
 | 24 | DDS in a 100 kHz register-level timer interrupt: sine, square, saw, triangle, host-tested | Done |
 | 25 | LVGL 9.3 on the panel: double framebuffer, bounce buffers, rendering on core 1 | Done |
 | 26 | GT911 touch over I2C at 0x5D, feeding LVGL as an input device | Done |
+| 27 | Live scope view: board 1 frames drawn on board 2, link 31.8 frames/s error-free under display load | In progress (8 fps, trace cleanup) |
 
 ---
 
