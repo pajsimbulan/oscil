@@ -946,6 +946,8 @@ with. ISR execution time on the timing pin not measured yet.
 
 ![Triangle, 1 kHz](screenshots_videos/gen_dds_triangle_1khz.JPG)
 
+![Seven host test suites passing, DDS added](screenshots_videos/host_tests_dds_passing.png)
+
 
 LVGL on the panel. The display now draws through LVGL 9.3 and
 esp_lvgl_port instead of filling the framebuffer by hand. Two PSRAM
@@ -970,3 +972,16 @@ black is black again.
 ![RGB bus wiring, panel flipped](screenshots_videos/display_wiring_rgb_bus_rear.JPG)
 
 [Video: LVGL hello screen running](screenshots_videos/lvgl_hello_running.MP4)
+
+
+Touch. The GT911 now runs through Espressif's esp_lcd_touch driver and
+feeds LVGL as an input device. At reset the driver holds INT low, which
+makes the chip answer at 0x5D instead of the 0x14 the earlier throwaway
+scan found; the boot scan sees exactly one device at 0x5D and reads the
+product ID back as "911". A red dot follows the finger and every press
+prints its coordinates. X and Y come out in the right directions, no
+mirroring or swap needed.
+
+![Touch coordinates in the monitor](screenshots_videos/touch_coordinates_log.png)
+
+[Video: dot following the finger](screenshots_videos/touch_dot_following_finger.MP4)

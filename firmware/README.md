@@ -55,6 +55,7 @@ From the ESP-IDF terminal, in a board folder:
 | 23 | 8-bit R-2R ladder, all eight bits in one GPIO_OUT store: every bit weight within 1% | Done |
 | 24 | DDS in a 100 kHz register-level timer interrupt: sine, square, saw, triangle, host-tested | Done |
 | 25 | LVGL 9.3 on the panel: double framebuffer, bounce buffers, rendering on core 1 | Done |
+| 26 | GT911 touch over I2C at 0x5D, feeding LVGL as an input device | Done |
 
 ---
 
