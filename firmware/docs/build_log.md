@@ -945,3 +945,28 @@ with. ISR execution time on the timing pin not measured yet.
 ![Saw, 1 kHz](screenshots_videos/gen_dds_saw_1khz.JPG)
 
 ![Triangle, 1 kHz](screenshots_videos/gen_dds_triangle_1khz.JPG)
+
+
+LVGL on the panel. The display now draws through LVGL 9.3 and
+esp_lvgl_port instead of filling the framebuffer by hand. Two PSRAM
+framebuffers with tearing avoidance (LVGL draws one while the panel shows
+the other), and 10-line bounce buffers in internal RAM so the LCD DMA
+never waits on PSRAM. LVGL renders on core 1; the RGB refill interrupt
+stays on core 0. First screen is plain: the default light theme, "Oscil"
+centred, and LVGL's FPS/CPU monitor in the corner. Held still for a
+minute with no drift or tearing.
+
+Two snags. The build failed first: the manual pinned LVGL 9.2 but the
+newest esp_lvgl_port 2.x uses a colour format added in 9.3, so the
+manifest now allows LVGL 9.3. Then the grey text and the monitor box came
+out purple. The bit-line test showed why: black was maroon, and the last
+band (R7 alone) matched the background, so R7 was stuck high. The
+jumpers on that side of board 2 had shifted two rows, putting R5 and
+below on the wrong header pins, one of them 3V3. Moved them back and
+black is black again.
+
+![LVGL hello screen](screenshots_videos/lvgl_hello_running.JPG)
+
+![RGB bus wiring, panel flipped](screenshots_videos/display_wiring_rgb_bus_rear.JPG)
+
+[Video: LVGL hello screen running](screenshots_videos/lvgl_hello_running.MP4)
