@@ -1079,3 +1079,40 @@ First trace on screen, with the gaps in the highs:
 The scope view running on the bench, board 1's 1 kHz square on CH1:
 
 ![Live scope view on the bench](screenshots_videos/scope_view_live_square_bench.JPG)
+
+
+Measurements. Board 1 now measures each channel from the full
+1600-sample record, before decimation, and sends the results in the
+frame header: min, max, peak to peak, average, true RMS (DC included),
+frequency and duty. Board 2 only displays them. Average and RMS come
+from one pass with double accumulators; frequency reuses the trigger:
+every rising crossing of the midpoint (10% hysteresis) across the
+record, first to last with the sub-sample fractions, over the achieved
+sample rate. Duty is the share of samples above the midpoint. Host
+tested first: DC, sine RMS, a 1 kHz sine within 0.1%, a 25% square.
+Eight host suites pass.
+
+On the 1 kHz test square, nominal calibration:
+
+| Measurement | Oscil | Expected |
+|---|---|---|
+| Frequency | 996.0 Hz | 1000 Hz |
+| Duty | 50.0% | 50% |
+| Average | 1.749 V | midway between the levels |
+| RMS | 2.431 V | high level / sqrt(2) |
+| Min / max | -0.235 / 3.590 V | levels about -0.13 / 3.45 V, plus noise |
+| Peak to peak | 3.825 V | max - min |
+
+The level offsets are the nominal calibration; the real one comes later.
+The link stays at 31.8 frames/s with zero errors and board 1 still
+captures 31 frames/s with the measuring added.
+
+![Measurement panel on the 1 kHz square](screenshots_videos/measure_panel_1khz_square.jpg)
+
+![Bench with measurements running](screenshots_videos/measure_bench_square.JPG)
+
+![Host tests, measurements added](screenshots_videos/host_tests_measure_passing.png)
+
+![Link clean, board 1 measuring](screenshots_videos/measure_link_clean.png)
+
+[Video: measurements running](screenshots_videos/measure_running.MP4)
