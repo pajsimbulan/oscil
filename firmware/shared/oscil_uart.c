@@ -30,14 +30,19 @@ static void IRAM_ATTR uart_isr(void *arg)
 
     if (st & INT_RX_ALL) {
         hw->int_clr.val = st & INT_RX_ALL;                // clear first: a byte arriving mid-drain re-raises it
-        uint32_t n;
-        while ((n = hw->status.rxfifo_cnt) != 0) {        // re-read: bytes keep arriving while we drain
-            while (n--) {
-                uint8_t b = (uint8_t)hw->fifo.val;        // reading UART_FIFO_REG pops one byte
-                if (!ring_put(&u->rx, b)) u->rx_drops++;  // ring full: the task is too slow
+        if (st & INT_RXOVF) {                             // the FIFO filled before we got here:
+            u->hw_overflows++;                            // its contents and pointers can't be trusted,
+            hw->conf0.rxfifo_rst = 1;                     // so discard it, as ESP-IDF's driver does.
+            hw->conf0.rxfifo_rst = 0;                     // The link decoder resyncs on the next frame delimiter.
+        } else {
+            uint32_t n;
+            while ((n = hw->status.rxfifo_cnt) != 0) {    // re-read: bytes keep arriving while we drain
+                while (n--) {
+                    uint8_t b = (uint8_t)hw->fifo.val;    // reading UART_FIFO_REG pops one byte
+                    if (!ring_put(&u->rx, b)) u->rx_drops++;  // ring full: the task is too slow
+                }
             }
         }
-        if (st & INT_RXOVF)  u->hw_overflows++;           // the FIFO filled before we got here
         if (st & INT_FRMERR) u->frame_errors++;           // bad stop bit: noise or wrong baud
         TaskHandle_t t = u->reader;
         if (t) vTaskNotifyGiveFromISR(t, &woken);
@@ -108,7 +113,7 @@ esp_err_t oscil_uart_start(oscil_uart_t *u, uint32_t rx_size, uint32_t tx_size)
     // 4. FIFOs and thresholds (TRM p.928, p.930).
     hw->conf0.rxfifo_rst = 1; hw->conf0.rxfifo_rst = 0;
     hw->conf0.txfifo_rst = 1; hw->conf0.txfifo_rst = 0;
-    hw->conf1.rxfifo_full_thrhd = 64;                     // RX interrupt above half full
+    hw->conf1.rxfifo_full_thrhd = 32;                     // RX interrupt at a quarter full: 480 us of headroom
     hw->conf1.txfifo_empty_thrhd = 32;                    // TX interrupt below 32 bytes
     hw->mem_conf.rx_tout_thrhd = 20;                      // idle 20 bit times = 2 bytes
     hw->conf1.rx_tout_en = 1;
@@ -138,7 +143,7 @@ esp_err_t oscil_uart_start(oscil_uart_t *u, uint32_t rx_size, uint32_t tx_size)
     hw->int_clr.val = 0xFFFFFFFFu;
     hw->int_ena.val = (u->rx_pin >= 0) ? INT_RX_ALL : 0;  // TX-empty is enabled on demand
     int src = (u->port == 1) ? ETS_UART1_INTR_SOURCE : ETS_UART2_INTR_SOURCE;
-    return esp_intr_alloc(src, ESP_INTR_FLAG_IRAM, uart_isr, u, &u->isr);
+        return esp_intr_alloc(src, ESP_INTR_FLAG_IRAM | ESP_INTR_FLAG_LEVEL3, uart_isr, u, &u->isr);
 }
 
 void oscil_uart_set_reader(oscil_uart_t *u, TaskHandle_t t) { u->reader = t; }
