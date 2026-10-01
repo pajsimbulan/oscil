@@ -1,0 +1,4 @@
+dependencies:
+  idf: ">=5.5"
+  lvgl/lvgl: "~9.3.0"               # 9.3.x: esp_lvgl_port 2.x needs RGB565_SWAPPED
+  espressif/esp_lvgl_port: "^2"     # 2.x accepts LVGL >=8,<10 and IDF >=5.2

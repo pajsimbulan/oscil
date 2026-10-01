@@ -9,6 +9,8 @@
 #include "oscil_pins_display.h"
 #include "lcd.h"
 #include "lcd_test.h"
+#include "gui.h"
+#include "gui_test.h"
 
 static const char *TAG = "disp";
 
@@ -25,7 +27,10 @@ void app_main(void)
     // Status LED retired: GPIO48 is TOUCH_RESET, and its 30 us masked window
     // would upset the RGB bounce-buffer refill interrupt.
 
-    esp_lcd_panel_handle_t panel = lcd_start(0, 1);
+    esp_lcd_panel_handle_t panel = lcd_start(10, 2);                // 10-line bounce buffers, 2 frame buffers
+    lv_display_t *disp = gui_start(panel);
+    (void)disp;
 
-    test_lcd(panel);
+    //test_lcd(panel);
+    test_hello();
 }
