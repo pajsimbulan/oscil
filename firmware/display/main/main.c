@@ -36,17 +36,20 @@ void app_main(void)
              flash_bytes / (1024 * 1024), (unsigned)(esp_psram_get_size() / (1024 * 1024)));
     // Status LED retired: GPIO48 is TOUCH_RESET, and its 30 us masked window
     // would upset the RGB bounce-buffer refill interrupt.
-
-    esp_lcd_panel_handle_t panel = lcd_start(10, 2);                // 10-line bounce buffers, 2 frame buffers
+            esp_lcd_panel_handle_t panel = lcd_start(10, 2);                // 10-line bounce buffers, 2 frame buffers
     lv_display_t *disp = gui_start(panel);
-    touch_start(disp); 
+    touch_start(disp);                                              // failure is logged; the self-test sees it
+
     const links_handlers_t lh = { .on_frame = on_frame, .on_key = on_key, .on_cal = on_cal };
     ESP_ERROR_CHECK(links_start(&lh));
+
     lvgl_port_lock(0);
-    scope_view_init(lv_screen_active(), 40);
-    view_t v = { .ch = { { true, 1.0f, 0, false, 0 }, { true, 1.0f, 0, false, 0 } }, .phosphor = false, .meas_panel = true };
-    scope_view_set_view(&v);                                     // step 35: .phosphor = true to try it
+    ESP_ERROR_CHECK(scope_view_init(lv_screen_active(), 40));
+    view_t v = { .ch = { { true, 1.0f, 0, false, 0 }, { true, 1.0f, 0, false, 0 } },
+                 .phosphor = false, .meas_panel = true };
+    scope_view_set_view(&v);
     lvgl_port_unlock();
+
 
     //test_lcd(panel);
     //test_hello();

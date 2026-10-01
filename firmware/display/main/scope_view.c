@@ -107,10 +107,12 @@ static void show_meas(const proto_frame_hdr_t *h)
         float k = (v->amps && v->shunt_ohm > 0) ? 1.0f / v->shunt_ohm : 1.0f;   // V -> A
         const char *u = (v->amps && v->shunt_ohm > 0) ? "A" : "V";
         proto_meas_t m = h->meas[ch];                               // copy out of the packed header
-        lv_label_set_text_fmt(s_meas[ch],
+        char buf[160];                                            // libc snprintf: LVGL's built-in one has no %f
+        snprintf(buf, sizeof buf,
             "CH%d  min %.3f %s  max %.3f %s  pp %.3f %s\navg %.3f %s  rms %.3f %s  f %.1f Hz  duty %.1f %%",
             ch + 1, m.vmin * k, u, m.vmax * k, u, (m.vmax - m.vmin) * k, u,
             m.vavg * k, u, m.vrms * k, u, m.freq_hz, m.duty * 100.0f);
+        lv_label_set_text(s_meas[ch], buf);
     }
 }
 
@@ -144,6 +146,7 @@ static void scope_task(void *arg)
         s_drawing = -1;
         s_last = r;
         taskEXIT_CRITICAL(&s_mux);
+        vTaskDelay(pdMS_TO_TICKS(10));   // block so lower-priority tasks can run
 
         int64_t now = esp_timer_get_time();
         if (++frames, now - t_win >= 5000000) {
@@ -178,7 +181,9 @@ esp_err_t scope_view_init(lv_obj_t *parent, int y)
         lv_obj_set_pos(s_meas[ch], 4, y + SCOPE_H - 84 + ch * 42);
         lv_obj_add_flag(s_meas[ch], LV_OBJ_FLAG_HIDDEN);
     }
-    xTaskCreatePinnedToCore(scope_task, "scope", 4096, NULL, 5, &s_task, 1);
+    if (xTaskCreatePinnedToCore(scope_task, "scope", 16384,
+                                NULL, 5, &s_task, 1) != pdPASS)
+        return ESP_ERR_NO_MEM;
     return ESP_OK;
 }
 
