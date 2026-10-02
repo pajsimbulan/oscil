@@ -1170,3 +1170,23 @@ disagree with the output. Board 2 sends the settings on LINK2 every
 500 ms; board 3 starts following once its receiver is in.
 
 ![Generator screen, 250 Hz sine with the preview](screenshots_videos/generator_screen_sine_preview.JPG)
+
+LINK2. Board 3 now listens. LINK2 is one-way, so board 3 can't
+acknowledge anything; instead board 2 sends the whole generator state
+right after every change and again every 500 ms, and board 3 applies
+whatever arrives. A lost frame is corrected within half a second, and
+receiving the same state twice changes nothing. Board 3 flashes its LED
+white per frame, then green for output on or dim red for off, and logs
+each change plus a status line every 5 s (frames received, time since
+the last one, or a warning if the link goes quiet). Frames arrive about
+every 500 ms with no gaps.
+
+The generator screen also got easier to read: frequency is a button
+that opens the keypad, each slider shows its value (Vpp, V, %), the
+switch is labelled, and an output card at the bottom summarises the
+setting ("1 kHz Sine, 0.00 to 3.30 V, output on"). All float text goes
+through snprintf.
+
+![Three boards: generator screen, board 3 following](screenshots_videos/link2_generator_screen_three_boards.JPG)
+
+![Board 3 log: frames every 500 ms, the applied setting](screenshots_videos/link2_board3_following_monitor.png)
