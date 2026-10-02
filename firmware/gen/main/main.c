@@ -12,6 +12,7 @@
 #include "r2r_test.h"
 #include "gen.h"
 #include "gen_test.h"
+#include "gen_link.h"
 
 static const char *TAG = "gen";
 static const oscil_pin_t GEN_PINS[] __attribute__((unused)) = {
@@ -36,13 +37,13 @@ void app_main(void)
     ESP_LOGI(TAG, "tick %d Hz, LINK2 RX on GPIO%d",
              configTICK_RATE_HZ, GEN_LINK2_RX);
     ESP_ERROR_CHECK(oscil_status_init(GEN_STATUS_RGB));
-    ESP_ERROR_CHECK(oscil_status_start_heartbeat(0, 0, 16));      // blue
-    ESP_LOGI(TAG, "heartbeat on GPIO%d", GEN_STATUS_RGB);
+    // ESP_ERROR_CHECK(oscil_status_start_heartbeat(0, 0, 16));   // blue; LINK2 owns the LED now
     // test_pinwalk(GEN_PINS, sizeof GEN_PINS / sizeof GEN_PINS[0]);
 
     // r2r_init();                                      // D0-D7 outputs, code 0
-    //test_dac_bits();
-    //test_dac_ramp();
+    // test_dac_bits();
+    // test_dac_ramp();
     gen_start();                                     // DDS interrupt on core 1, output at code 0
-    test_gen();
+    ESP_ERROR_CHECK(gen_link_start());               // LINK2 on core 0: board 2 sets the waveform
+    // test_gen();
 }
