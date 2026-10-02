@@ -187,10 +187,18 @@ esp_err_t scope_view_init(lv_obj_t *parent, int y)
     return ESP_OK;
 }
 
-void scope_view_set_view(const view_t *v)
+
+    void scope_view_set_view(const view_t *v)
 {
     s_view = *v;
+    // Redraw the last frame with the new view, so V/div, channel on/off and MEAS
+    // change the picture even in STOP, when no new frames arrive.
+    taskENTER_CRITICAL(&s_mux);
+    if (s_ready < 0 && s_last >= 0) s_ready = s_last;
+    taskEXIT_CRITICAL(&s_mux);
+    if (s_task) xTaskNotifyGive(s_task);
 }
+
 
 void scope_view_set_cal(const oscil_afe_cal_t cal[2])
 {
