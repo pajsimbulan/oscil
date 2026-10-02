@@ -248,3 +248,26 @@ hold the 2:1 ratio, and parallel pairs take less breadboard than series.
 Ladder output is now 5k, so the Sallen-Key corner moves from 23 kHz
 (Q 0.73) to 33 kHz (Q 0.69) with R38 kept at 10k. Filter note and
 ladder note updated on the sheet.
+
+## 2026-10-02
+
+Front-end decoupling. The scope trace had visible fuzz on a flat input.
+The ADS7883 uses VDD as its reference, so any noise on the analog rail
+shows up as code noise. Everything on the rail was 1 uF or smaller.
+
+Added:
+
+- 10 uF on the MCP1700 output (+3.3VA), beside C2.
+- 10 uF on the MCP1700 input (+5V), beside C1.
+- 10 uF at each ADS7883 VDD, beside the existing 1 uF and 10 nF, in the
+  same breadboard row as the pin.
+- 1 uF across R3, the 20k of the VREF divider. It filters the 2.2 V
+  reference at the divider (about 24 Hz with the 6.7k source), not on the
+  buffer output, where a capacitive load could make the follower oscillate.
+
+The noise on the trace dropped to a low level.
+
+Schematic labels fixed: the op-amps and both ADS7883s were drawn on
++3V3, the dev board's digital rail, but on the bench they run from the
+MCP1700 rail. Moved them to +3.3VA so the drawing matches the wiring.
+Digital pull-ups stay on +3V3. Notes added next to the new parts.
