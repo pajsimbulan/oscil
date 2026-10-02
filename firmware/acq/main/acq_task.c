@@ -23,6 +23,7 @@
 #define TRIG_LED_MS   30               // TRIG flash length
 #define AUTO_BURSTS   3                // AUTO: show an untriggered frame after this many misses
 #define LINK_BAUD     2000000          // same on all three boards
+#define ACQ_STANDALONE 0
 
 #define TIMING(v) do { if (v) oscil_gpio_set(TIMING_PIN); else oscil_gpio_clr(TIMING_PIN); } while (0)
 
@@ -201,7 +202,7 @@ static void acq_panel_task(void *arg)
         if (!xQueueReceive(q, &ev, portMAX_DELAY)) continue;
         const proto_key_t k = { .type = (uint8_t)ev.type, .id = ev.id, .delta = ev.delta };
         link_send(&s_link1, MSG_KEY, &k, sizeof k);
-        if (ev.type != PANEL_EV_PRESS) continue;
+        if (!ACQ_STANDALONE || ev.type != PANEL_EV_PRESS) continue;
         if (ev.id == PANEL_BTN_RUN) {
             xSemaphoreTake(s_set_lock, portMAX_DELAY);
             acq_run_t now = s_set.run;
@@ -213,6 +214,7 @@ static void acq_panel_task(void *arg)
             panel_led(PANEL_LED_RUN, false);
         }
     }
+    
 }
 
 // LINK1 RX task (core 0): copy out and return, never block for long.
