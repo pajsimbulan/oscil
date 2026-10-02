@@ -271,3 +271,10 @@ Schematic labels fixed: the op-amps and both ADS7883s were drawn on
 +3V3, the dev board's digital rail, but on the bench they run from the
 MCP1700 rail. Moved them to +3.3VA so the drawing matches the wiring.
 Digital pull-ups stay on +3V3. Notes added next to the new parts.
+
+Link series resistors. One 220R on each link wire: R40 (board 1 TX)
+and R11 (board 1 RX) for LINK1, R41 (board 2 TX) for LINK2. They limit
+the current into an unpowered board's ESD diode when one board is
+unplugged while another drives the line, and damp ringing on the
+jumpers. At 2 Mbaud the RC is about 5 ns against a 500 ns bit. Matches
+the bench.
