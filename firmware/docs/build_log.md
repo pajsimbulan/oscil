@@ -1156,3 +1156,17 @@ and comes back to 31.8 frames/s with zero errors on RUN.
 ![Link in STOP and RUN, board 1 still capturing on demand](screenshots_videos/controls_link_stop_run_monitor.png)
 
 [Video: knobs and touch driving the scope](screenshots_videos/controls_knobs_and_touch.MOV)
+
+Generator screen. A second LVGL screen for the generator: shape buttons,
+frequency (tap for a numeric keypad), amplitude and offset sliders, a
+duty slider shown only for square, output on/off, and a one-period
+preview. Every widget calls the same action function as the knobs, and
+that function refreshes the screen after every generator change, so
+touch and knobs follow each other both ways without loops (LVGL setters
+send no events). Amplitude and offset are the DDS's own lo/hi codes,
+clamped so neither leaves 0..255. The preview is drawn by dds_next(), the
+same code board 3 runs in its timer interrupt, so the picture can't
+disagree with the output. Board 2 sends the settings on LINK2 every
+500 ms; board 3 starts following once its receiver is in.
+
+![Generator screen, 250 Hz sine with the preview](screenshots_videos/generator_screen_sine_preview.JPG)
