@@ -1116,3 +1116,43 @@ captures 31 frames/s with the measuring added.
 ![Link clean, board 1 measuring](screenshots_videos/measure_link_clean.png)
 
 [Video: measurements running](screenshots_videos/measure_running.MP4)
+
+## 2026-10-02
+
+Controls. Board 2 now owns every user setting in one struct, and every
+input goes through one function: the knobs and buttons on board 1 arrive
+as key messages, the touch buttons call it directly, and both change the
+same settings. Board 1 only reports turns and presses; it no longer
+toggles RUN or SINGLE itself (a compile-time switch keeps that for
+running board 1 alone), so a press can't toggle twice. Changes go out
+only to the board that needs them: timebase and trigger to board 1,
+V/div and channel on/off stay on the display. At startup board 2 pushes
+its settings to board 1, so after a display reset both agree. Keys from
+the link task reach the UI through a queue, so the link never waits on
+the display lock.
+
+Knob map: ENC1 timebase, ENC2 V/div of the selected channel (push swaps
+channel), ENC3 trigger level (push flips the edge). Top bar: RUN/STOP,
+SINGLE, CH1, CH2, TRIG, MEAS, PHOS, GEN, SAVE. The status bar shows
+timebase, both channels' V/div, and the trigger source, edge, level and
+mode.
+
+Two problems on the way:
+
+- Boot loop: the status bar was formatted with LVGL's own printf, which
+  has no float support. The trigger voltage shifted the arguments and the
+  last string pointer was garbage. Formatted with libc snprintf instead,
+  the same fix as the measurement labels.
+- In STOP the trace ignored V/div, because the canvas only redrew when a
+  new frame arrived. A view change now redraws the last frame. Timebase
+  and trigger still apply on the next capture: board 1 sends decimated
+  columns, so a stopped trace can be rescaled vertically but not in time.
+
+In STOP the link drops to the ping and state messages (0.9 messages/s)
+and comes back to 31.8 frames/s with zero errors on RUN.
+
+![Stopped, status bar showing the settings](screenshots_videos/controls_stopped_status_bar.JPG)
+
+![Link in STOP and RUN, board 1 still capturing on demand](screenshots_videos/controls_link_stop_run_monitor.png)
+
+[Video: knobs and touch driving the scope](screenshots_videos/controls_knobs_and_touch.MOV)

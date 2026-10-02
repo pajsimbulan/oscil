@@ -58,6 +58,7 @@ From the ESP-IDF terminal, in a board folder:
 | 26 | GT911 touch over I2C at 0x5D, feeding LVGL as an input device | Done |
 | 27 | Live scope view: board 1 frames drawn on board 2, link 31.8 frames/s error-free under display load | In progress (8 fps, trace cleanup) |
 | 28 | Measurements on board 1 from the full record: min, max, pp, avg, true RMS, frequency, duty, host-tested | Done |
+| 29 | Controls: knobs, buttons and touch through one action path, board 2 owns the settings, RUN/STOP/SINGLE | Done |
 
 ---
 
