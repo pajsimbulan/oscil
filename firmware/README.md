@@ -5,7 +5,7 @@ One ESP-IDF project per board. Each builds on its own.
 | Board | Folder | Job |
 |---|---|---|
 | 1 | [`acq/`](acq/) | Two ADS7883s over SPI, trigger, front panel, LINK1 |
-| 2 | [`display/`](display/) | 7" RGB panel, touch, UI, Wi-Fi, LINK1 and LINK2 |
+| 2 | [`display/`](display/) | 7" RGB panel, touch, UI, Wi-Fi, OTA, LINK1 and LINK2 |
 | 3 | [`gen/`](gen/) | DDS into an 8-bit R-2R ladder, LINK2 |
 
 ![firmware](https://github.com/pajsimbulan/oscil/actions/workflows/firmware.yml/badge.svg)
@@ -64,6 +64,30 @@ From the ESP-IDF terminal, in a board folder:
 | 32 | Settings saved to NVS with debounce and CRC; two-point calibration per channel, stored on board 1 and sent to board 2 | Done |
 | 33 | 16 MB partition table on all boards: two 4 MB OTA slots, 7.9 MB storage, app rollback on | Done |
 | 34 | Wi-Fi station on board 2: event-driven, exponential backoff reconnect, SNTP, credentials kept out of git | Done |
+| 35 | SYS panel and HTTPS OTA: one-time NVS request, reboot without LCD for download, new-image self-test | In progress (0.8.0 to 0.8.1 passed; rollback tests pending) |
+
+---
+
+## Updates
+
+Board 2 updates over Wi-Fi from SYS. The release asset is
+`oscil_display.bin`, built as `display/build/display.bin`; `OTA_URL`
+in the ignored `display/main/secrets.h` points to it. Upload the new
+binary to the latest GitHub Release before pressing Update.
+
+Update saves a one-time request to NVS and reboots. The next boot
+downloads with the LCD, touch and UI disabled, then boots the new
+image. The screen is blank during the download. A failed attempt
+returns to normal startup instead of retrying on every boot.
+
+Keep board 1 running: a new image confirms itself only after the LCD
+and touch start and a recent acquisition frame arrives. Otherwise it
+rolls back. The 0.8.0 to 0.8.1 update and confirmation passed; deliberate
+self-test failure and missing-LINK1 rollback tests are still pending.
+
+[Update mode and download log](docs/screenshots_videos/ota_update_mode_download.png),
+[0.8.1 confirmed with LINK1 clean](docs/screenshots_videos/ota_0_8_1_confirmed_link_clean.png),
+and [video: update from the touchscreen](docs/screenshots_videos/ota_update_0_8_0_to_0_8_1.MP4).
 
 ---
 

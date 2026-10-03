@@ -1291,3 +1291,54 @@ The scope and LINK1 kept running throughout: 31.8 frames/s, no errors.
 ![Backoff while the network is unavailable](screenshots_videos/wifi_backoff_retries.png)
 
 ![Connected to the hotspot](screenshots_videos/wifi_online_hotspot.png)
+
+OTA. Board 2 now updates from SYS, using the display binary on the
+latest GitHub Release. HTTPS checks the server certificate against
+ESP-IDF's bundled roots, writes the other app slot, verifies the image
+and sets it for the next boot. SYS shows the firmware version, Wi-Fi
+state and RSSI, free and minimum heap, and the scope frame rate.
+
+The first attempts reset while writing flash with the display running.
+One watchdog reset stopped in the panic handler; later runs caught
+illegal instruction and instruction-fetch errors. Pausing the scope
+task, then holding the LVGL lock for the download, did not make it
+reliable. The lock also held up UI callbacks from the link receiver,
+so incoming bytes were dropped. An update with the LCD left unstarted
+completed. That narrowed the problem to the display setup alongside
+OTA, but did not identify the exact cause. The panic handler is now in
+IRAM so failures during flash operations can be reported.
+
+The update button now saves a one-time request in NVS and reboots.
+Before starting the LCD, touch or LVGL, the next boot consumes the
+request and starts an OTA task. It waits up to 30 s for Wi-Fi, downloads
+with the screen disabled, then reboots. LINK1 keeps draining frames
+without UI callbacks. A failed attempt returns to normal startup; the
+request is already cleared, so another reset cannot start an update
+loop.
+
+Tested from 0.8.0 to 0.8.1, starting with the touchscreen button. The
+download took about 26 s after entering update mode, the new image
+booted from ota_1 at 0x420000, and the self-test confirmed it. The test
+checks the LCD, touch and a recent frame from board 1, allowing up to
+5 s for that frame. The screen returned and LINK1 stayed at about
+31.8 frames/s with zero errors during the download and after reboot.
+
+The successful path is checked. Deliberately failing a new image's
+self-test, and repeating with LINK1 disconnected, are still to test;
+the rollback code is in place but those failures have not been
+demonstrated yet.
+
+```text
+ota: update requested, rebooting without LCD
+ota: update mode: LCD, touch and UI disabled
+ota: done, rebooting
+App version: 0.8.1
+ota: 0.8.1 is new: self-test
+ota: new image confirmed
+```
+
+![Update mode, certificate checks and the download starting](screenshots_videos/ota_update_mode_download.png)
+
+![0.8.1 confirmed, scope running and LINK1 clean](screenshots_videos/ota_0_8_1_confirmed_link_clean.png)
+
+[Video: touchscreen update from 0.8.0 to 0.8.1](screenshots_videos/ota_update_0_8_0_to_0_8_1.MP4)
