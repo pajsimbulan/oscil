@@ -1247,3 +1247,27 @@ and offset are still restored.
 ![Scope with minor ticks, calibrated 1 kHz square](screenshots_videos/scope_minor_ticks.JPG)
 
 ![Generator preview with its grid](screenshots_videos/generator_preview_grid.JPG)
+
+Partition table. All three boards now use the same 16 MB layout:
+
+| Partition | Offset | Size |
+|---|---|---|
+| nvs | 0x9000 | 24 KB |
+| otadata | 0xF000 | 8 KB |
+| phy_init | 0x11000 | 4 KB |
+| ota_0 | 0x20000 | 4 MB |
+| ota_1 | 0x420000 | 4 MB |
+| storage (LittleFS) | 0x820000 | 7.9 MB |
+
+Two app slots so an update can be written to the slot that isn't running
+and rolled back if it fails; app rollback is on in the bootloader. NVS
+kept its offset and size, so board 2's settings and board 1's
+calibration survived. The images are far below a slot: board 1 about
+241 KB, board 2 about 654 KB, board 3 about 213 KB.
+
+The first build ignored the new settings: sdkconfig.defaults is only read
+when no sdkconfig exists, and each board already had one. Set the custom
+table and rollback in menuconfig on each board, and kept the lines in
+sdkconfig.defaults so a fresh clone builds the same way.
+
+![All three boards building with the 16 MB table](screenshots_videos/partition_table_builds_three_boards.png)
