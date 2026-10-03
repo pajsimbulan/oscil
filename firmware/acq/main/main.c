@@ -16,6 +16,9 @@
 #include "testsig.h"
 #include "acq_task.h"
 #include "link_test.h"
+#include "nvs_flash.h"
+#include "cal.h"
+#include "cal_test.h"
 
 static const char *TAG = "acq";
 
@@ -60,7 +63,17 @@ void app_main(void)
     //test_noise();
     //test_dual();
     //test_burst();
+    esp_err_t e = nvs_flash_init();                       // calibration lives in NVS
+    if (e == ESP_ERR_NVS_NO_FREE_PAGES || e == ESP_ERR_NVS_NEW_VERSION_FOUND) {
+        ESP_ERROR_CHECK(nvs_flash_erase());
+        e = nvs_flash_init();
+    }
+    ESP_ERROR_CHECK(e);
+    cal_load();                                           // nominal until calibrated
+
     testsig_start(47, 1000);        // bench signal on header 28 until board 3 exists
     ESP_ERROR_CHECK(acq_start());
     //test_link_loop();
+    //test_cal(0);                        // CH1
+    //test_cal(1);                        // CH2
 }

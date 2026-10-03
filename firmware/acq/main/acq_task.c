@@ -16,6 +16,7 @@
 #include "sampler.h"
 #include "acq_task.h"
 #include "oscil_measure.h"
+#include "cal.h"
 
 
 #define R2            (2 * ACQ_R)      // burst length: the trigger is searched in the middle half
@@ -85,9 +86,8 @@ static void frame_build(const uint16_t *c1, const uint16_t *c2, const sampler_in
     hdr->triggered = triggered;
     hdr->ch_mask   = 0x3;
     hdr->trig_frac = frac;
-    static const oscil_afe_cal_t CAL_NOM = OSCIL_AFE_CAL_NOMINAL;   // calibration later swaps in cal_get(ch)
-    oscil_measure(c1, ACQ_R, info->rate_hz, &CAL_NOM, &hdr->meas[0]);   // full-resolution record, achieved rate
-    oscil_measure(c2, ACQ_R, info->rate_hz, &CAL_NOM, &hdr->meas[1]);
+    oscil_measure(c1, ACQ_R, info->rate_hz, cal_get(0), &hdr->meas[0]);   // full-resolution record, achieved rate
+    oscil_measure(c2, ACQ_R, info->rate_hz, cal_get(1), &hdr->meas[1]);
 }
 
 // MSG_ACQ_STATE whenever the run state or the requested rate changes: first byte = run state.
@@ -254,6 +254,9 @@ esp_err_t acq_start(void)
     s_link1.on_frame = on_link1;
     e = link_start(&s_link1);                            // this core (0) gets the UART interrupt
     if (e != ESP_OK) return e;
+
+    const oscil_afe_cal_t cal[2] = { *cal_get(0), *cal_get(1) };
+    link_send(&s_link1, MSG_CAL, cal, sizeof cal);        // board 2 scales the trace with it
 
 
     QueueHandle_t q = panel_start();                     // LEDs, buttons, encoders
