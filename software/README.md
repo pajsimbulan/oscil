@@ -7,7 +7,7 @@ Supabase setup for Oscil accounts and saved captures. Device code lives in
 |---|---|
 | [`schema.sql`](schema.sql) | Tables, row-level security and the private screenshots bucket |
 | [`index.ts`](index.ts) | Account function: username signup and secret-phrase password reset |
-| `tests/` | Account and isolation tests, not implemented yet |
+| [`tests/isolation_test.py`](tests/isolation_test.py) | Two-user isolation, password reset and lockout tests |
 
 ## Setup
 
@@ -28,8 +28,21 @@ sign-in. Supabase supplies the service-role key in the function environment.
 |---|---|
 | Project and email settings | Done |
 | Tables, security policies and private bucket | SQL applied successfully |
-| Account function | Deployed; signup and duplicate rejection passed, reset tests pending |
-| Isolation tests | Not run |
+| Account function | Signup, duplicate rejection, password reset and lockout passed |
+| Isolation tests | All 17 checks passed |
+
+## Tests
+
+Run from the repo root in PowerShell, with Windows Python and `requests`.
+Set `SUPABASE_URL` and `SUPABASE_ANON_KEY` in that terminal, then run:
+
+```powershell
+python software/tests/isolation_test.py
+```
+
+Use the Windows Python executable directly if `python` points to MSYS2.
+The script creates two test users and prints their names for cleanup.
+Remove the test storage objects before deleting their Auth users.
 
 ## Build log
 
@@ -38,3 +51,5 @@ sign-in. Supabase supplies the service-role key in the function environment.
 [Schema creation screenshot](docs/screenshots_videos/supabase_schema_created.png)
 
 [Signup and duplicate test](docs/screenshots_videos/account_signup_duplicate_test.png)
+
+[Isolation test results](docs/screenshots_videos/supabase_isolation_all_pass.png)
