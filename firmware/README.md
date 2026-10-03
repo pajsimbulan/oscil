@@ -63,6 +63,7 @@ From the ESP-IDF terminal, in a board folder:
 | 31 | LINK2: board 2 broadcasts the generator state on change and every 500 ms, board 3 applies it, no acknowledgement needed | Done |
 | 32 | Settings saved to NVS with debounce and CRC; two-point calibration per channel, stored on board 1 and sent to board 2 | Done |
 | 33 | 16 MB partition table on all boards: two 4 MB OTA slots, 7.9 MB storage, app rollback on | Done |
+| 34 | Wi-Fi station on board 2: event-driven, exponential backoff reconnect, SNTP, credentials kept out of git | Done |
 
 ---
 

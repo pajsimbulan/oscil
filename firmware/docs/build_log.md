@@ -1271,3 +1271,24 @@ table and rollback in menuconfig on each board, and kept the lines in
 sdkconfig.defaults so a fresh clone builds the same way.
 
 ![All three boards building with the 16 MB table](screenshots_videos/partition_table_builds_three_boards.png)
+
+## 2026-10-03, Wi-Fi
+
+Board 2 joins Wi-Fi as a station. Everything is event-driven: the
+driver reports start, disconnect and got-IP as events, and other tasks
+wait on one event-group bit (online) instead of polling. A dropped
+connection retries with exponential backoff, 1, 2, 4, 8, 16, 32 s up to
+60 s, from a one-shot FreeRTOS timer, so a rebooting router isn't
+hammered. SNTP starts once on the first IP so captures get real times.
+Credentials are compiled in from a git-ignored secrets.h; provisioning on
+the device is future work.
+
+The ESP32-S3 radio is 2.4 GHz only and the home network is 5 GHz, so it
+runs on a phone hotspot with its 2.4 GHz compatibility mode on. First
+attempts showed the backoff working but never connecting; on the hotspot
+it joined on channel 6, WPA2, RSSI -39 dBm, and got 172.20.10.6 by DHCP.
+The scope and LINK1 kept running throughout: 31.8 frames/s, no errors.
+
+![Backoff while the network is unavailable](screenshots_videos/wifi_backoff_retries.png)
+
+![Connected to the hotspot](screenshots_videos/wifi_online_hotspot.png)
