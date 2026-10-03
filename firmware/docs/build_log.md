@@ -1191,7 +1191,6 @@ through snprintf.
 
 ![Board 3 log: frames every 500 ms, the applied setting](screenshots_videos/link2_board3_following_monitor.png)
 
-## 2026-10-03
 
 Settings and calibration. Board 2 now saves its settings (timebase,
 V/div, trigger, channels, generator) to NVS two seconds after the last
@@ -1272,7 +1271,7 @@ sdkconfig.defaults so a fresh clone builds the same way.
 
 ![All three boards building with the 16 MB table](screenshots_videos/partition_table_builds_three_boards.png)
 
-## 2026-10-03, Wi-Fi
+## 2026-10-03
 
 Board 2 joins Wi-Fi as a station. Everything is event-driven: the
 driver reports start, disconnect and got-IP as events, and other tasks
