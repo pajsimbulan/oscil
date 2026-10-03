@@ -15,3 +15,5 @@ desktop.ini
 
 # Generated PC test build
 /build-host/
+
+firmware/display/main/secrets.h

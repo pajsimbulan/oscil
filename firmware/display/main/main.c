@@ -17,6 +17,7 @@
 #include "scope_view.h"
 #include "ui.h"
 #include "settings.h"
+#include "net.h"
 
 static const char *TAG = "disp";
 
@@ -44,8 +45,9 @@ void app_main(void)
     const links_handlers_t lh = { .on_frame = scope_view_submit, .on_key = ui_on_key,
                                   .on_acq_state = ui_on_acq_state, .on_cal = scope_view_set_cal };
     ESP_ERROR_CHECK(links_start(&lh));
-    const ui_hooks_t hooks = { .changed = settings_mark_dirty };
-    ui_start(&s, &hooks);
+      const ui_hooks_t hooks = { .changed = settings_mark_dirty };
+      ui_start(&s, &hooks);
+      net_start();
 
-    // test_lcd(panel);
+      // test_lcd(panel);
 }
