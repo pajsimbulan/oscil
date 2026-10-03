@@ -18,7 +18,13 @@ static void draw_preview(const proto_gen_set_t *g)
 {
     dds_t d = { 0 };
     dds_set(&d, (dds_shape_t)g->shape, 1.0, PV_W, g->duty / 65535.0, g->lo, g->hi);
-    for (int i = 0; i < PV_W * PV_H; i++) s_pv_buf[i] = 0x0000;
+        for (int i = 0; i < PV_W * PV_H; i++) s_pv_buf[i] = 0x0000;
+    for (int k = 0; k <= 4; k++) {                              // faint grid: 0, 0.825, 1.65, 2.475, 3.3 V
+        int y = k * (PV_H - 1) / 4, x = k * (PV_W - 1) / 4;
+        uint16_t c = (k == 2) ? 0x4208 : 0x2104;                // centre line a little brighter
+        for (int i = 0; i < PV_W; i++) s_pv_buf[y * PV_W + i] = c;
+        for (int j = 0; j < PV_H; j++) s_pv_buf[j * PV_W + x] = c;
+    }
     for (int x = 0; x < PV_W; x++) {
         int y = PV_H - 1 - dds_next(&d) * (PV_H - 1) / 255;   // 0..255 codes = 0..3.3 V
         s_pv_buf[y * PV_W + x] = g->on ? 0xFFE0 : 0x7BEF;

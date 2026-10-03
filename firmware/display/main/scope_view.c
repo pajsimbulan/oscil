@@ -49,6 +49,13 @@ static void draw_graticule(void)
     for (int y = 0; y < SCOPE_H; y++) s_bg[y * SCOPE_W + SCOPE_W / 2] = COL_AXIS;
     for (int x = 0; x < SCOPE_W; x++) s_bg[(SCOPE_H - 1) * SCOPE_W + x] = COL_GRID;
     for (int y = 0; y < SCOPE_H; y++) s_bg[y * SCOPE_W + SCOPE_W - 1] = COL_GRID;
+        // Minor ticks on the centre axes: 5 per division, 7 px long, like a bench scope
+    for (int x = 0; x < SCOPE_W; x += SCOPE_DIV_X / 5)          // every 16 px across
+        for (int dy = -3; dy <= 3; dy++)
+            s_bg[(SCOPE_H / 2 + dy) * SCOPE_W + x] = COL_AXIS;
+    for (int y = 0; y < SCOPE_H; y += SCOPE_DIV_Y / 5)          // every 10 px down
+        for (int dx = -3; dx <= 3; dx++)
+            s_bg[y * SCOPE_W + SCOPE_W / 2 + dx] = COL_AXIS;
 }
 
 static inline int code_to_y(uint16_t code, const view_ch_t *v, const oscil_afe_cal_t *cal)

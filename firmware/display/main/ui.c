@@ -44,7 +44,7 @@ void ui_defaults(ui_settings_t *s)
     s->trig = (trig_cfg_t){ .level = 2560, .hyst = 50, .edge = TRIG_RISING };
     s->trig_src = 0; s->trig_mode = UI_TRIG_AUTO; s->run = UI_RUN;
     s->fstep_idx = 2;                                           // 100 Hz
-    s->gen = (proto_gen_set_t){ .shape = 0, .on = 1, .lo = 0, .hi = 255,
+    s->gen = (proto_gen_set_t){ .shape = 0, .on = 0, .lo = 0, .hi = 255,
                                 .freq_mhz = 1000u * 1000u, .duty = 32768 };   // sine, 1 kHz, full range, 50 %
 }
 

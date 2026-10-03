@@ -36,6 +36,7 @@ void app_main(void)
     ESP_ERROR_CHECK(settings_init());
     ui_settings_t s;
     if (settings_load(&s) != ESP_OK) { ui_defaults(&s); ESP_LOGW(TAG, "settings: defaults"); }
+    s.gen.on = 0;                    // output always starts off, whatever was saved: safe power-up
 
     esp_lcd_panel_handle_t panel = lcd_start(10, 2);                // 10-line bounce buffers, 2 frame buffers
     lv_display_t *disp = gui_start(panel);
