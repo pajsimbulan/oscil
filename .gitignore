@@ -17,3 +17,13 @@ desktop.ini
 /build-host/
 
 firmware/display/main/secrets.h
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Local credentials
+.env
+.env.*
+!.env.example
