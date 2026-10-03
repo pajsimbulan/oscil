@@ -1342,3 +1342,28 @@ ota: new image confirmed
 ![0.8.1 confirmed, scope running and LINK1 clean](screenshots_videos/ota_0_8_1_confirmed_link_clean.png)
 
 [Video: touchscreen update from 0.8.0 to 0.8.1](screenshots_videos/ota_update_0_8_0_to_0_8_1.MP4)
+
+
+Accounts on board 2. Added the Supabase HTTPS client and account session
+code. Requests use the bundled certificate roots and the publishable key;
+user requests carry the access token. The refresh token, username and user
+id are saved in NVS. The access token stays in RAM and is renewed when
+needed, including after reboot.
+
+Tested sign-in as `paul_test`. TLS validated, sign-in returned ESP_OK and
+the token was 800 characters. After a reset, the test printed "session from
+NVS: paul_test" and obtained a token again without another password login.
+Forced sign-out for the negative test, then supplied a wrong password.
+It returned "Wrong username or password" with ESP_FAIL and no valid token.
+
+LINK1 stayed at 31.8 frames/s in the sign-in run. The reset run recorded
+one length error, 44 gaps and 281726 dropped bytes at startup; those counters
+stayed flat in the following logs and reception returned to 31.8 frames/s.
+The cause of that startup disturbance is not established. The scope drew
+at about 4.7 fps, around 203 ms per frame, slower than the earlier run.
+
+![Device sign-in succeeded](screenshots_videos/account_sign_in_success.png)
+
+![Session restored after reset](screenshots_videos/account_session_restored.png)
+
+![Wrong password rejected, no token issued](screenshots_videos/account_wrong_password_rejected.png)

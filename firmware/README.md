@@ -65,6 +65,7 @@ From the ESP-IDF terminal, in a board folder:
 | 33 | 16 MB partition table on all boards: two 4 MB OTA slots, 7.9 MB storage, app rollback on | Done |
 | 34 | Wi-Fi station on board 2: event-driven, exponential backoff reconnect, SNTP, credentials kept out of git | Done |
 | 35 | SYS panel and HTTPS OTA: one-time NVS request, reboot without LCD for download, new-image self-test | In progress (0.8.0 to 0.8.1 passed; rollback tests pending) |
+| 36 | Supabase HTTPS client: sign-in, session saved in NVS, refresh after reboot, wrong-password rejection | Done |
 
 ---
 
@@ -88,6 +89,22 @@ self-test failure and missing-LINK1 rollback tests are still pending.
 [Update mode and download log](docs/screenshots_videos/ota_update_mode_download.png),
 [0.8.1 confirmed with LINK1 clean](docs/screenshots_videos/ota_0_8_1_confirmed_link_clean.png),
 and [video: update from the touchscreen](docs/screenshots_videos/ota_update_0_8_0_to_0_8_1.MP4).
+
+---
+
+## Accounts
+
+Board 2 signs in through Supabase over HTTPS. The refresh token and user
+identity are saved in NVS; the access token stays in RAM. After reboot,
+the saved refresh token obtains a new access token without the password.
+
+Device tests passed for sign-in, session recovery after reset and rejection
+of a wrong password. The touchscreen account screen is still to add.
+Backend setup and isolation tests live in [`software/`](../software/).
+
+[Sign-in](docs/screenshots_videos/account_sign_in_success.png),
+[session recovery](docs/screenshots_videos/account_session_restored.png),
+and [wrong-password rejection](docs/screenshots_videos/account_wrong_password_rejected.png).
 
 ---
 
