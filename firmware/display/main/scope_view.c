@@ -7,6 +7,7 @@
 #include "esp_lvgl_port.h"
 #include "esp_timer.h"
 #include "scope_view.h"
+#include "ota.h"
 
 static const char *TAG = "scope";
 
@@ -129,6 +130,11 @@ static void scope_task(void *arg)
     int frames = 0;
     for (;;) {
         ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+
+        while (ota_is_running()) {
+            vTaskDelay(pdMS_TO_TICKS(100));   // hold the last trace while flash is written
+        }
+
         oscil_afe_cal_t cal[2];
         taskENTER_CRITICAL(&s_mux);
         int r = s_ready;

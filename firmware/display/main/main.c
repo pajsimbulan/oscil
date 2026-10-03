@@ -18,6 +18,8 @@
 #include "ui.h"
 #include "settings.h"
 #include "net.h"
+#include "ota.h"
+#include "ui_sys.h"
 
 static const char *TAG = "disp";
 
@@ -35,9 +37,15 @@ void app_main(void)
     // would upset the RGB bounce-buffer refill interrupt.
 
     ESP_ERROR_CHECK(settings_init());
+
+    bool update_mode = false;
+    esp_err_t e = ota_boot_if_requested(&update_mode);
+    if (e != ESP_OK) ESP_LOGE(TAG, "update boot: %s", esp_err_to_name(e));
+    if (update_mode) return;                    // OTA task owns this boot; no LCD or UI
+
     ui_settings_t s;
     if (settings_load(&s) != ESP_OK) { ui_defaults(&s); ESP_LOGW(TAG, "settings: defaults"); }
-    s.gen.on = 0;                    // output always starts off, whatever was saved: safe power-up
+    s.gen.on = 0;                                                   // generator off at power-up
 
     esp_lcd_panel_handle_t panel = lcd_start(10, 2);                // 10-line bounce buffers, 2 frame buffers
     lv_display_t *disp = gui_start(panel);
@@ -45,9 +53,11 @@ void app_main(void)
     const links_handlers_t lh = { .on_frame = scope_view_submit, .on_key = ui_on_key,
                                   .on_acq_state = ui_on_acq_state, .on_cal = scope_view_set_cal };
     ESP_ERROR_CHECK(links_start(&lh));
-      const ui_hooks_t hooks = { .changed = settings_mark_dirty };
-      ui_start(&s, &hooks);
-      net_start();
+    const ui_hooks_t hooks = { .changed = settings_mark_dirty, .sys = ui_sys_toggle };
+    ui_start(&s, &hooks);
+    net_start();
+    ota_confirm_or_roll_back();                                     // no-op unless this image is new
+    ESP_LOGI(TAG, "firmware %s", ota_version());
 
-      // test_lcd(panel);
+    // test_lcd(panel);
 }
