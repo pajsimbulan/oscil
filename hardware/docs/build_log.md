@@ -279,7 +279,6 @@ unplugged while another drives the line, and damp ringing on the
 jumpers. At 2 Mbaud the RC is about 5 ns against a 500 ns bit. Matches
 the bench.
 
-## 2026-10-03
 
 Front-end power. The 9 V breadboard power module overheated again and
 the 3.3 V analog rail sagged to about 2.9 V. Since that rail is also the
