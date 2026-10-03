@@ -61,6 +61,7 @@ From the ESP-IDF terminal, in a board folder:
 | 29 | Controls: knobs, buttons and touch through one action path, board 2 owns the settings, RUN/STOP/SINGLE | Done |
 | 30 | Generator screen: shapes, keypad frequency, amplitude, offset, duty, live preview from the same DDS code | Done |
 | 31 | LINK2: board 2 broadcasts the generator state on change and every 500 ms, board 3 applies it, no acknowledgement needed | Done |
+| 32 | Settings saved to NVS with debounce and CRC; two-point calibration per channel, stored on board 1 and sent to board 2 | Done |
 
 ---
 

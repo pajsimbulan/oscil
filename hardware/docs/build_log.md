@@ -278,3 +278,12 @@ the current into an unpowered board's ESD diode when one board is
 unplugged while another drives the line, and damp ringing on the
 jumpers. At 2 Mbaud the RC is about 5 ns against a 500 ns bit. Matches
 the bench.
+
+## 2026-10-03
+
+Front-end power. The 9 V breadboard power module overheated again and
+the 3.3 V analog rail sagged to about 2.9 V. Since that rail is also the
+ADC reference, every reading moved with it. The module is out. The +5V
+rail now comes from a regulated 5 V adapter, and the MCP1700 stays cool
+and holds 3.27 V. The front end draws only a few mA, so the heat was the
+module's own wiring or load, not this circuit.

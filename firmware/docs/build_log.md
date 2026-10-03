@@ -1190,3 +1190,50 @@ through snprintf.
 ![Three boards: generator screen, board 3 following](screenshots_videos/link2_generator_screen_three_boards.JPG)
 
 ![Board 3 log: frames every 500 ms, the applied setting](screenshots_videos/link2_board3_following_monitor.png)
+
+## 2026-10-03
+
+Settings and calibration. Board 2 now saves its settings (timebase,
+V/div, trigger, channels, generator) to NVS two seconds after the last
+change, with a version number and a CRC, and restores them at boot. A
+burst of knob turns is one flash write, not dozens.
+
+Board 1 has a two-point calibration per channel, stored in its own NVS
+and sent to board 2 at boot. The procedure: input to GND (zero), then
+input to the 3.3 V analog rail measured with a DMM (span), averaging
+4096 samples each. The inputs are the top of the 750k divider resistors,
+the same node the BNC centre goes to.
+
+| Channel | Zero (codes) | Span (codes) | Gain | Offset |
+|---|---|---|---|---|
+| CH1 | 2067.2 | 3092.9 | 3.9442 | 1.6725 V |
+| CH2 | 2074.0 | 3098.6 | 3.9481 | 1.6781 V |
+
+Span source 3.273 V. Nominal was gain 4.0 and offset 1.65 V, about 1.4 %
+and 25 mV off, which is what had the step 36 levels reading wrong. After
+calibration the 1 kHz test square reads min -0.106 V, max 3.526 V,
+avg 1.735 V, 996.0 Hz, 50.0 % duty (min/max include the trace noise).
+
+It took four runs. The first ran with the sampler still active, so two
+tasks drove the ADC bus at once. The second used a span value taken while
+the analog rail was sagging. The third had CH2 reading the same code
+(about 2763, the 2.2 V reference level) whatever the input: the jumper
+wasn't in the R7 row, so the divider input was floating. The fourth was
+clean, and the two channels agree within 0.1 %.
+
+Spikes after rewiring. For a while both channels showed single samples
+jumping to the edge of the screen. Every bad sample was off by exactly
+2048 codes, the ADC's most significant bit, so it was a bit error on the
+SPI read, not analog noise. Slowing SCLK from 26.67 to 20 MHz made it
+worse (the sampler's timing is built around 26.67 MHz) and was reverted.
+The spikes then stopped with the original code after the jumpers were
+re-seated, so the cause was a marginal connection. If they come back:
+press on the SCLK, CS and SDO jumpers while watching, and the CS setup
+time (one clock now) is the first margin to add.
+
+![Calibration on the bench: DMM on the span source](screenshots_videos/calibration_bench_dmm_span.JPG)
+
+![Calibration results on the monitor](screenshots_videos/calibration_monitor_result.png)
+
+![1 kHz square after calibration](screenshots_videos/calibrated_1khz_square_measurements.JPG)
+
