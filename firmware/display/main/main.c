@@ -15,12 +15,10 @@
 #include "touch_test.h"
 #include "links.h"
 #include "scope_view.h"
-#include "esp_lvgl_port.h"
 #include "ui.h"
+#include "settings.h"
 
 static const char *TAG = "disp";
-
-
 
 void app_main(void)
 {
@@ -35,8 +33,9 @@ void app_main(void)
     // Status LED retired: GPIO48 is TOUCH_RESET, and its 30 us masked window
     // would upset the RGB bounce-buffer refill interrupt.
 
+    ESP_ERROR_CHECK(settings_init());
     ui_settings_t s;
-    ui_defaults(&s);
+    if (settings_load(&s) != ESP_OK) { ui_defaults(&s); ESP_LOGW(TAG, "settings: defaults"); }
 
     esp_lcd_panel_handle_t panel = lcd_start(10, 2);                // 10-line bounce buffers, 2 frame buffers
     lv_display_t *disp = gui_start(panel);
@@ -44,7 +43,7 @@ void app_main(void)
     const links_handlers_t lh = { .on_frame = scope_view_submit, .on_key = ui_on_key,
                                   .on_acq_state = ui_on_acq_state, .on_cal = scope_view_set_cal };
     ESP_ERROR_CHECK(links_start(&lh));
-    const ui_hooks_t hooks = { 0 };
+    const ui_hooks_t hooks = { .changed = settings_mark_dirty };
     ui_start(&s, &hooks);
 
     // test_lcd(panel);
