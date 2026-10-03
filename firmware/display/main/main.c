@@ -20,6 +20,8 @@
 #include "net.h"
 #include "ota.h"
 #include "ui_sys.h"
+#include "account.h"
+#include "account_test.h"
 
 static const char *TAG = "disp";
 
@@ -37,6 +39,7 @@ void app_main(void)
     // would upset the RGB bounce-buffer refill interrupt.
 
     ESP_ERROR_CHECK(settings_init());
+    ESP_ERROR_CHECK(account_init());
 
     bool update_mode = false;
     esp_err_t e = ota_boot_if_requested(&update_mode);
@@ -60,4 +63,5 @@ void app_main(void)
     ESP_LOGI(TAG, "firmware %s", ota_version());
 
     // test_lcd(panel);
+    //test_account("paul_test", "hunter2hunter2");
 }
