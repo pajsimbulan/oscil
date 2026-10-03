@@ -1237,3 +1237,13 @@ time (one clock now) is the first margin to add.
 
 ![1 kHz square after calibration](screenshots_videos/calibrated_1khz_square_measurements.JPG)
 
+Small display changes. Minor ticks on the scope's centre axes, five per
+division, so a level can be read to a fifth of a division. A faint 4 x 4
+grid in the generator preview, so amplitude and offset show where the
+wave sits in the 0 to 3.3 V range. The generator output now always
+starts off at power-up, whatever was saved; shape, frequency, amplitude
+and offset are still restored.
+
+![Scope with minor ticks, calibrated 1 kHz square](screenshots_videos/scope_minor_ticks.JPG)
+
+![Generator preview with its grid](screenshots_videos/generator_preview_grid.JPG)
