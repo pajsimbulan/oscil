@@ -67,6 +67,7 @@ From the ESP-IDF terminal, in a board folder:
 | 35 | SYS panel and HTTPS OTA: one-time NVS request, reboot without LCD for download, new-image self-test | In progress (0.8.0 to 0.8.1 passed; rollback tests pending) |
 | 36 | Supabase HTTPS client: sign-in, session saved in NVS, refresh after reboot, wrong-password rejection | Done |
 | 37 | Touchscreen account screen: sign-in, create account, phrase reset and sign-out; software AES for TLS | Done (touchscreen tests passed) |
+| 38 | Cloud-only scope photos: signed-in SAVE, RAM snapshot, private BMP upload and busy guard | Done (upload, signed-out and busy tests passed) |
 
 ---
 
@@ -119,6 +120,30 @@ Videos: [screen buttons](docs/screenshots_videos/account_screen_buttons.MP4),
 [password reset](docs/screenshots_videos/account_forgot_password_test.MP4),
 and [sign-in with the new password](docs/screenshots_videos/account_reset_new_password_sign_in.MP4).
 
+
+---
+
+## Cloud photos
+
+SAVE captures the scope screen into RAM and uploads a BMP to the signed-in
+user's private Supabase folder. Photos are not saved on the device. NVS
+keeps only the screenshot counter, so filenames do not repeat after a
+normal reboot. Capturing briefly holds the LVGL lock; HTTPS runs on a
+worker task, with one upload allowed at a time.
+
+Tested successful saving and viewing the uploaded result in Supabase.
+SAVE while signed out says "Sign in to save photos". Repeated presses
+during an upload say "Photo upload busy". The private screenshots bucket
+now allows 2 MB per file; an 800 x 480 BMP is 1,152,054 bytes.
+
+A photo list and viewer on the Account screen are next. The gallery is
+not implemented yet. Offline saving and LINK1 counters during photo
+uploads have not been recorded in this test.
+
+[Sign-in required](docs/screenshots_videos/cloud_photo_sign_in_required.JPG),
+[upload busy](docs/screenshots_videos/cloud_photo_upload_busy.JPG),
+[saved to account](docs/screenshots_videos/cloud_photo_saved_to_account.JPG),
+and [video: SAVE, repeated presses and the Supabase result](docs/screenshots_videos/cloud_photo_save_busy_supabase.MOV).
 
 ---
 

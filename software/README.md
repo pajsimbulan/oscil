@@ -1,6 +1,6 @@
 # Software
 
-Supabase setup for Oscil accounts and saved captures. Device code lives in
+Supabase setup for Oscil accounts and cloud photos. Device code lives in
 [`firmware/`](../firmware/).
 
 | File | Job |
@@ -15,7 +15,9 @@ The project is `oscil-dev`, in West US. Email sign-in is enabled and email
 confirmation is off because device accounts use `<username>@oscil.local`.
 
 Run `schema.sql` once in the Supabase SQL editor. Keep the same SQL here so
-the setup can be recreated. Project URL and publishable key go in the
+the setup can be recreated. The private screenshots bucket allows 2 MB
+per photo; the device uploads BMP images without saving them locally.
+Project URL and publishable key go in the
 firmware's git-ignored `secrets.h`. The service-role key stays on the server.
 
 Paste `index.ts` into the Supabase Edge Function editor and deploy it as

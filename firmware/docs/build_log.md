@@ -1404,3 +1404,41 @@ the Supabase setup and PC isolation test stay under software.
 [Video: forgot password test](screenshots_videos/account_forgot_password_test.MP4)
 
 [Video: password reset and sign-in with the new password](screenshots_videos/account_reset_new_password_sign_in.MP4)
+
+
+Cloud photos. SAVE now takes a screenshot of the scope screen into RAM
+and uploads it directly to the signed-in user's private Supabase folder.
+The earlier file uploader expected a locally saved .osc capture; replaced
+that path with an LVGL snapshot and BMP upload. No photo is written to
+LittleFS. NVS keeps a screenshot counter across normal reboots.
+
+The RGB565 snapshot is streamed as a 24-bit BMP, one converted row at a
+time. An 800 x 480 image is 1,152,054 bytes. Raised the screenshots bucket
+limit from 64 KB to 2 MB and saved the new limit in software/schema.sql.
+The bucket remains private, with the existing owner policies.
+
+Snapshot capture briefly takes the LVGL lock. The upload and metadata row
+run on a worker task; a second SAVE while it is active reports "Photo
+upload busy". Closing the request frees the snapshot. Signed-out SAVE is
+refused. HTTP header and body read failures now return an error instead
+of reporting a successful request.
+
+The display rebuild compiled and linked, and the binary passed its app
+partition size check with 65% free. Device testing passed: signed-out
+SAVE showed "Sign in to save photos", repeated presses during uploading
+showed "Photo upload busy", and a completed upload showed "Photo saved
+to your account". Recorded the SAVE sequence and the resulting image in
+Supabase. No new LINK1 error-counter log or offline test was supplied for
+this run, so those checks are still to record.
+
+The Account screen photo list and viewer are next. They are not part of
+this change. The planned viewer will fetch only a selected photo into
+RAM and free it when closed.
+
+![SAVE refused while signed out](screenshots_videos/cloud_photo_sign_in_required.JPG)
+
+![Repeated SAVE presses while uploading](screenshots_videos/cloud_photo_upload_busy.JPG)
+
+![Photo saved to the signed-in account](screenshots_videos/cloud_photo_saved_to_account.JPG)
+
+[Video: cloud SAVE, busy guard and the Supabase image](screenshots_videos/cloud_photo_save_busy_supabase.MOV)
