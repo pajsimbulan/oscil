@@ -56,3 +56,6 @@ void ui_on_key(const proto_key_t *k);           // LINK1 RX task
 void ui_on_acq_state(const uint8_t *p, uint16_t len);   // LINK1 RX task
 void ui_toast(const char *msg);                 // any task
 void ui_keypad_open(const char *title, void (*done)(float value, void *ctx), void *ctx);   // LVGL lock held
+
+// Scope screen for screenshots. Caller holds the LVGL lock.
+lv_obj_t *ui_scope_screen(void);

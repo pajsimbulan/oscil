@@ -352,3 +352,8 @@ void ui_start(const ui_settings_t *initial, const ui_hooks_t *hooks)
 
     xTaskCreatePinnedToCore(ui_task, "ui", 4096, NULL, 5, NULL, 1);
 }
+
+lv_obj_t *ui_scope_screen(void)
+{
+    return s_scr_scope;
+}

@@ -39,14 +39,33 @@ esp_err_t cloud_json(esp_http_client_method_t method, const char *path, const ch
     esp_err_t e = esp_http_client_open(c, len);          // request line + headers
     if (e == ESP_OK && len > 0 && esp_http_client_write(c, body, len) != len) e = ESP_FAIL;
     if (e == ESP_OK) {
-        esp_http_client_fetch_headers(c);
-        *status = esp_http_client_get_status_code(c);
-        int got = 0, r;
-        while (got < (int)n - 1 && (r = esp_http_client_read(c, resp + got, (int)n - 1 - got)) > 0) got += r;
-        resp[got] = 0;
-    } else {
-        ESP_LOGW(TAG, "%s: %s", path, esp_err_to_name(e));
+        if (esp_http_client_fetch_headers(c) < 0) {
+            e = ESP_FAIL;
+        } else {
+            *status = esp_http_client_get_status_code(c);
+            int got = 0;
+
+            while (got < (int)n - 1) {
+                int r = esp_http_client_read(
+                    c, resp + got, (int)n - 1 - got);
+                if (r < 0) {
+                    e = ESP_FAIL;
+                    break;
+                }
+                if (r == 0) {
+                    if (!esp_http_client_is_complete_data_received(c))
+                        e = ESP_FAIL;
+                    break;
+                }
+                got += r;
+            }
+
+            resp[got] = 0;
+        }
     }
+
+    if (e != ESP_OK)
+        ESP_LOGW(TAG, "%s: %s", path, esp_err_to_name(e));
     esp_http_client_close(c);
     esp_http_client_cleanup(c);
     return e;

@@ -22,8 +22,10 @@
 #include "ui_sys.h"
 #include "account.h"
 #include "account_test.h"
+#include "upload.h"
 
 static const char *TAG = "disp";
+
 
 void app_main(void)
 {
@@ -56,8 +58,13 @@ void app_main(void)
     const links_handlers_t lh = { .on_frame = scope_view_submit, .on_key = ui_on_key,
                                   .on_acq_state = ui_on_acq_state, .on_cal = scope_view_set_cal };
     ESP_ERROR_CHECK(links_start(&lh));
-    const ui_hooks_t hooks = { .changed = settings_mark_dirty, .sys = ui_sys_toggle };
+    const ui_hooks_t hooks = {
+        .changed = settings_mark_dirty,
+        .save = upload_save,
+        .sys = ui_sys_toggle
+    };
     ui_start(&s, &hooks);
+    ESP_ERROR_CHECK(upload_start());
     net_start();
     ota_confirm_or_roll_back();                                     // no-op unless this image is new
     ESP_LOGI(TAG, "firmware %s", ota_version());

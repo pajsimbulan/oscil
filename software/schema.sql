@@ -22,9 +22,9 @@ create table public.recovery (
 create table public.screenshots (
   id          bigint generated always as identity primary key,
   owner       uuid not null default auth.uid() references auth.users(id) on delete cascade,
-  shot_id     int  not null,               -- the device's counter, from the .osc header
+  shot_id     int  not null,               -- the device's screenshot counter
   created_at  timestamptz not null default now(),
-  captured_at timestamptz,                 -- the .osc unix_time, if the clock was set
+  captured_at timestamptz,                -- capture time, when the clock is set
   link        text not null,               -- object path in bucket 'screenshots'
   bytes       int  not null,
   unique (owner, shot_id)                  -- uploading the same capture twice changes nothing
@@ -59,7 +59,7 @@ create policy "add own screenshots" on public.screenshots for insert to authenti
 
 -- Bucket: private; each user writes and reads only <their uid>/...
 insert into storage.buckets (id, name, public, file_size_limit)
-values ('screenshots', 'screenshots', false, 65536);
+values ('screenshots', 'screenshots', false, 2097152);
 
 create policy "upload own files" on storage.objects for insert to authenticated
   with check (bucket_id = 'screenshots' and (storage.foldername(name))[1] = (select auth.uid())::text);
