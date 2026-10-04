@@ -1,5 +1,5 @@
 idf_component_register(
-    SRCS "account_test.c" "account.c" "cloud_http.c" "main.c" "lcd.c" "lcd_test.c" "gui.c" "gui_test.c" "touch.c" "touch_test.c"
+    SRCS "ui_account.c" "account_test.c" "account.c" "cloud_http.c" "main.c" "lcd.c" "lcd_test.c" "gui.c" "gui_test.c" "touch.c" "touch_test.c"
          "links.c" "scope_view.c" "ui.c" "ui_gen.c" "settings.c" "net.c"
          "ota.c" "ui_sys.c"
     INCLUDE_DIRS "."
