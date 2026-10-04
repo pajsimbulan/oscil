@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
@@ -21,6 +22,13 @@ static uint16_t *s_px;                    // canvas buffer LVGL renders from (PS
 static uint8_t  *s_int[2];                // Phosphor intensity per channel (PSRAM)
 static uint16_t  s_lut[2][256];           // intensity -> colour
 static lv_obj_t *s_canvas, *s_meas[2];
+static int s_selected, s_xshift[2];
+static int16_t (*s_hit_lo)[SCOPE_W], (*s_hit_hi)[SCOPE_W];
+static void (*s_drag)(int dx, int dy);
+static bool s_pressed, s_dragging;
+static int s_press_ch;
+static uint32_t s_press_tick;
+static lv_point_t s_press_point, s_drag_point;
 static view_t    s_view;                  // written and read under the LVGL lock
 
 static oscil_afe_cal_t s_cal[2] = { OSCIL_AFE_CAL_NOMINAL, OSCIL_AFE_CAL_NOMINAL };
@@ -68,30 +76,38 @@ static inline int code_to_y(uint16_t code, const view_ch_t *v, const oscil_afe_c
 
 static void draw_normal(const proto_frame_hdr_t *h, const uint16_t *data, const oscil_afe_cal_t *cal)
 {
+    memset(s_hit_lo, 0xff, 2 * SCOPE_W * sizeof(int16_t));
     memcpy(s_px, s_bg, SCOPE_W * SCOPE_H * sizeof(uint16_t));    // background in one copy
     for (int ch = 0; ch < 2; ch++) {
         if (!(h->ch_mask & (1 << ch)) || !s_view.ch[ch].on) continue;
         const uint16_t *mn = data + ch * 2 * h->cols, *mx = mn + h->cols;
         for (int x = 0; x < h->cols; x++) {                       // one vertical run per column
+            int dest_x = x + s_xshift[ch];
+            if (dest_x < 0 || dest_x >= SCOPE_W) continue;
             int y0 = code_to_y(mx[x], &s_view.ch[ch], &cal[ch]);
             int y1 = code_to_y(mn[x], &s_view.ch[ch], &cal[ch]);
-            for (int y = y0; y <= y1; y++) s_px[y * SCOPE_W + x] = COL_CH[ch];
+            s_hit_lo[ch][dest_x] = y0; s_hit_hi[ch][dest_x] = y1;
+            for (int y = y0; y <= y1; y++) s_px[y * SCOPE_W + dest_x] = COL_CH[ch];
         }
     }
 }
 
 static void draw_phosphor(const proto_frame_hdr_t *h, const uint16_t *data, const oscil_afe_cal_t *cal)
 {
+    memset(s_hit_lo, 0xff, 2 * SCOPE_W * sizeof(int16_t));
     for (int ch = 0; ch < 2; ch++) {
         uint8_t *I = s_int[ch];
         for (int i = 0; i < SCOPE_W * SCOPE_H; i++) I[i] -= (I[i] + 7) >> 3;   // x 7/8, reaches 0
         if (!(h->ch_mask & (1 << ch)) || !s_view.ch[ch].on) continue;
         const uint16_t *mn = data + ch * 2 * h->cols, *mx = mn + h->cols;
         for (int x = 0; x < h->cols; x++) {
+            int dest_x = x + s_xshift[ch];
+            if (dest_x < 0 || dest_x >= SCOPE_W) continue;
             int y0 = code_to_y(mx[x], &s_view.ch[ch], &cal[ch]);
             int y1 = code_to_y(mn[x], &s_view.ch[ch], &cal[ch]);
+            s_hit_lo[ch][dest_x] = y0; s_hit_hi[ch][dest_x] = y1;
             for (int y = y0; y <= y1; y++) {
-                uint8_t *p = &I[y * SCOPE_W + x];
+                uint8_t *p = &I[y * SCOPE_W + dest_x];
                 *p = (*p > 255 - 64) ? 255 : *p + 64;             // saturating add
             }
         }
@@ -170,14 +186,68 @@ static void scope_task(void *arg)
     }
 }
 
+static void on_trace_touch(lv_event_t *e)
+{
+    lv_event_code_t event = lv_event_get_code(e);
+    if (event == LV_EVENT_RELEASED || event == LV_EVENT_PRESS_LOST) {
+        s_pressed = s_dragging = false;
+        return;
+    }
+    if (event != LV_EVENT_PRESSED && event != LV_EVENT_PRESSING) return;
+    lv_indev_t *indev = lv_indev_active();
+    if (!indev) return;
+    lv_point_t p; lv_indev_get_point(indev, &p);
+    if (event == LV_EVENT_PRESSED) {
+        lv_area_t area; lv_obj_get_coords(s_canvas, &area);
+        int x = p.x - area.x1, y = p.y - area.y1;
+        s_pressed = s_dragging = false;
+        if (!s_drag || !s_view.ch[s_selected].on || x < 0 || x >= SCOPE_W || y < 0 || y >= SCOPE_H) return;
+        // Hold near the selected trace. Other channels cannot arm dragging.
+        for (int xx = x - 3; xx <= x + 3; xx++) {
+            if (xx < 0 || xx >= SCOPE_W || s_hit_lo[s_selected][xx] < 0) continue;
+            if (y >= s_hit_lo[s_selected][xx] - 12 && y <= s_hit_hi[s_selected][xx] + 12) {
+                s_pressed = true; s_press_ch = s_selected;
+                s_press_point = s_drag_point = p; s_press_tick = lv_tick_get(); break;
+            }
+        }
+    } else if (s_pressed) {
+        if (s_press_ch != s_selected || !s_view.ch[s_selected].on) { s_pressed = false; return; }
+        if (!s_dragging) {
+            if (lv_tick_elaps(s_press_tick) < 300) {
+                if (abs(p.x - s_press_point.x) > 16 || abs(p.y - s_press_point.y) > 16) s_pressed = false;
+                return;
+            }
+            s_dragging = true; s_drag_point = p; return;
+        }
+        int dx = p.x - s_drag_point.x, dy = p.y - s_drag_point.y;
+        if (abs(dx) + abs(dy) >= 2) { s_drag_point = p; s_drag(dx, dy); }
+    }
+}
+
+void scope_view_set_touch(int selected, void (*drag)(int dx, int dy))
+{
+    if (selected != s_selected) s_pressed = s_dragging = false;
+    s_selected = selected & 1; s_drag = drag;
+}
+
+void scope_view_set_x_offset(int ch, int pixels)
+{
+    ch &= 1;
+    s_xshift[ch] = pixels < -400 ? -400 : pixels > 400 ? 400 : pixels;
+    if (s_view.phosphor) memset(s_int[ch], 0, SCOPE_W * SCOPE_H);
+    scope_view_set_view(&s_view);
+}
+
 esp_err_t scope_view_init(lv_obj_t *parent, int y)
 {
     const size_t px = SCOPE_W * SCOPE_H;
     s_bg = heap_caps_malloc(px * 2, MALLOC_CAP_SPIRAM);
     s_px = heap_caps_malloc(px * 2, MALLOC_CAP_SPIRAM);
+    s_hit_lo = heap_caps_malloc(2 * SCOPE_W * sizeof(int16_t), MALLOC_CAP_SPIRAM);
+    s_hit_hi = heap_caps_malloc(2 * SCOPE_W * sizeof(int16_t), MALLOC_CAP_SPIRAM);
     s_int[0] = heap_caps_calloc(px, 1, MALLOC_CAP_SPIRAM);
     s_int[1] = heap_caps_calloc(px, 1, MALLOC_CAP_SPIRAM);
-    if (!s_bg || !s_px || !s_int[0] || !s_int[1]) return ESP_ERR_NO_MEM;
+    if (!s_bg || !s_px || !s_int[0] || !s_int[1] || !s_hit_lo || !s_hit_hi) return ESP_ERR_NO_MEM;
     for (int ch = 0; ch < 2; ch++)
         for (int i = 0; i < 256; i++) s_lut[ch][i] = dim(COL_CH[ch], 40 + i * 215 / 255);   // never fully dark
     draw_graticule();
@@ -186,6 +256,10 @@ esp_err_t scope_view_init(lv_obj_t *parent, int y)
     s_canvas = lv_canvas_create(parent);
     lv_canvas_set_buffer(s_canvas, s_px, SCOPE_W, SCOPE_H, LV_COLOR_FORMAT_RGB565);
     lv_obj_set_pos(s_canvas, 0, y);
+    memset(s_hit_lo, 0xff, 2 * SCOPE_W * sizeof(int16_t));
+    lv_obj_add_flag(s_canvas, LV_OBJ_FLAG_CLICKABLE);
+    lv_obj_remove_flag(s_canvas, LV_OBJ_FLAG_SCROLLABLE);
+    lv_obj_add_event_cb(s_canvas, on_trace_touch, LV_EVENT_ALL, NULL);
     for (int ch = 0; ch < 2; ch++) {
         s_meas[ch] = lv_label_create(parent);
         lv_obj_set_style_text_color(s_meas[ch], lv_color_hex(ch ? 0x00FFFF : 0xFFFF00), 0);

@@ -63,3 +63,7 @@ if(NOT MSVC)
     target_link_libraries(test_measure PRIVATE m)
 endif()
 add_test(NAME measure COMMAND test_measure)
+
+add_executable(test_photo_bmp test_photo_bmp.c)
+target_link_libraries(test_photo_bmp PRIVATE unity)
+add_test(NAME photo_bmp COMMAND test_photo_bmp)

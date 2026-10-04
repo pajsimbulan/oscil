@@ -7,6 +7,7 @@
 #include "account.h"
 #include "net.h"
 #include "ui_account.h"
+#include "ui_photos.h"
 
 enum { MODE_SIGN_IN, MODE_CREATE, MODE_FORGOT, JOB_SIGN_OUT };
 
@@ -14,6 +15,7 @@ typedef struct { int mode; char user[24], pass[72], phrase[96]; } job_t;
 
 static lv_obj_t *s_scr, *s_prev, *s_status, *s_modes, *s_msg, *s_kb, *s_go, *s_go_lbl, *s_out;
 static lv_obj_t *s_user, *s_pass, *s_phrase, *s_user_lbl, *s_pass_lbl, *s_phrase_lbl;
+static lv_obj_t *s_photos, *s_photo_info;
 static int s_mode;
 static QueueHandle_t s_q;
 static volatile bool s_working;
@@ -47,6 +49,9 @@ static void refresh(void)                      // LVGL lock held
     lv_obj_t *form[] = { s_modes, s_user, s_pass, s_phrase, s_user_lbl, s_pass_lbl, s_phrase_lbl, s_go, s_kb };
     for (size_t i = 0; i < sizeof form / sizeof form[0]; i++) show(form[i], !in);
     show(s_out, in);
+    show(s_photos, in);
+    show(s_photo_info, in);
+    if (in) lv_label_set_text(s_msg, "");
     if (!in) show_mode();
 }
 
@@ -76,7 +81,7 @@ static void acct_task(void *arg)
             }
         }
         refresh();
-        lv_label_set_text(s_msg, msg);
+        lv_label_set_text(s_msg, account_signed_in() ? "" : msg);
         lvgl_port_unlock();
         s_working = false;
     }
@@ -98,6 +103,8 @@ static void submit(void)
     xQueueSend(s_q, &j, 0);
     memset(&j, 0, sizeof j);
 }
+
+static void on_photos(lv_event_t *e) { if (!s_working) ui_photos_open(s_scr); }
 
 static void on_go(lv_event_t *e)      { submit(); }
 static void on_kb_ready(lv_event_t *e) { submit(); }
@@ -179,6 +186,11 @@ static void build(void)
 
     s_go  = button("Sign in", 560, 114, 220, on_go, &s_go_lbl);
     s_out = button("Sign out", 560, 114, 220, on_out, NULL);
+    s_photos = button("My photos", 20, 130, 300, on_photos, NULL);
+    s_photo_info = lv_label_create(s_scr);
+    lv_obj_set_pos(s_photo_info, 20, 192);
+    lv_obj_set_width(s_photo_info, 480);
+    lv_label_set_text(s_photo_info, "Your saved scope screenshots, kept in your account.\nOpen a photo, then close it to return to your list.");
     s_msg = lv_label_create(s_scr);
     lv_label_set_long_mode(s_msg, LV_LABEL_LONG_WRAP);
     lv_obj_set_width(s_msg, 220);

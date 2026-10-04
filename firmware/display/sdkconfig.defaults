@@ -37,3 +37,5 @@ CONFIG_MBEDTLS_HARDWARE_AES=n
 
 # SAVE captures the scope screen into RAM for cloud upload.
 CONFIG_LV_USE_SNAPSHOT=y
+# Gallery worker stack uses PSRAM; XIP above keeps it accessible during NVS writes.
+CONFIG_FREERTOS_TASK_CREATE_ALLOW_EXT_MEM=y

@@ -356,7 +356,7 @@ void upload_save(const ui_settings_t *s)
         ui_toast("Wi-Fi offline. Nothing saved");
         return;
     }
-    if (s->mode != MODE_SCOPE) {
+    if (s->mode != MODE_SCOPE || lv_screen_active() != ui_scope_screen()) {
         ui_toast("Open the scope screen to save");
         return;
     }

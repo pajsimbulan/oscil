@@ -34,3 +34,6 @@ void      scope_view_get_cal(int ch, oscil_afe_cal_t *out); // any task
 void      scope_view_submit(const uint8_t *payload, uint16_t len);   // link RX task: copy, wake, return
 size_t    scope_view_copy_last(uint8_t *dst, size_t cap);   // last drawn frame, for SAVE; 0 if none
 float     scope_view_fps(void);
+// Display-only horizontal pan; these functions require the LVGL lock.
+void scope_view_set_touch(int selected, void (*drag)(int dx, int dy));
+void scope_view_set_x_offset(int ch, int pixels);

@@ -30,6 +30,10 @@ static ui_hooks_t    s_hooks;
 static QueueHandle_t s_q;
 static lv_obj_t *s_scr_scope, *s_scr_gen, *s_status, *s_run_lbl, *s_toast;
 
+static lv_obj_t *s_ch_button[2];
+static int s_pan[2];
+static void drag_trace(int dx, int dy);
+
 static int clampi(int v, int lo, int hi) { return v < lo ? lo : (v > hi ? hi : v); }
 
 void ui_defaults(ui_settings_t *s)
@@ -77,7 +81,25 @@ static void refresh_status(const ui_settings_t *s)
         s->trig_src + 1, s->trig.edge == TRIG_RISING ? "rise" : "fall",
     oscil_afe_code_to_volts(s->trig.level, &cal), s->trig_mode == UI_TRIG_AUTO ? "AUTO" : "NORM");
     lv_label_set_text(s_status, buf);
+    scope_view_set_touch(s->sel_ch, drag_trace);
+    for (int c = 0; c < 2; c++) {
+        lv_obj_set_style_border_width(s_ch_button[c], s->sel_ch == c ? 3 : 0, 0);
+        lv_obj_set_style_border_color(s_ch_button[c], lv_color_hex(c ? 0x00ffff : 0xffff00), 0);
+        lv_obj_set_style_text_color(s_ch_button[c], lv_color_hex(s->view.ch[c].on ? (c ? 0x00ffff : 0xffff00) : 0x8892a0), 0);
+    }
     lv_label_set_text(s_run_lbl, s->run == UI_STOP ? "STOP" : (s->run == UI_SINGLE ? "SINGLE" : "RUN"));
+}
+
+static void drag_trace(int dx, int dy)
+{
+    int ch = g_ui.sel_ch;
+    if (lv_screen_active() != s_scr_scope || !g_ui.view.ch[ch].on) return;
+    float offset = g_ui.view.ch[ch].offset_v + dy * g_ui.view.ch[ch].volts_per_div / SCOPE_DIV_Y;
+    g_ui.view.ch[ch].offset_v = offset < -20 ? -20 : offset > 20 ? 20 : offset;
+    s_pan[ch] = clampi(s_pan[ch] + dx, -400, 400);
+    scope_view_set_x_offset(ch, s_pan[ch]);
+    scope_view_set_view(&g_ui.view);
+    if (s_hooks.changed) s_hooks.changed(&g_ui);
 }
 
 static void gen_set_span(proto_gen_set_t *g, int center, int span)
@@ -123,11 +145,11 @@ void ui_apply(ui_action_t a, int arg)
         } else { gen_set_span(g, (g->hi + g->lo) / 2, g->hi - g->lo + 2 * arg); gen = true; }
         break;
     case ACT_ENC3:
-        if (scope) { s->trig.level = (uint16_t)clampi(s->trig.level + arg * 8, 0, 4095); acq = true; }
+        if (scope) { s->trig_src = s->sel_ch; s->trig.level = (uint16_t)clampi(s->trig.level + arg * 8, 0, 4095); acq = true; }
         else { gen_set_span(g, (g->hi + g->lo) / 2 + 2 * arg, g->hi - g->lo); gen = true; }
         break;
     case ACT_PUSH1:
-        if (scope) { s->view.ch[c].offset_v = 0; view = true; }
+        if (scope) { s->view.ch[c].offset_v = 0; s_pan[c] = 0; scope_view_set_x_offset(c, 0); view = true; }
         else s->fstep_idx = (uint8_t)((s->fstep_idx + 1) % 4);
         break;
     case ACT_PUSH2:
@@ -135,7 +157,7 @@ void ui_apply(ui_action_t a, int arg)
         else { g->on = !g->on; gen = true; }
         break;
     case ACT_PUSH3:
-        if (scope) { s->trig.edge = s->trig.edge == TRIG_RISING ? TRIG_FALLING : TRIG_RISING; acq = true; }
+        if (scope) { s->trig_src = s->sel_ch; s->trig.edge = s->trig.edge == TRIG_RISING ? TRIG_FALLING : TRIG_RISING; acq = true; }
         else { g->shape = (uint8_t)((g->shape + 1) % 5); gen = true; }
         break;
     case ACT_RUN:    s->run = (s->run == UI_RUN) ? UI_STOP : UI_RUN; acq = true; break;
@@ -151,9 +173,10 @@ void ui_apply(ui_action_t a, int arg)
         s->sel_ch = (uint8_t)c;
         view = true;
         break;
-    case ACT_TRIG:                          // rise -> fall -> other source -> AUTO/NORMAL
+    case ACT_TRIG:                          // selected channel: rise/fall, then AUTO/NORMAL
+        s->trig_src = s->sel_ch;
         if (s->trig.edge == TRIG_RISING) s->trig.edge = TRIG_FALLING;
-        else { s->trig.edge = TRIG_RISING; s->trig_src ^= 1; if (s->trig_src == 0) s->trig_mode ^= 1; }
+        else { s->trig.edge = TRIG_RISING; s->trig_mode ^= 1; }
         acq = true;
         break;
     case ACT_MEAS:     s->view.meas_panel = !s->view.meas_panel; view = true; break;
@@ -237,6 +260,9 @@ static lv_obj_t *top_button(lv_obj_t *parent, int i, const char *text, ui_action
 {
     lv_obj_t *b = lv_button_create(parent);
     lv_obj_set_size(b, 76, 34);
+    lv_obj_set_style_bg_color(b, lv_color_hex(0x202c40), 0);
+    lv_obj_set_style_shadow_width(b, 0, 0);
+    lv_obj_set_style_radius(b, 6, 0);
     lv_obj_set_pos(b, 2 + i * 80, 3);
     lv_obj_add_event_cb(b, on_btn, LV_EVENT_SHORT_CLICKED, (void *)(intptr_t)(a | (arg << 8)));
     lv_obj_t *l = lv_label_create(b);
@@ -317,6 +343,7 @@ void ui_start(const ui_settings_t *initial, const ui_hooks_t *hooks)
     top_button(s_scr_scope, 1, "SINGLE", ACT_SINGLE, 0);
     lv_obj_t *c1 = top_button(s_scr_scope, 2, "CH1", ACT_CH, 0);
     lv_obj_t *c2 = top_button(s_scr_scope, 3, "CH2", ACT_CH, 1);
+    s_ch_button[0] = c1; s_ch_button[1] = c2;
     lv_obj_add_event_cb(c1, on_ch_long, LV_EVENT_LONG_PRESSED, (void *)0);
     lv_obj_add_event_cb(c2, on_ch_long, LV_EVENT_LONG_PRESSED, (void *)1);
     top_button(s_scr_scope, 4, "TRIG", ACT_TRIG, 0);
@@ -327,10 +354,15 @@ void ui_start(const ui_settings_t *initial, const ui_hooks_t *hooks)
     lv_obj_t *sys = top_button(s_scr_scope, 9, "SYS", ACT_SYS, 0);
     if (!s_hooks.sys) lv_obj_add_flag(sys, LV_OBJ_FLAG_HIDDEN);
 
-    scope_view_init(s_scr_scope, 40);                 // plot, 800 x 400
+    ESP_ERROR_CHECK(scope_view_init(s_scr_scope, 40));                 // plot, 800 x 400
     s_status = lv_label_create(s_scr_scope);          // status bar, 40 px
     lv_obj_set_style_text_color(s_status, lv_color_hex(0xFFFFFF), 0);
-    lv_obj_set_pos(s_status, 6, 452);
+    lv_obj_set_pos(s_status, 6, 442);
+    lv_obj_t *hint = lv_label_create(s_scr_scope);
+    lv_label_set_text(hint, "Hold selected trace to drag  |  ENC1 press: centre  |  ENC3: trigger on selected CH");
+    lv_obj_set_style_text_font(hint, &lv_font_montserrat_14, 0);
+    lv_obj_set_style_text_color(hint, lv_color_hex(0x9aa8bc), 0);
+    lv_obj_set_pos(hint, 6, 463);
 
     s_toast = lv_label_create(lv_layer_top());
     lv_obj_set_style_bg_color(s_toast, lv_color_hex(0x303030), 0);
