@@ -1367,3 +1367,40 @@ at about 4.7 fps, around 203 ms per frame, slower than the earlier run.
 ![Session restored after reset](screenshots_videos/account_session_restored.png)
 
 ![Wrong password rejected, no token issued](screenshots_videos/account_wrong_password_rejected.png)
+
+
+Account screen. SYS now opens a page with Sign in, Create account and
+Forgot password modes, a text keyboard, account status, Sign out and Back.
+Password fields are masked. Create account asks for a secret phrase; reset
+asks for that phrase and a new password. Network requests are queued to a
+worker task so the LVGL task does not wait on HTTPS.
+
+The manual's SYS replacement called the old OTA function. Kept the working
+NVS request and reboot updater, so adding Account does not restore the
+update path that failed with the LCD running.
+
+The first touchscreen sign-in validated the certificate, then failed with
+"esp-aes: Failed to allocate memory" and a TLS read error. The hardware AES
+path needs temporary DMA-capable buffers; its allocation failed. Disabled
+hardware AES in menuconfig and saved the same setting in sdkconfig.defaults.
+TLS now uses software AES, with certificate checking still enabled. Account
+operations worked after this change. Exhaustion versus fragmentation of
+the DMA heap was not measured.
+
+Recorded the three account screens, button navigation, password reset and
+sign-in with the new password. Captures are kept with the firmware evidence;
+the Supabase setup and PC isolation test stay under software.
+
+![Account sign-in screen](screenshots_videos/account_sign_in_screen.JPG)
+
+![Create account screen](screenshots_videos/account_create_screen.PNG)
+
+![Forgot password screen](screenshots_videos/account_forgot_password_screen.JPG)
+
+[Video: account screen buttons](screenshots_videos/account_screen_buttons.MP4)
+
+[Video: account screen navigation](screenshots_videos/account_screen_navigation.MP4)
+
+[Video: forgot password test](screenshots_videos/account_forgot_password_test.MP4)
+
+[Video: password reset and sign-in with the new password](screenshots_videos/account_reset_new_password_sign_in.MP4)

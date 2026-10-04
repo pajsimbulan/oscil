@@ -66,6 +66,7 @@ From the ESP-IDF terminal, in a board folder:
 | 34 | Wi-Fi station on board 2: event-driven, exponential backoff reconnect, SNTP, credentials kept out of git | Done |
 | 35 | SYS panel and HTTPS OTA: one-time NVS request, reboot without LCD for download, new-image self-test | In progress (0.8.0 to 0.8.1 passed; rollback tests pending) |
 | 36 | Supabase HTTPS client: sign-in, session saved in NVS, refresh after reboot, wrong-password rejection | Done |
+| 37 | Touchscreen account screen: sign-in, create account, phrase reset and sign-out; software AES for TLS | Done (touchscreen tests passed) |
 
 ---
 
@@ -99,12 +100,25 @@ identity are saved in NVS; the access token stays in RAM. After reboot,
 the saved refresh token obtains a new access token without the password.
 
 Device tests passed for sign-in, session recovery after reset and rejection
-of a wrong password. The touchscreen account screen is still to add.
+of a wrong password. SYS opens the touchscreen account screen for sign-in,
+account creation, phrase-based reset and sign-out. Network requests run on
+a worker task. Touchscreen testing passed after switching TLS to software
+AES to avoid a hardware AES DMA allocation failure.
 Backend setup and isolation tests live in [`software/`](../software/).
 
 [Sign-in](docs/screenshots_videos/account_sign_in_success.png),
 [session recovery](docs/screenshots_videos/account_session_restored.png),
 and [wrong-password rejection](docs/screenshots_videos/account_wrong_password_rejected.png).
+
+[Sign-in screen](docs/screenshots_videos/account_sign_in_screen.JPG),
+[create account screen](docs/screenshots_videos/account_create_screen.PNG),
+[forgot password screen](docs/screenshots_videos/account_forgot_password_screen.JPG).
+
+Videos: [screen buttons](docs/screenshots_videos/account_screen_buttons.MP4),
+[navigation](docs/screenshots_videos/account_screen_navigation.MP4),
+[password reset](docs/screenshots_videos/account_forgot_password_test.MP4),
+and [sign-in with the new password](docs/screenshots_videos/account_reset_new_password_sign_in.MP4).
+
 
 ---
 
