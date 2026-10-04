@@ -1442,3 +1442,72 @@ RAM and free it when closed.
 ![Photo saved to the signed-in account](screenshots_videos/cloud_photo_saved_to_account.JPG)
 
 [Video: cloud SAVE, busy guard and the Supabase image](screenshots_videos/cloud_photo_save_busy_supabase.MOV)
+
+
+### 2026-10-03 — Photo viewer and selected trace touch
+
+Added My photos to the signed-in Account screen. The gallery lists 20
+metadata rows per page, newest first; it does not download thumbnails.
+Tapping a row fetches that photo with the user's access token. The BMP is
+read a row at a time and converted into one RGB565 PSRAM buffer, at most
+768 KB. Close frees it and returns to the list. Leaving while a request is
+running cancels its result, so an old download cannot reopen a photo.
+The bucket and owner policies are unchanged.
+
+Kept the scope layout and changed the top buttons to a dark background,
+with a yellow or cyan border around the selected channel. Holding near
+that trace for 300 ms starts dragging. Vertical movement changes only
+that channel's voltage offset; horizontal movement pans only its display.
+It does not change the sample rate or acquisition trigger position. ENC1
+press centres it again. ENC3 and TRIG use the selected channel as source.
+The persisted settings structure has not changed; horizontal pan starts
+at zero after reboot. SAVE is refused away from the scope screen.
+
+The display compiled and linked. Seven host tests passed for BMP headers,
+both row directions, padding, RGB565 colours and malformed input. Hardware
+checks are still pending: open and close several photos, leave during a
+download, check another account sees only its own list, and drag CH1 and
+CH2 separately in RUN and STOP. Record LINK counters during viewing before
+calling this step tested on the device.
+
+
+Photo viewer startup correction. The first device attempt reported
+"Photo viewer unavailable" before opening the gallery. That message came
+from queue or worker creation, before any Supabase request. The worker
+asked for a 12 KB internal stack; moved it to PSRAM and made the queue and
+task control blocks static so startup no longer needs that internal heap
+allocation. Kept PSRAM XIP enabled because token renewal can write NVS.
+Added startup heap diagnostics and a "worker ready" log. Device retest
+is pending; the earlier build alone did not prove gallery startup.
+
+
+### 2026-10-04 — Gallery review
+
+Rechecked the PSRAM worker stack, static queue/task controls, token use,
+private folder paths, image bounds and cleanup when leaving a request.
+The nine host suites passed, including the seven BMP cases. Corrected an
+offline pagination case: Next, Previous and Refresh now keep the current
+page when no request can start. Made gallery JSON parsing strict and
+added HTTP/stage logs for a failed list or photo download. Photo requests
+use the same 2 KB HTTP buffers as the uploader.
+
+The signed-out guard and RAM-only photo path remain in place. Trace pan
+is limited to the selected channel, with bounded horizontal positions;
+ENC1 resets both offsets and trigger controls use the selected source.
+A saved STOP state can still boot to an empty grid because waveform data
+is not persisted. RUN with AUTO is the first check in that situation.
+Gallery startup on the device, repeated photo open/close, and trace drag
+in RUN and STOP still need a new hardware result.
+
+### 2026-10-04 - Photo viewer on the device
+
+Opened a saved cloud photo in the device viewer. The new capture shows
+"Photo 4" with the saved scope image, both channel traces, measurements
+and the Close control. This confirms gallery startup and a selected photo
+being displayed after the worker startup correction.
+
+Repeated open/close, leaving during a download, account isolation on the
+device and selected-channel dragging still need recorded results. This
+photo does not establish RAM recovery or clean LINK1 counters.
+
+![Saved cloud photo open on the device](screenshots_videos/cloud_photo_viewer.JPG)

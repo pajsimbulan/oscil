@@ -68,6 +68,7 @@ From the ESP-IDF terminal, in a board folder:
 | 36 | Supabase HTTPS client: sign-in, session saved in NVS, refresh after reboot, wrong-password rejection | Done |
 | 37 | Touchscreen account screen: sign-in, create account, phrase reset and sign-out; software AES for TLS | Done (touchscreen tests passed) |
 | 38 | Cloud-only scope photos: signed-in SAVE, RAM snapshot, private BMP upload and busy guard | Done (upload, signed-out and busy tests passed) |
+| 39 | Account photo list and single-photo viewer; hold and drag the selected scope trace | Photo displayed on device (remaining checks pending) |
 
 ---
 
@@ -136,14 +137,37 @@ SAVE while signed out says "Sign in to save photos". Repeated presses
 during an upload say "Photo upload busy". The private screenshots bucket
 now allows 2 MB per file; an 800 x 480 BMP is 1,152,054 bytes.
 
-A photo list and viewer on the Account screen are next. The gallery is
-not implemented yet. Offline saving and LINK1 counters during photo
+Account now has My photos: 20 metadata rows per page, newest first. Tap
+one row to download that BMP into PSRAM. Close frees the image and returns
+to the list; Close again returns to Account. Leaving during a request
+discards its result. No photos are cached on flash. The viewer accepts the
+uncompressed 24-bit BMPs produced by SAVE, up to 800 x 480.
+
+The gallery build and seven host image-format tests passed. A saved cloud
+photo displayed on the device on October 4. Repeated open/close and the
+remaining gallery checks are pending. Offline saving and LINK1 counters during photo
 uploads have not been recorded in this test.
 
+[Photo viewer on the device](docs/screenshots_videos/cloud_photo_viewer.JPG),
 [Sign-in required](docs/screenshots_videos/cloud_photo_sign_in_required.JPG),
 [upload busy](docs/screenshots_videos/cloud_photo_upload_busy.JPG),
 [saved to account](docs/screenshots_videos/cloud_photo_saved_to_account.JPG),
 and [video: SAVE, repeated presses and the Supabase result](docs/screenshots_videos/cloud_photo_save_busy_supabase.MOV).
+
+---
+
+## Trace touch controls
+
+The selected CH button has a yellow or cyan border. Hold near that trace
+for 300 ms, then drag. Only the selected, enabled channel moves. Vertical
+drag changes its voltage offset; horizontal drag pans its displayed trace
+without changing acquisition timing. Horizontal pan is temporary. Press
+ENC1 to centre the selected trace again. ENC2 still sets its V/div, and
+ENC3 now adjusts the trigger using the selected channel as its source.
+TRIG cycles rise/fall and AUTO/NORMAL for the selected channel. Clicking
+an already selected CH button still switches that channel on or off;
+holding the CH button still opens its shunt setting. Device touch tests
+are pending.
 
 ---
 
