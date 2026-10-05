@@ -12,6 +12,30 @@
 static const char *TAG = "touch";
 static i2c_master_bus_handle_t s_i2c;
 static bool s_ok;
+static esp_err_t (*s_read_data)(esp_lcd_touch_handle_t);
+
+// A missed I2C read means no touch this time, not a fatal application error.
+// Keep this adapter here rather than modifying a downloaded component.
+static esp_err_t read_touch_safely(esp_lcd_touch_handle_t tp)
+{
+    static unsigned failures;
+    esp_err_t e = s_read_data(tp);
+    if (e == ESP_OK) {
+        if (failures) ESP_LOGI(TAG, "touch communication recovered");
+        failures = 0;
+        return ESP_OK;
+    }
+    portENTER_CRITICAL(&tp->data.lock);
+    tp->data.points = 0;
+#if CONFIG_ESP_LCD_TOUCH_MAX_BUTTONS > 0
+    tp->data.buttons = 0;
+#endif
+    portEXIT_CRITICAL(&tp->data.lock);
+    if (++failures == 1 || failures % 100 == 0)
+        ESP_LOGW(TAG, "touch read failed: %s; releasing touch (%u failures)",
+                 esp_err_to_name(e), failures);
+    return ESP_OK;
+}
 
 // Every 7-bit address; prints the ones that ACK
 static void i2c_scan(void)
@@ -35,7 +59,7 @@ esp_err_t touch_start(lv_display_t *disp)
 
     esp_lcd_panel_io_handle_t io;
     esp_lcd_panel_io_i2c_config_t io_cfg = ESP_LCD_TOUCH_IO_I2C_GT911_CONFIG();   // 0x5D, 16-bit registers
-    io_cfg.scl_speed_hz = 400000;                       // GT911 p.10: at or below 400 kbit/s
+    io_cfg.scl_speed_hz = 100000;                       // conservative speed for the breadboard harness
     ESP_RETURN_ON_ERROR(esp_lcd_new_panel_io_i2c(s_i2c, &io_cfg, &io), TAG, "panel io");
 
     // With driver_data the driver runs the address-select sequence: RESET low, INT low
@@ -53,6 +77,8 @@ esp_err_t touch_start(lv_display_t *disp)
     esp_err_t e = esp_lcd_touch_new_i2c_gt911(io, &tcfg, &tp);
     i2c_scan();                                         // after the driver released RESET
     ESP_RETURN_ON_ERROR(e, TAG, "GT911 not answering");
+    s_read_data = tp->read_data;
+    tp->read_data = read_touch_safely;
 
     const lvgl_port_touch_cfg_t lt = { .disp = disp, .handle = tp };
     lvgl_port_lock(0);

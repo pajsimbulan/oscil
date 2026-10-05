@@ -16,6 +16,7 @@
 #include "esp_lvgl_port.h"
 #include "nvs.h"
 #include "lvgl.h"
+#include "cJSON.h"
 
 #include "account.h"
 #include "cloud_http.h"
@@ -37,15 +38,47 @@ static QueueHandle_t s_queue;
 static SemaphoreHandle_t s_slot;
 
 // Only a counter goes into NVS. Photo bytes never go into flash.
-static esp_err_t next_id(uint32_t *id)
+static esp_err_t next_id(const char *jwt, const char *uid, uint32_t *id)
 {
+    // The account outlives this board. Never restart at an existing cloud ID.
+    char path[160], resp[256];
+    snprintf(path, sizeof path,
+             "/rest/v1/screenshots?select=shot_id&owner=eq.%s&order=shot_id.desc&limit=1", uid);
+    int status;
+    esp_err_t e = cloud_json(HTTP_METHOD_GET, path, jwt, NULL, NULL,
+                             &status, resp, sizeof resp);
+    if (e != ESP_OK) return e;
+    if (status == 401) return ESP_ERR_INVALID_STATE;
+    if (status != 200) {
+        ESP_LOGW(TAG, "photo numbering HTTP %d: %s", status, resp);
+        return ESP_FAIL;
+    }
+    cJSON *rows = cJSON_Parse(resp);
+    if (!cJSON_IsArray(rows) || cJSON_GetArraySize(rows) > 1) {
+        cJSON_Delete(rows);
+        return ESP_ERR_INVALID_RESPONSE;
+    }
+    uint32_t minimum = 1;
+    if (cJSON_GetArraySize(rows)) {
+        cJSON *last = cJSON_GetObjectItem(cJSON_GetArrayItem(rows, 0), "shot_id");
+        if (!cJSON_IsNumber(last) || last->valuedouble < 1 ||
+            last->valuedouble >= INT32_MAX - 1 ||
+            last->valuedouble != (double)last->valueint) {
+            cJSON_Delete(rows);
+            return ESP_ERR_INVALID_RESPONSE;
+        }
+        minimum = (uint32_t)last->valueint + 1;
+    }
+    cJSON_Delete(rows);
+
     nvs_handle_t h;
-    esp_err_t e = nvs_open("photos", NVS_READWRITE, &h);
+    e = nvs_open("photos", NVS_READWRITE, &h);
     if (e != ESP_OK) return e;
 
     uint32_t next = 1;
     e = nvs_get_u32(h, "next", &next);
     if (e == ESP_ERR_NVS_NOT_FOUND) e = ESP_OK;
+    if (e == ESP_OK && next < minimum) next = minimum;
 
     if (e == ESP_OK && (next == 0 || next >= INT32_MAX))
         e = ESP_ERR_INVALID_STATE;
@@ -88,8 +121,9 @@ static esp_err_t write_all(esp_http_client_handle_t c,
 }
 
 static esp_err_t put_photo(const char *jwt, const char *obj,
-                           const lv_draw_buf_t *image, uint32_t *bytes)
+                           const lv_draw_buf_t *image, uint32_t *bytes, bool *exists)
 {
+    *exists = false;
     uint32_t w = image->header.w;
     uint32_t h = image->header.h;
 
@@ -177,11 +211,34 @@ static esp_err_t put_photo(const char *jwt, const char *obj,
     }
 
     int status = -1;
+    char response[384] = {0};
     if (e == ESP_OK) {
         if (esp_http_client_fetch_headers(c) < 0)
             e = ESP_FAIL;
         else
             status = esp_http_client_get_status_code(c);
+    }
+
+    if (e == ESP_OK && status != 200 && status != 201) {
+        int got = 0;
+        while (got < sizeof response - 1) {
+            int n = esp_http_client_read(c, response + got, sizeof response - 1 - got);
+            if (n <= 0) break;
+            got += n;
+        }
+        response[got] = 0;
+        cJSON *error = cJSON_Parse(response);
+        const cJSON *code = cJSON_GetObjectItem(error, "error");
+        const cJSON *message = cJSON_GetObjectItem(error, "message");
+        *exists = (status == 400 || status == 409) &&
+            ((cJSON_IsString(code) &&
+              (!strcmp(code->valuestring, "Duplicate") ||
+               !strcmp(code->valuestring, "ResourceAlreadyExists") ||
+               !strcmp(code->valuestring, "already_exists"))) ||
+             (cJSON_IsString(message) &&
+              (!strcmp(message->valuestring, "The resource already exists") ||
+               !strcmp(message->valuestring, "Asset Already Exists"))));
+        cJSON_Delete(error);
     }
 
     esp_http_client_close(c);
@@ -191,7 +248,7 @@ static esp_err_t put_photo(const char *jwt, const char *obj,
     if (e != ESP_OK) return e;
     if (status == 401) return ESP_ERR_INVALID_STATE;
     if (status != 200 && status != 201) {
-        ESP_LOGW(TAG, "photo HTTP %d", status);
+        ESP_LOGW(TAG, "photo HTTP %d: %s", status, response);
         return ESP_FAIL;
     }
     return ESP_OK;
@@ -275,7 +332,7 @@ static void save_task(void *arg)
             goto done;
         }
 
-        e = next_id(&id);
+        e = next_id(jwt, uid, &id);
         if (e != ESP_OK) goto done;
 
         lvgl_port_lock(0);
@@ -292,7 +349,16 @@ static void save_task(void *arg)
         snprintf(obj, sizeof obj, "%s/%010lu.bmp",
                  uid, (unsigned long)id);
 
-        e = put_photo(jwt, obj, image, &bytes);
+        for (unsigned attempt = 0; attempt < 3; attempt++) {
+            bool exists;
+            e = put_photo(jwt, obj, image, &bytes, &exists);
+            if (!exists || attempt == 2) break;
+            // An orphaned upload or another device can still occupy the path.
+            ESP_LOGW(TAG, "photo %lu already exists; trying the next number", (unsigned long)id);
+            e = next_id(jwt, uid, &id);
+            if (e != ESP_OK) break;
+            snprintf(obj, sizeof obj, "%s/%010lu.bmp", uid, (unsigned long)id);
+        }
         if (e == ESP_OK) {
             e = add_row(jwt, uid, obj, id, bytes, captured);
             if (e != ESP_OK)

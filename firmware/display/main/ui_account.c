@@ -1,9 +1,13 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include "freertos/FreeRTOS.h"
 #include "freertos/queue.h"
 #include "freertos/task.h"
 #include "esp_lvgl_port.h"
+#include "esp_heap_caps.h"
+#include "esp_log.h"
+#include "sdkconfig.h"
 #include "account.h"
 #include "net.h"
 #include "ui_account.h"
@@ -19,6 +23,17 @@ static lv_obj_t *s_photos, *s_photo_info;
 static int s_mode;
 static QueueHandle_t s_q;
 static volatile bool s_working;
+static const char *TAG = "ui_account";
+#define ACCOUNT_STACK_BYTES 12288
+#if !CONFIG_SPIRAM_XIP_FROM_PSRAM || !CONFIG_FREERTOS_TASK_CREATE_ALLOW_EXT_MEM
+#error "Account worker requires PSRAM XIP and external task stack support"
+#endif
+static StaticTask_t s_worker_control;
+static StackType_t *s_worker_stack;
+static StaticQueue_t s_queue_control;
+static uint8_t s_queue_storage[sizeof(job_t)];
+
+static bool start_worker(void);
 
 static void show(lv_obj_t *o, bool on)
 {
@@ -64,12 +79,14 @@ static void acct_task(void *arg)
         xQueueReceive(s_q, &j, portMAX_DELAY);
         int mode = j.mode;
         esp_err_t e;
+        ESP_LOGI(TAG, "account request started (mode %d)", mode);
         if (mode == JOB_SIGN_OUT)      { account_sign_out(); e = ESP_OK; snprintf(msg, sizeof msg, "Signed out"); }
         else if (!net_online())        { e = ESP_FAIL; snprintf(msg, sizeof msg, "Wi-Fi offline"); }
         else if (mode == MODE_SIGN_IN) e = account_sign_in(j.user, j.pass, msg, sizeof msg);
         else if (mode == MODE_CREATE)  e = account_sign_up(j.user, j.pass, j.phrase, msg, sizeof msg);
         else                           e = account_reset(j.user, j.phrase, j.pass, msg, sizeof msg);
         memset(&j, 0, sizeof j);                                  // wipe password and phrase
+        ESP_LOGI(TAG, "account request finished: %s", esp_err_to_name(e));
 
         lvgl_port_lock(0);
         if (e == ESP_OK) {
@@ -90,6 +107,10 @@ static void acct_task(void *arg)
 static void submit(void)
 {
     if (s_working) return;
+    if (!start_worker()) {
+        lv_label_set_text(s_msg, "Account unavailable: memory. Try again");
+        return;
+    }
     job_t j = { .mode = s_mode };
     strlcpy(j.user, lv_textarea_get_text(s_user), sizeof j.user);
     strlcpy(j.pass, lv_textarea_get_text(s_pass), sizeof j.pass);
@@ -100,7 +121,10 @@ static void submit(void)
     }
     s_working = true;
     lv_label_set_text(s_msg, "Working...");
-    xQueueSend(s_q, &j, 0);
+    if (xQueueSend(s_q, &j, 0) != pdTRUE) {
+        s_working = false;
+        lv_label_set_text(s_msg, "Account busy. Try again");
+    }
     memset(&j, 0, sizeof j);
 }
 
@@ -113,9 +137,40 @@ static void on_back(lv_event_t *e)    { lv_screen_load(s_prev); }
 static void on_out(lv_event_t *e)
 {
     if (s_working) return;
+    if (!start_worker()) {
+        lv_label_set_text(s_msg, "Account unavailable: memory. Try again");
+        return;
+    }
     job_t j = { .mode = JOB_SIGN_OUT };
     s_working = true;
-    xQueueSend(s_q, &j, 0);
+    if (xQueueSend(s_q, &j, 0) != pdTRUE) {
+        s_working = false;
+        lv_label_set_text(s_msg, "Account busy. Try again");
+    }
+}
+
+static bool start_worker(void)
+{
+    if (s_q) return true;
+    s_worker_stack = heap_caps_malloc(ACCOUNT_STACK_BYTES, MALLOC_CAP_SPIRAM | MALLOC_CAP_8BIT);
+    if (!s_worker_stack) {
+        ESP_LOGE(TAG, "cannot allocate account worker stack");
+        return false;
+    }
+    QueueHandle_t queue = xQueueCreateStatic(1, sizeof(job_t), s_queue_storage, &s_queue_control);
+    s_q = queue;
+    TaskHandle_t task = queue ? xTaskCreateStaticPinnedToCore(acct_task, "acct", ACCOUNT_STACK_BYTES,
+                                   NULL, 3, s_worker_stack, &s_worker_control, 0) : NULL;
+    if (!task) {
+        if (queue) vQueueDelete(queue);
+        s_q = NULL;
+        free(s_worker_stack);
+        s_worker_stack = NULL;
+        ESP_LOGE(TAG, "cannot create account worker");
+        return false;
+    }
+    ESP_LOGI(TAG, "worker ready: %u-byte stack in PSRAM", ACCOUNT_STACK_BYTES);
+    return true;
 }
 
 static void on_mode(lv_event_t *e)
@@ -202,8 +257,7 @@ static void build(void)
     lv_keyboard_set_textarea(s_kb, s_user);
     lv_obj_add_event_cb(s_kb, on_kb_ready, LV_EVENT_READY, NULL);
 
-    s_q = xQueueCreate(1, sizeof(job_t));
-    xTaskCreatePinnedToCore(acct_task, "acct", 8192, NULL, 3, NULL, 0);
+    start_worker();
 }
 
 void ui_account_open(void)

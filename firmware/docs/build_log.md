@@ -1511,3 +1511,31 @@ device and selected-channel dragging still need recorded results. This
 photo does not establish RAM recovery or clean LINK1 counters.
 
 ![Saved cloud photo open on the device](screenshots_videos/cloud_photo_viewer.JPG)
+
+### 2026-10-04 - Touch failure during sign-in
+
+The display rebooted after a GT911 I2C timeout. The backtrace reached
+LVGL's fatal touch-read check; it did not show an Auth rejection.
+Added a project-side adapter that releases touch on an error, logs the
+failure and lets the next read retry. Reduced the touch bus to 100 kHz
+for the breadboard harness. Downloaded components are unchanged.
+
+Moved the account worker's 12 KB stack into PSRAM with the same XIP
+requirement as the gallery. Queue and task creation are checked; failed
+submissions clear Working and show an error. Added request start/finish
+logs without passwords, phrases or tokens. Device sign-in, wrong-password
+and sustained touch retests are pending. Software handling does not prove
+that the wiring or touch controller survived the power fault.
+
+### 2026-10-04 - Photo numbering after the board swap
+
+The replacement display started at photo 1 while the account still held
+photos from the old board. Before allocating a number, the uploader now
+reads the account's highest shot_id and keeps the larger of that next
+number and the local counter. Existing photos are never overwritten.
+
+Storage errors now include the server response in the serial log.
+Recognised duplicate-file responses retry with a fresh number, up to
+three uploads per save, using the same RAM snapshot. Other errors stop
+the save. No SQL or policy changes are needed. Saving from the replacement
+board and opening the new photo on the device still need a hardware test.
