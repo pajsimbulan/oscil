@@ -27,3 +27,6 @@ __pycache__/
 .env
 .env.*
 !.env.example
+# Raw phone media (HEIC/MOV, hundreds of MB). Web-sized copies are committed instead.
+screenshots_and_videos/*.HEIC
+screenshots_and_videos/*.MOV
