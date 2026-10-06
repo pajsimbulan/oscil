@@ -67,10 +67,21 @@ Firmware DDS into an 8-bit R-2R ladder, then a Sallen-Key filter at about
 parallel, so the 2:1 ratio holds by construction. Its own 5k output
 impedance is the filter's first resistor, so one op-amp filters and buffers.
 
+## On the bench
+
+Rev A is built on breadboards around three ESP32-S3 dev boards. These are
+from bring-up, each part checked on its own before the boards were joined.
+
+| | |
+|---|---|
+| <img src="../firmware/docs/screenshots_videos/rail_setup_3v3.JPG" width="360"><br>The analog 3.3 V rail from the MCP1700 | <img src="../firmware/docs/screenshots_videos/ads7883_soldering_setup.JPG" width="360"><br>Hand-soldering the ADS7883s onto adapters |
+| <img src="../firmware/docs/screenshots_videos/gen_r2r_ladder_beside_schematic.JPG" width="360"><br>The R-2R ladder built beside its sheet | <img src="../firmware/docs/screenshots_videos/display_wiring_rgb_bus_rear.JPG" width="360"><br>The 16-bit RGB bus to the display |
+
 ## For Rev B
 
 - C0G filter caps. Rev A uses a generic ceramic kit, values checked with a meter.
-- A carrier board with bare WROOM-1U modules instead of dev boards.
+- A custom PCB with bare WROOM-1U modules instead of dev boards and breadboards.
+- A 3D-printed enclosure.
 - A gain and offset stage on the generator output. Rev A is 0 to 3.3 V only.
 
 
@@ -80,11 +91,8 @@ impedance is the filter's first resistor, so one op-amp filters and buffers.
 
 # Build log
 
-Every day of this project, including the mistakes. Expand below to read
-it here, or open [docs/build_log.md](docs/build_log.md).
 <details>
-<summary>Read the full log</summary>
-
+<summary><b>Open the hardware build log</b>: the schematic decisions day by day, the parts that changed and why</summary>
 
 ## 2026-09-16
 
