@@ -13,6 +13,7 @@
   <img src="https://img.shields.io/badge/hardware-Rev%20A-blue" alt="hardware">
   <img src="https://img.shields.io/badge/platform-ESP32--S3-informational" alt="platform">
   <a href="https://github.com/pajsimbulan/oscil/actions/workflows/firmware.yml"><img src="https://github.com/pajsimbulan/oscil/actions/workflows/firmware.yml/badge.svg" alt="firmware CI"></a>
+  <a href="https://github.com/pajsimbulan/oscil/releases/latest"><img src="https://img.shields.io/badge/firmware-v0.9.0-orange" alt="firmware version"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-lightgrey" alt="license"></a>
 </p>
 
@@ -1673,6 +1674,18 @@ checkout could not compile them. The workflow now copies
 builds with empty credentials and nothing real reaches GitHub. Moved
 `actions/checkout` to v5 to clear the Node 20 deprecation warnings.
 
+## 2026-10-06
+
+### Version 0.9.0
+
+The display had stayed at 0.8.1 since the OTA test, so everything added
+after it, accounts, cloud photos, the gallery, trace dragging and the
+touch and photo numbering fixes, still reported 0.8.1. Boards 1 and 3 had
+no version set and showed a git describe string instead. All three
+projects now set `PROJECT_VER` to 0.9.0, checked in each built image, and
+the three images go out together as one release, `v0.9.0`. Board 2 takes
+it over Wi-Fi, boards 1 and 3 are flashed over USB.
+
 </details>
 
 <details>
@@ -2064,14 +2077,15 @@ PNG versions of each diagram are in [`screenshots_and_videos/`](screenshots_and_
 
 ## Revision history
 
-| Rev | Date | Change |
-|---|---|---|
-| 0.1 | 2026-09-16 | Initial design: use cases, requirements, architecture. Nothing built. |
-| 0.2 | 2026-09-22 | Hardware Rev A schematic complete. Firmware started. |
-| 0.3 | 2026-09-30 | ADC capture, trigger, board links, display, touch and generator running. |
-| 0.4 | 2026-10-02 | Touch and knob controls, generator screen, saved settings, two-point calibration, 16 MB OTA partition table. |
-| 0.5 | 2026-10-03 | Wi-Fi, HTTPS OTA with self-test, Supabase accounts and cloud photo saves. |
-| 0.6 | 2026-10-04 | Photo gallery and viewer on the device, trace dragging, photo numbering fix. |
+| Rev | Date | Firmware | Change |
+|---|---|---|---|
+| 0.1 | 2026-09-16 | none | Initial design: use cases, requirements, architecture. Nothing built. |
+| 0.2 | 2026-09-22 | unversioned | Hardware Rev A schematic complete. Firmware started. |
+| 0.3 | 2026-09-30 | unversioned | ADC capture, trigger, board links, display, touch and generator running. |
+| 0.4 | 2026-10-02 | unversioned | Touch and knob controls, generator screen, saved settings, two-point calibration, 16 MB OTA partition table. |
+| 0.5 | 2026-10-03 | 0.8.1 | Wi-Fi, HTTPS OTA with self-test, Supabase accounts and cloud photo saves. |
+| 0.6 | 2026-10-04 | 0.8.1 | Photo gallery and viewer on the device, trace dragging, photo numbering fix. |
+| 0.7 | 2026-10-06 | 0.9.0 | One version across all three boards, released together as v0.9.0. New front page, MIT license. |
 
 ---
 
