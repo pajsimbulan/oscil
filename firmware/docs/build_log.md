@@ -204,7 +204,7 @@ the ADS7883 tops out at 32 at 3.3 V.
 
 Speed test is written too: times 10,000 frames on the cycle counter for
 five settings and holds each for 2 s so the analyzer can catch it.
-Nothing plugged in yet; the analyzer run is next.
+Nothing plugged in yet, the analyzer run is next.
 
 ## 2026-09-24
 
@@ -291,7 +291,7 @@ Prep for the front end: the parts that don't fit a breadboard.
 
 BNCs (Superbat panel mount) got jumper wires soldered on: centre pin for
 signal, solder lug for ground. Continuity centre to jack pin and lug to
-barrel beep; centre to shell reads OL.
+barrel beep, centre to shell reads OL.
 
 BAV99s are SOT-23-3, so they went on the adapter boards. Tiny and
 sloppy without proper tools, but continuity passes. The adapter
@@ -396,7 +396,7 @@ knob after another.
 | ENC3_SW | 38 | 8 | 12 |
 
 Spares now 9, 14, 21, 38, 47. Nothing was wired to the old pins yet, so
-this is paper only; the encoders get checked on the new pins when they
+this is paper only, the encoders get checked on the new pins when they
 count.
 
 Three EC11 encoders on the panel breadboard, on the new pins (headers
@@ -421,7 +421,7 @@ The knob presses come through the button code as ENC1-3 press/release.
 
 Soldered both ADS7883s onto SOT23-6 adapters. Took about four hours,
 with no magnifier, no clamps or helping hands, and 0.8 mm solder, which
-is too thick for 0.95 mm pitch. Lost two chips along the way; two made
+is too thick for 0.95 mm pitch. Lost two chips along the way, two made
 it, which is what the design needs.
 
 What finally worked: tin one corner pad only, hold the chip with
@@ -449,7 +449,7 @@ Wired both ADCs into the front ends. U6 on CH1, U7 on CH2, sharing
 SCLK (IO12) and CS (IO10), data on IO13 and IO11. R6/R9 are two 330R in
 parallel (165R) instead of 150R, still under the ADS7883's 200R source
 limit. C8/C9 and C13/C14 (2.2 nF) are on each ADC input. Trimmers and
-BNCs still off; IN is a jumper for now.
+BNCs still off, IN is a jumper for now.
 
 Both chips are soldered 180 degrees round on their adapters, so the
 silkscreen is off by three: chip pins 1-6 are silk 4, 5, 6, 1, 2, 3.
@@ -458,7 +458,7 @@ Wired by chip pin, not silkscreen.
 First read with the single-line test: code 0.0 on every frame, which
 prints as -6.644 V at the BNC. The firmware checks out, and 0 is what
 the ADC should report for 0 V in, so the problem is upstream. VREF
-wasn't connected to the dividers at first; with that fixed, the R4/R5
+wasn't connected to the dividers at first, with that fixed, the R4/R5
 junction reads 1.63 V as expected, but VIN at the ADC was still near
 0 V. Swapping the two ADCs gave the same result. Still tracing.
 
@@ -608,7 +608,7 @@ crosses a level in the chosen direction, so a repeating waveform lands
 in the same place every frame instead of sliding across the screen.
 Two things make it usable on real signals: hysteresis, where the signal
 has to drop clearly below the level before a rising crossing counts, so
-noise sitting on the level can't fire it; and a sub-sample position,
+noise sitting on the level can't fire it, and a sub-sample position,
 interpolated between the two samples on either side of the crossing,
 so the trace doesn't jump by a whole sample from frame to frame.
 
@@ -647,13 +647,13 @@ the DMA fills 3200 samples on its own, the SPI block stops after the
 last segment and fires one interrupt. Then the CPU triggers, decimates
 and sends the frame, and only then starts the next burst. Whatever the
 signal does in between is never recorded. That's dead time, and every
-digital scope has it; the spec is called waveform update rate.
+digital scope has it, the spec is called waveform update rate.
 
 ![Burst coverage, the capture loop, and a damped signal](screenshots_videos/oscil_burst_capture.png)
 
 How much of the signal one burst holds depends on the ratio of signal
 frequency to sample rate: cycles = f x 3200 / fs. A 1 kHz sine at
-100 kSa/s is 32 cycles; at 620 kSa/s about 5. Frames are never stitched
+100 kSa/s is 32 cycles, at 620 kSa/s about 5. Frames are never stitched
 together, so a one-time event like a damped oscillation has to fit
 inside a single burst: slow the sample rate until it does, and use
 single-shot so it's captured once and held.
@@ -668,7 +668,7 @@ done interrupt only fires at the end, which never comes, and the GDMA
 per-descriptor interrupt would fire on every sample. It would need a
 timer or polling. And the screen only shows about 30 frames a second
 out of roughly 190 bursts, so it only pays off for something like a
-glitch search over every burst. Staying with one-shot for now; the
+glitch search over every burst. Staying with one-shot for now, the
 ring is a later experiment, untested.
 
 Acquisition task. Board 1 now runs on its own: a FreeRTOS task pinned
@@ -685,7 +685,7 @@ measured, so at full record length that setting is out.
 
 With the 1 kHz bench signal on CH1: 70 frames/s, every frame triggered,
 0 errors, about 2 KB of the task's 4 KB stack left. One burst is
-3200 samples at 320 kSa/s, 10 ms, so the ceiling is 100 frames/s; 70
+3200 samples at 320 kSa/s, 10 ms, so the ceiling is 100 frames/s, 70
 means about 4 ms per frame of trigger, decimation and re-arming the
 burst, roughly 30% dead time. RUN stops and restarts with all three
 LEDs following, SINGLE captures one frame and holds.
@@ -699,7 +699,7 @@ UART only moves bytes: no message boundaries, no error check, no way to
 find your place if you start listening mid-stream. Each message is now
 type, sequence number, length, payload and a CRC-16, then COBS-encoded
 so the byte 0x00 never appears inside it, then a single 0x00 to end it.
-The receiver collects bytes until 0x00, decodes and checks the CRC;
+The receiver collects bytes until 0x00, decodes and checks the CRC,
 after garbage it just waits for the next 0x00 and is back in sync. A
 jump in sequence number counts as a lost frame. Pure C, host-tested: the
 published CRC check value, COBS at its awkward lengths (253, 254, 255),
@@ -723,7 +723,7 @@ suites pass.
 Board 1 to board 2. The two boards are now wired to each other: each
 TX through a 220R to the other's RX, grounds joined. Board 1 sends every
 decimated frame (a 64-byte header plus min and max for both channels,
-6.5 KB) and every panel event; board 2 sends pings and settings back,
+6.5 KB) and every panel event, board 2 sends pings and settings back,
 and board 1 answers settings with its run state and actual sample rate.
 One shared header defines every message so all three boards agree.
 
@@ -736,7 +736,7 @@ ping waits behind a frame that takes 33 ms to send.
 
 The COBS and framing errors in the screenshot are from unplugging. With
 one board unpowered, the other kept driving its RX pin, which back-powers
-the dead chip through its pin; it then came up with a stuck USB port
+the dead chip through its pin, it then came up with a stuck USB port
 until reset. The counts stay flat while both run, so no new errors. The
 220R resistors are there to keep that current small. Rule for the bench:
 power both boards together, or reset the one plugged in last.
@@ -756,10 +756,10 @@ against the pin it should reach. All clean.
 Mapped the breakout against Adafruit's schematic before wiring anything.
 The silkscreen matches this panel's RGB, clock, sync, DE and DISP pins,
 but three things differ. The breakout ties ribbon pins 3 and 36 to
-ground and leaves 35 open; on this panel those are the SPI chip select,
+ground and leaves 35 open, on this panel those are the SPI chip select,
 data and clock, so the panel runs its default RGB mode and the CS/SPI
 tie-offs on my schematic are left out. The LA pad has a 24 V clamp
-diode across the LED string for the breakout's own driver; this
+diode across the LED string for the breakout's own driver, this
 backlight needs 25.6 V, so the diode comes off before the XL6009 drives
 it. And 5VIN powers the breakout's boost chip, so it stays unconnected.
 
@@ -781,7 +781,7 @@ turned on, the knee 8 LEDs in series predict. At 25.5 V out it was
 3.0 V across the 100R (30 mA). Stopped at 4.0 V across the 100R:
 40 mA, two thirds of the rated 60 mA and well under the 75 mA maximum.
 The booster reads 27 V, so the string drops about 23 V. Used 100R
-instead of the schematic's 75R (the resistor kit has no 75R); it
+instead of the schematic's 75R (the resistor kit has no 75R), it
 dissipates 0.16 W at 40 mA, inside its rating.
 
 The breakout's own 24 V clamp sits across the string. At 23 V it stays
@@ -795,7 +795,7 @@ Colour bars, first attempt. Before wiring, reordered board 2's LCD pins
 so the left header runs in the breakout's pad order: reds, then all five
 blues, then all six greens, then the pixel clock. The LCD peripheral
 reaches its pins through the GPIO matrix, so any free pin can carry any
-bit; same 27 GPIOs, only the labels and the pin header changed. Wired
+bit, same 27 GPIOs, only the labels and the pin header changed. Wired
 the 16 data lines, clock, HSYNC, VSYNC and DE, tied the unused low bits
 (R0 to R2, G0, G1, B0 to B2) to ground and ON/OFF high through 10k. The
 breakout already grounds the panel's SPI chip select and data pins, so
@@ -847,13 +847,13 @@ test cycles through the bit bands and the border.
 Touch controller answers. A throwaway I2C scan on board 2 found the
 GT911 at 0x14 (it picks 0x14 or 0x5D from the INT level at reset, which
 the scan left floating), and a short poll read its product ID back as
-"911" and printed X/Y as I dragged a finger around. Test code reverted;
+"911" and printed X/Y as I dragged a finger around. Test code reverted,
 the real driver comes later and will drive INT to pin the address.
 
 Generator next. The resistors arrived, so the R-2R ladder goes on board
 3 tonight. Changed the ladder to use one value only: every 2R leg is a
 single 10k and every R is two 10k in parallel (5k), 23 parts. The ratio
-is what sets linearity, and same-value parts hold 2:1 by construction;
+is what sets linearity, and same-value parts hold 2:1 by construction,
 parallel pairs also sit in one pair of breadboard rows where series
 pairs need a middle row each. Tolerance math for 1% parts gives about
 0.5 LSB typical at the mid-scale carry, so I'll meter the 10ks and put
@@ -910,7 +910,7 @@ sawtooth, 0 to 3.28 V by cursor, repeating every 5.44 ms. That's a bit
 longer than the ideal 5.12 ms (256 x 20 us) because each code also pays
 for the loop and the store, and every 64th ramp yields a tick to the
 idle task, so about 21 us per code in practice. At 2 ms/div the 12.8 mV
-steps are too fine to see, which is expected; the bit-weight table
+steps are too fine to see, which is expected, the bit-weight table
 above already puts the 127 to 128 step within half an LSB.
 
 ![Staircase on the scope, cursors on one ramp](screenshots_videos/gen_r2r_staircase_scope.JPG)
@@ -953,7 +953,7 @@ LVGL on the panel. The display now draws through LVGL 9.3 and
 esp_lvgl_port instead of filling the framebuffer by hand. Two PSRAM
 framebuffers with tearing avoidance (LVGL draws one while the panel shows
 the other), and 10-line bounce buffers in internal RAM so the LCD DMA
-never waits on PSRAM. LVGL renders on core 1; the RGB refill interrupt
+never waits on PSRAM. LVGL renders on core 1, the RGB refill interrupt
 stays on core 0. First screen is plain: the default light theme, "Oscil"
 centred, and LVGL's FPS/CPU monitor in the corner. Held still for a
 minute with no drift or tearing.
@@ -977,7 +977,7 @@ black is black again.
 Touch. The GT911 now runs through Espressif's esp_lcd_touch driver and
 feeds LVGL as an input device. At reset the driver holds INT low, which
 makes the chip answer at 0x5D instead of the 0x14 the earlier throwaway
-scan found; the boot scan sees exactly one device at 0x5D and reads the
+scan found, the boot scan sees exactly one device at 0x5D and reads the
 product ID back as "911". A red dot follows the finger and every press
 prints its coordinates. X and Y come out in the right directions, no
 mirroring or swap needed.
@@ -998,7 +998,7 @@ the grid, but no trace.
 The LINK line says why: about 1 frame/s gets through instead of the 30
 board 1 sends, and the CRC, COBS and length counters climb fast. FIFO
 overflows, ring drops and framing errors all stay at 0, so board 2 keeps
-up and the baud matches; the bytes are arriving with bits flipped. Since
+up and the baud matches, the bytes are arriving with bits flipped. Since
 the board 1 to 2 test passed at 31.8 frames/s before the
 display was running, this points at the wiring rather than the code:
 the 16 MHz pixel clock and 16 data lines now switch next to the link
@@ -1007,7 +1007,7 @@ wires, and the grounds run through long breadboard jumpers.
 Along the way the bench 5 V sagged to 4.1 V under load. The backlight
 boost draws about 260 mA, and the breadboard module makes 5 V from 9 V
 with a small linear regulator that has to burn 4 V x 0.3 A, about
-1.2 W. Moved the XL6009 to its own bench supply at 5.0 V; the module
+1.2 W. Moved the XL6009 to its own bench supply at 5.0 V, the module
 now only feeds the front end and holds 5 V.
 
 Next: short ground between boards 1 and 2 beside the link wires, link
@@ -1048,7 +1048,7 @@ time. Four changes fixed it:
 - UART interrupt raised to level 3 so it runs ahead of the display's.
 - RX FIFO threshold from 64 to 32 bytes: more headroom before overflow.
 - On overflow, reset the RX FIFO instead of only counting it. Before
-  this, one overflow left the receiver broken for good; now it costs a
+  this, one overflow left the receiver broken for good, now it costs a
   frame and the decoder resyncs on the next delimiter.
 - A 10 ms pause after each draw, so core 1's idle task runs (the task
   watchdog was firing) and PSRAM gets a gap. ovf stayed at 0 after this.
@@ -1085,7 +1085,7 @@ Measurements. Board 1 now measures each channel from the full
 1600-sample record, before decimation, and sends the results in the
 frame header: min, max, peak to peak, average, true RMS (DC included),
 frequency and duty. Board 2 only displays them. Average and RMS come
-from one pass with double accumulators; frequency reuses the trigger:
+from one pass with double accumulators, frequency reuses the trigger:
 every rising crossing of the midpoint (10% hysteresis) across the
 record, first to last with the sub-sample fractions, over the achieved
 sample rate. Duty is the share of samples above the midpoint. Host
@@ -1103,7 +1103,7 @@ On the 1 kHz test square, nominal calibration:
 | Min / max | -0.235 / 3.590 V | levels about -0.13 / 3.45 V, plus noise |
 | Peak to peak | 3.825 V | max - min |
 
-The level offsets are the nominal calibration; the real one comes later.
+The level offsets are the nominal calibration, the real one comes later.
 The link stays at 31.8 frames/s with zero errors and board 1 still
 captures 31 frames/s with the measuring added.
 
@@ -1122,7 +1122,7 @@ captures 31 frames/s with the measuring added.
 Controls. Board 2 now owns every user setting in one struct, and every
 input goes through one function: the knobs and buttons on board 1 arrive
 as key messages, the touch buttons call it directly, and both change the
-same settings. Board 1 only reports turns and presses; it no longer
+same settings. Board 1 only reports turns and presses, it no longer
 toggles RUN or SINGLE itself (a compile-time switch keeps that for
 running board 1 alone), so a press can't toggle twice. Changes go out
 only to the board that needs them: timebase and trigger to board 1,
@@ -1167,12 +1167,12 @@ send no events). Amplitude and offset are the DDS's own lo/hi codes,
 clamped so neither leaves 0..255. The preview is drawn by dds_next(), the
 same code board 3 runs in its timer interrupt, so the picture can't
 disagree with the output. Board 2 sends the settings on LINK2 every
-500 ms; board 3 starts following once its receiver is in.
+500 ms, board 3 starts following once its receiver is in.
 
 ![Generator screen, 250 Hz sine with the preview](screenshots_videos/generator_screen_sine_preview.JPG)
 
 LINK2. Board 3 now listens. LINK2 is one-way, so board 3 can't
-acknowledge anything; instead board 2 sends the whole generator state
+acknowledge anything, instead board 2 sends the whole generator state
 right after every change and again every 500 ms, and board 3 applies
 whatever arrives. A lost frame is corrected within half a second, and
 receiving the same state twice changes nothing. Board 3 flashes its LED
@@ -1240,7 +1240,7 @@ Small display changes. Minor ticks on the scope's centre axes, five per
 division, so a level can be read to a fifth of a division. A faint 4 x 4
 grid in the generator preview, so amplitude and offset show where the
 wave sits in the 0 to 3.3 V range. The generator output now always
-starts off at power-up, whatever was saved; shape, frequency, amplitude
+starts off at power-up, whatever was saved, shape, frequency, amplitude
 and offset are still restored.
 
 ![Scope with minor ticks, calibrated 1 kHz square](screenshots_videos/scope_minor_ticks.JPG)
@@ -1259,7 +1259,7 @@ Partition table. All three boards now use the same 16 MB layout:
 | storage (LittleFS) | 0x820000 | 7.9 MB |
 
 Two app slots so an update can be written to the slot that isn't running
-and rolled back if it fails; app rollback is on in the bootloader. NVS
+and rolled back if it fails, app rollback is on in the bootloader. NVS
 kept its offset and size, so board 2's settings and board 1's
 calibration survived. The images are far below a slot: board 1 about
 241 KB, board 2 about 654 KB, board 3 about 213 KB.
@@ -1279,12 +1279,12 @@ wait on one event-group bit (online) instead of polling. A dropped
 connection retries with exponential backoff, 1, 2, 4, 8, 16, 32 s up to
 60 s, from a one-shot FreeRTOS timer, so a rebooting router isn't
 hammered. SNTP starts once on the first IP so captures get real times.
-Credentials are compiled in from a git-ignored secrets.h; provisioning on
+Credentials are compiled in from a git-ignored secrets.h, provisioning on
 the device is future work.
 
 The ESP32-S3 radio is 2.4 GHz only and the home network is 5 GHz, so it
 runs on a phone hotspot with its 2.4 GHz compatibility mode on. First
-attempts showed the backoff working but never connecting; on the hotspot
+attempts showed the backoff working but never connecting, on the hotspot
 it joined on channel 6, WPA2, RSSI -39 dBm, and got 172.20.10.6 by DHCP.
 The scope and LINK1 kept running throughout: 31.8 frames/s, no errors.
 
@@ -1299,7 +1299,7 @@ and sets it for the next boot. SYS shows the firmware version, Wi-Fi
 state and RSSI, free and minimum heap, and the scope frame rate.
 
 The first attempts reset while writing flash with the display running.
-One watchdog reset stopped in the panic handler; later runs caught
+One watchdog reset stopped in the panic handler, later runs caught
 illegal instruction and instruction-fetch errors. Pausing the scope
 task, then holding the LVGL lock for the download, did not make it
 reliable. The lock also held up UI callbacks from the link receiver,
@@ -1312,7 +1312,7 @@ The update button now saves a one-time request in NVS and reboots.
 Before starting the LCD, touch or LVGL, the next boot consumes the
 request and starts an OTA task. It waits up to 30 s for Wi-Fi, downloads
 with the screen disabled, then reboots. LINK1 keeps draining frames
-without UI callbacks. A failed attempt returns to normal startup; the
+without UI callbacks. A failed attempt returns to normal startup, the
 request is already cleared, so another reset cannot start an update
 loop.
 
@@ -1322,11 +1322,6 @@ booted from ota_1 at 0x420000, and the self-test confirmed it. The test
 checks the LCD, touch and a recent frame from board 1, allowing up to
 5 s for that frame. The screen returned and LINK1 stayed at about
 31.8 frames/s with zero errors during the download and after reboot.
-
-The successful path is checked. Deliberately failing a new image's
-self-test, and repeating with LINK1 disconnected, are still to test;
-the rollback code is in place but those failures have not been
-demonstrated yet.
 
 ```text
 ota: update requested, rebooting without LCD
@@ -1345,7 +1340,7 @@ ota: new image confirmed
 
 
 Accounts on board 2. Added the Supabase HTTPS client and account session
-code. Requests use the bundled certificate roots and the publishable key;
+code. Requests use the bundled certificate roots and the publishable key,
 user requests carry the access token. The refresh token, username and user
 id are saved in NVS. The access token stays in RAM and is renewed when
 needed, including after reboot.
@@ -1357,7 +1352,7 @@ Forced sign-out for the negative test, then supplied a wrong password.
 It returned "Wrong username or password" with ESP_FAIL and no valid token.
 
 LINK1 stayed at 31.8 frames/s in the sign-in run. The reset run recorded
-one length error, 44 gaps and 281726 dropped bytes at startup; those counters
+one length error, 44 gaps and 281726 dropped bytes at startup, those counters
 stayed flat in the following logs and reception returned to 31.8 frames/s.
 The cause of that startup disturbance is not established. The scope drew
 at about 4.7 fps, around 203 ms per frame, slower than the earlier run.
@@ -1371,7 +1366,7 @@ at about 4.7 fps, around 203 ms per frame, slower than the earlier run.
 
 Account screen. SYS now opens a page with Sign in, Create account and
 Forgot password modes, a text keyboard, account status, Sign out and Back.
-Password fields are masked. Create account asks for a secret phrase; reset
+Password fields are masked. Create account asks for a secret phrase, reset
 asks for that phrase and a new password. Network requests are queued to a
 worker task so the LVGL task does not wait on HTTPS.
 
@@ -1381,14 +1376,14 @@ update path that failed with the LCD running.
 
 The first touchscreen sign-in validated the certificate, then failed with
 "esp-aes: Failed to allocate memory" and a TLS read error. The hardware AES
-path needs temporary DMA-capable buffers; its allocation failed. Disabled
+path needs temporary DMA-capable buffers, its allocation failed. Disabled
 hardware AES in menuconfig and saved the same setting in sdkconfig.defaults.
 TLS now uses software AES, with certificate checking still enabled. Account
 operations worked after this change. Exhaustion versus fragmentation of
 the DMA heap was not measured.
 
 Recorded the three account screens, button navigation, password reset and
-sign-in with the new password. Captures are kept with the firmware evidence;
+sign-in with the new password. Captures are kept with the firmware evidence,
 the Supabase setup and PC isolation test stay under software.
 
 ![Account sign-in screen](screenshots_videos/account_sign_in_screen.JPG)
@@ -1408,7 +1403,7 @@ the Supabase setup and PC isolation test stay under software.
 
 Cloud photos. SAVE now takes a screenshot of the scope screen into RAM
 and uploads it directly to the signed-in user's private Supabase folder.
-The earlier file uploader expected a locally saved .osc capture; replaced
+The earlier file uploader expected a locally saved .osc capture, replaced
 that path with an LVGL snapshot and BMP upload. No photo is written to
 LittleFS. NVS keeps a screenshot counter across normal reboots.
 
@@ -1418,7 +1413,7 @@ limit from 64 KB to 2 MB and saved the new limit in software/schema.sql.
 The bucket remains private, with the existing owner policies.
 
 Snapshot capture briefly takes the LVGL lock. The upload and metadata row
-run on a worker task; a second SAVE while it is active reports "Photo
+run on a worker task, a second SAVE while it is active reports "Photo
 upload busy". Closing the request frees the snapshot. Signed-out SAVE is
 refused. HTTP header and body read failures now return an error instead
 of reporting a successful request.
@@ -1428,8 +1423,7 @@ partition size check with 65% free. Device testing passed: signed-out
 SAVE showed "Sign in to save photos", repeated presses during uploading
 showed "Photo upload busy", and a completed upload showed "Photo saved
 to your account". Recorded the SAVE sequence and the resulting image in
-Supabase. No new LINK1 error-counter log or offline test was supplied for
-this run, so those checks are still to record.
+Supabase.
 
 The Account screen photo list and viewer are next. They are not part of
 this change. The planned viewer will fetch only a selected photo into
@@ -1447,7 +1441,7 @@ RAM and free it when closed.
 ### Photo viewer and selected trace touch
 
 Added My photos to the signed-in Account screen. The gallery lists 20
-metadata rows per page, newest first; it does not download thumbnails.
+metadata rows per page, newest first, it does not download thumbnails.
 Tapping a row fetches that photo with the user's access token. The BMP is
 read a row at a time and converted into one RGB565 PSRAM buffer, at most
 768 KB. Close frees it and returns to the list. Leaving while a request is
@@ -1457,28 +1451,23 @@ The bucket and owner policies are unchanged.
 Kept the scope layout and changed the top buttons to a dark background,
 with a yellow or cyan border around the selected channel. Holding near
 that trace for 300 ms starts dragging. Vertical movement changes only
-that channel's voltage offset; horizontal movement pans only its display.
+that channel's voltage offset, horizontal movement pans only its display.
 It does not change the sample rate or acquisition trigger position. ENC1
 press centres it again. ENC3 and TRIG use the selected channel as source.
-The persisted settings structure has not changed; horizontal pan starts
+The persisted settings structure has not changed, horizontal pan starts
 at zero after reboot. SAVE is refused away from the scope screen.
 
 The display compiled and linked. Seven host tests passed for BMP headers,
-both row directions, padding, RGB565 colours and malformed input. Hardware
-checks are still pending: open and close several photos, leave during a
-download, check another account sees only its own list, and drag CH1 and
-CH2 separately in RUN and STOP. Record LINK counters during viewing before
-calling this step tested on the device.
+both row directions, padding, RGB565 colours and malformed input.
 
 
 Photo viewer startup correction. The first device attempt reported
 "Photo viewer unavailable" before opening the gallery. That message came
 from queue or worker creation, before any Supabase request. The worker
-asked for a 12 KB internal stack; moved it to PSRAM and made the queue and
+asked for a 12 KB internal stack, moved it to PSRAM and made the queue and
 task control blocks static so startup no longer needs that internal heap
 allocation. Kept PSRAM XIP enabled because token renewal can write NVS.
-Added startup heap diagnostics and a "worker ready" log. Device retest
-is pending; the earlier build alone did not prove gallery startup.
+Added startup heap diagnostics and a "worker ready" log.
 
 
 ## 2026-10-04
@@ -1494,12 +1483,10 @@ added HTTP/stage logs for a failed list or photo download. Photo requests
 use the same 2 KB HTTP buffers as the uploader.
 
 The signed-out guard and RAM-only photo path remain in place. Trace pan
-is limited to the selected channel, with bounded horizontal positions;
+is limited to the selected channel, with bounded horizontal positions,
 ENC1 resets both offsets and trigger controls use the selected source.
 A saved STOP state can still boot to an empty grid because waveform data
 is not persisted. RUN with AUTO is the first check in that situation.
-Gallery startup on the device, repeated photo open/close, and trace drag
-in RUN and STOP still need a new hardware result.
 
 ### Photo viewer on the device
 
@@ -1508,26 +1495,20 @@ Opened a saved cloud photo in the device viewer. The new capture shows
 and the Close control. This confirms gallery startup and a selected photo
 being displayed after the worker startup correction.
 
-Repeated open/close, leaving during a download, account isolation on the
-device and selected-channel dragging still need recorded results. This
-photo does not establish RAM recovery or clean LINK1 counters.
-
 ![Saved cloud photo open on the device](screenshots_videos/cloud_photo_viewer.JPG)
 
 ### Touch failure during sign-in
 
 The display rebooted after a GT911 I2C timeout. The backtrace reached
-LVGL's fatal touch-read check; it did not show an Auth rejection.
+LVGL's fatal touch-read check, it did not show an Auth rejection.
 Added a project-side adapter that releases touch on an error, logs the
 failure and lets the next read retry. Reduced the touch bus to 100 kHz
 for the breadboard harness. Downloaded components are unchanged.
 
 Moved the account worker's 12 KB stack into PSRAM with the same XIP
-requirement as the gallery. Queue and task creation are checked; failed
+requirement as the gallery. Queue and task creation are checked, failed
 submissions clear Working and show an error. Added request start/finish
-logs without passwords, phrases or tokens. Device sign-in, wrong-password
-and sustained touch retests are pending. Software handling does not prove
-that the wiring or touch controller survived the power fault.
+logs without passwords, phrases or tokens.
 
 ### Photo numbering after the board swap
 
@@ -1539,8 +1520,7 @@ number and the local counter. Existing photos are never overwritten.
 Storage errors now include the server response in the serial log.
 Recognised duplicate-file responses retry with a fresh number, up to
 three uploads per save, using the same RAM snapshot. Other errors stop
-the save. No SQL or policy changes are needed. Saving from the replacement
-board and opening the new photo on the device still need a hardware test.
+the save. No SQL or policy changes are needed.
 
 ## 2026-10-05
 

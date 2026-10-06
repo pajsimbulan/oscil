@@ -12,7 +12,7 @@ row-level security, and creates a private screenshots bucket with a 64 KiB
 file limit. Profile and screenshot policies restrict access to the signed-in
 owner. Recovery has no client policies and its client grants are revoked.
 
-The SQL is saved in the repo. The successful query confirms setup;
+The SQL is saved in the repo. The successful query confirms setup,
 account and isolation checks were run separately below.
 
 ![Supabase schema created](screenshots_videos/supabase_schema_created.png)
@@ -30,7 +30,7 @@ with the two-user test below.
 ![Account signup and duplicate rejection](screenshots_videos/account_signup_duplicate_test.png)
 
 Ran `tests/isolation_test.py` against `oscil-dev`. All 17 checks passed.
-Both users could sign up and sign in. A uploaded a file and added its row;
+Both users could sign up and sign in. A uploaded a file and added its row,
 B could not list or download it, write into A's folder, or insert a row as A.
 The signed-out request returned no screenshots, and the recovery hash read
 was refused. A could still read its own row.
@@ -47,4 +47,4 @@ the PowerShell environment. The final run returned `ALL PASS`.
 
 Raised the screenshots bucket limit from 64 KiB to 2 MB for the device's
 800 x 480 BMP photos (1,152,054 bytes each). The change is saved in
-`schema.sql`; the bucket stays private with the same owner policies.
+`schema.sql`, the bucket stays private with the same owner policies.

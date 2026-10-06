@@ -23,7 +23,7 @@ notes and build logs refer to these revisions.
 Notes:
 
 - The dev boards are Lonely Binary ESP32-S3 N16R8 boards. The DevKitC-1 page
-  is only a reference; header pin numbers in `hardware/docs/pin-map.md` are
+  is only a reference, header pin numbers in `hardware/docs/pin-map.md` are
   for the Lonely Binary board.
 - BAV99: SMC has since released Rev. D. The design was checked against Rev. B.
 - WS2812B and GT911: neither Worldsemi nor Goodix hosts a stable public link,

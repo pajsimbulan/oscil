@@ -19,7 +19,7 @@ ESP32-S3 N16R8 dev board.
 | LINK1_TX / RX | 43 / 44 | 43 / 42 | UART1 |
 
 Spare: 9, 14, 21, 38, 47. GPIO48 is the onboard WS2812. GPIO15/16 can
-host an optional 32 kHz crystal; the dev board doesn't fit one, so they
+host an optional 32 kHz crystal, the dev board doesn't fit one, so they
 are plain GPIOs here.
 
 ## Board 2, display
@@ -70,7 +70,7 @@ on USB Serial/JTAG (`CONFIG_ESP_CONSOLE_USB_SERIAL_JTAG`), otherwise the
 boot log goes down the link cable.
 
 GPIO39–42 are the external JTAG pins. Using them rules out an external JTAG
-probe; the built-in USB JTAG still works.
+probe, the built-in USB JTAG still works.
 
 DAC_D0–D7 sit on GPIO4–11, contiguous in the GPIO_OUT register, so all eight
 bits update in one write.
