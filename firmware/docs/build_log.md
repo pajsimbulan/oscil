@@ -1532,3 +1532,16 @@ checkout could not compile them. The workflow now copies
 `secrets_example.h` to `secrets.h` for the display job only, so CI
 builds with empty credentials and nothing real reaches GitHub. Moved
 `actions/checkout` to v5 to clear the Node 20 deprecation warnings.
+
+## 2026-10-06
+
+### Version 0.9.0
+
+The display had stayed at 0.8.1 since the OTA test, so everything added
+after it, accounts, cloud photos, the gallery, trace dragging and the
+touch and photo numbering fixes, still reported 0.8.1. Boards 1 and 3 had
+no version set and showed a git describe string instead. All three
+projects now set `PROJECT_VER` to 0.9.0, checked in each built image, and
+the three images go out together as one release, `v0.9.0`. Board 2 takes
+it over Wi-Fi, boards 1 and 3 are flashed over USB.
+

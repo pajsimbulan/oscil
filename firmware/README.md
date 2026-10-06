@@ -118,6 +118,7 @@ in Wi-Fi, the OTA URL and the Supabase project.
 | 40 | Touch read errors recovered instead of rebooting, account worker stack in PSRAM | Built |
 | 41 | Photo numbers continue after the account's highest saved photo, so a replacement board never collides | Built |
 | 42 | CI builds the display with placeholder secrets | Done |
+| 43 | Version 0.9.0 on all three boards, released together | Done |
 
 ## How the boards work together
 
@@ -132,6 +133,7 @@ in Wi-Fi, the OTA URL and the Supabase project.
 
 ## Updates over Wi-Fi
 
+- Releases: [latest](https://github.com/pajsimbulan/oscil/releases/latest). Board 2 updates itself, boards 1 and 3 flash over USB.
 - SYS, Update saves a request to NVS and reboots.
 - The next boot leaves the screen off, downloads the latest GitHub Release
   over HTTPS into the other app slot, and reboots into it.
@@ -1724,5 +1726,17 @@ checkout could not compile them. The workflow now copies
 `secrets_example.h` to `secrets.h` for the display job only, so CI
 builds with empty credentials and nothing real reaches GitHub. Moved
 `actions/checkout` to v5 to clear the Node 20 deprecation warnings.
+
+## 2026-10-06
+
+### Version 0.9.0
+
+The display had stayed at 0.8.1 since the OTA test, so everything added
+after it, accounts, cloud photos, the gallery, trace dragging and the
+touch and photo numbering fixes, still reported 0.8.1. Boards 1 and 3 had
+no version set and showed a git describe string instead. All three
+projects now set `PROJECT_VER` to 0.9.0, checked in each built image, and
+the three images go out together as one release, `v0.9.0`. Board 2 takes
+it over Wi-Fi, boards 1 and 3 are flashed over USB.
 
 </details>
