@@ -10,7 +10,7 @@ jobs:
   host-tests:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - run: cmake -S firmware/tests -B build-host
       - run: cmake --build build-host
       - run: ctest --test-dir build-host --output-on-failure
@@ -21,7 +21,10 @@ jobs:
       matrix:
         board: [acq, display, gen]
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
+      - name: Placeholder secrets for CI
+        if: matrix.board == 'display'
+        run: cp firmware/display/main/secrets_example.h firmware/display/main/secrets.h
       - uses: espressif/esp-idf-ci-action@v1
         with:
           esp_idf_version: v5.5.5

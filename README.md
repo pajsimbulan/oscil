@@ -4,18 +4,23 @@
 
 ESP32-S3 · ESP-IDF · FreeRTOS · Supabase
 
-![status](https://img.shields.io/badge/status-firmware%20bring--up-yellow)
+![status](https://img.shields.io/badge/status-working%20prototype-green)
 ![hardware](https://img.shields.io/badge/hardware-Rev%20A-blue)
 ![platform](https://img.shields.io/badge/platform-ESP32--S3-informational)
 ![firmware](https://github.com/pajsimbulan/oscil/actions/workflows/firmware.yml/badge.svg)
 
-> **Hardware Rev A done, firmware started.** The schematic is complete and
-> ERC clean. Breadboard bring-up and firmware happen together from here.
+> **Working prototype on breadboards.** Board 1 samples two channels and
+> sends waveform frames to board 2 at 31.8 frames/s with zero link errors.
+> Board 2 runs the 7" touchscreen scope, measurements and the generator
+> controls; board 3 outputs sine, square, saw and triangle. Board 2 also
+> joins Wi-Fi, updates itself over HTTPS with rollback, signs in to a
+> Supabase account and saves scope photos to the cloud.
 
 | Folder | What's in it |
 |---|---|
 | [`hardware/`](hardware/) | Rev A schematic, pin map, build log |
-| [`firmware/`](firmware/) | One ESP-IDF project per board, plus shared code |
+| [`firmware/`](firmware/) | One ESP-IDF project per board, plus shared code and host tests |
+| [`software/`](software/) | Supabase schema, account function and isolation tests |
 
 ---
 
@@ -26,6 +31,7 @@ ESP32-S3 · ESP-IDF · FreeRTOS · Supabase
 - [Hardware requirements](#hardware-requirements)
 - [Firmware requirements](#firmware-requirements)
 - [Software requirements](#software-requirements)
+- [Known limits](#known-limits)
 - [Design documents](#design-documents)
 
 ---
@@ -71,6 +77,23 @@ The cloud side: accounts, screenshot metadata, and file storage on Supabase.
 ---
 
 
+## Known limits
+
+A breadboard build with three dev boards, made to learn and to show the
+whole path from ADC to cloud. It is not a lab instrument.
+
+- Sampling tops out at about 620 kSa/s per burst, 12 bits per channel.
+- The link carries 31.8 frames/s; the screen draws fewer, about 5 to 20
+  frames/s depending on the view.
+- The generator output is 0 to 3.3 V only, with no gain or offset stage.
+- Wi-Fi is 2.4 GHz only, and credentials are compiled in from a
+  git-ignored file. There is no on-device Wi-Fi setup yet.
+- Photos are saved only to the cloud and only while signed in.
+- OTA rollback is in place; the deliberate failure tests are still to be
+  recorded.
+
+---
+
 ## Design documents
 
 | Document | Description |
@@ -88,6 +111,10 @@ PNG versions of each diagram are in [`screenshots/`](screenshots/).
 |---|---|---|
 | 0.1 | 2026-09-16 | Initial design: use cases, requirements, architecture. Nothing built. |
 | 0.2 | 2026-09-22 | Hardware Rev A schematic complete. Firmware started. |
+| 0.3 | 2026-09-30 | ADC capture, trigger, board links, display, touch and generator running. |
+| 0.4 | 2026-10-02 | Touch and knob controls, generator screen, saved settings, two-point calibration, 16 MB OTA partition table. |
+| 0.5 | 2026-10-03 | Wi-Fi, HTTPS OTA with self-test, Supabase accounts and cloud photo saves. |
+| 0.6 | 2026-10-04 | Photo gallery and viewer on the device, trace dragging, photo numbering fix. |
 
 ---
 

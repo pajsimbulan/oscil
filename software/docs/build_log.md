@@ -44,3 +44,7 @@ installed `requests` there, and set the Supabase URL and publishable key in
 the PowerShell environment. The final run returned `ALL PASS`.
 
 ![Supabase isolation tests passed](screenshots_videos/supabase_isolation_all_pass.png)
+
+Raised the screenshots bucket limit from 64 KiB to 2 MB for the device's
+800 x 480 BMP photos (1,152,054 bytes each). The change is saved in
+`schema.sql`; the bucket stays private with the same owner policies.

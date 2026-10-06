@@ -1444,7 +1444,7 @@ RAM and free it when closed.
 [Video: cloud SAVE, busy guard and the Supabase image](screenshots_videos/cloud_photo_save_busy_supabase.MOV)
 
 
-### 2026-10-03 — Photo viewer and selected trace touch
+### Photo viewer and selected trace touch
 
 Added My photos to the signed-in Account screen. The gallery lists 20
 metadata rows per page, newest first; it does not download thumbnails.
@@ -1481,7 +1481,9 @@ Added startup heap diagnostics and a "worker ready" log. Device retest
 is pending; the earlier build alone did not prove gallery startup.
 
 
-### 2026-10-04 — Gallery review
+## 2026-10-04
+
+### Gallery review
 
 Rechecked the PSRAM worker stack, static queue/task controls, token use,
 private folder paths, image bounds and cleanup when leaving a request.
@@ -1499,7 +1501,7 @@ is not persisted. RUN with AUTO is the first check in that situation.
 Gallery startup on the device, repeated photo open/close, and trace drag
 in RUN and STOP still need a new hardware result.
 
-### 2026-10-04 - Photo viewer on the device
+### Photo viewer on the device
 
 Opened a saved cloud photo in the device viewer. The new capture shows
 "Photo 4" with the saved scope image, both channel traces, measurements
@@ -1512,7 +1514,7 @@ photo does not establish RAM recovery or clean LINK1 counters.
 
 ![Saved cloud photo open on the device](screenshots_videos/cloud_photo_viewer.JPG)
 
-### 2026-10-04 - Touch failure during sign-in
+### Touch failure during sign-in
 
 The display rebooted after a GT911 I2C timeout. The backtrace reached
 LVGL's fatal touch-read check; it did not show an Auth rejection.
@@ -1527,7 +1529,7 @@ logs without passwords, phrases or tokens. Device sign-in, wrong-password
 and sustained touch retests are pending. Software handling does not prove
 that the wiring or touch controller survived the power fault.
 
-### 2026-10-04 - Photo numbering after the board swap
+### Photo numbering after the board swap
 
 The replacement display started at photo 1 while the account still held
 photos from the old board. Before allocating a number, the uploader now
@@ -1539,3 +1541,14 @@ Recognised duplicate-file responses retry with a fresh number, up to
 three uploads per save, using the same RAM snapshot. Other errors stop
 the save. No SQL or policy changes are needed. Saving from the replacement
 board and opening the new photo on the device still need a hardware test.
+
+## 2026-10-05
+
+### CI
+
+The display build on GitHub Actions had failed since Wi-Fi was added.
+Five display sources include the git-ignored `secrets.h`, so a clean
+checkout could not compile them. The workflow now copies
+`secrets_example.h` to `secrets.h` for the display job only, so CI
+builds with empty credentials and nothing real reaches GitHub. Moved
+`actions/checkout` to v5 to clear the Node 20 deprecation warnings.

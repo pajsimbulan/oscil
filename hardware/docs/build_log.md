@@ -10,7 +10,7 @@ Six hierarchical sheets on the root page: power, both AFE channels,
 acquisition, display, generator. 2000x1500 mils each, two rows of three.
 Empty so far.
 
-Added hardware/datasheets/ — PDFs untracked, README of links instead.
+Added hardware/datasheets/: PDFs untracked, README of links instead.
 Two of the links I had were dead.
 
 Made the project symbol library and drew the ADS7883. Pin numbers checked

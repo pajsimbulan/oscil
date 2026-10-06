@@ -69,6 +69,9 @@ From the ESP-IDF terminal, in a board folder:
 | 37 | Touchscreen account screen: sign-in, create account, phrase reset and sign-out; software AES for TLS | Done (touchscreen tests passed) |
 | 38 | Cloud-only scope photos: signed-in SAVE, RAM snapshot, private BMP upload and busy guard | Done (upload, signed-out and busy tests passed) |
 | 39 | Account photo list and single-photo viewer; hold and drag the selected scope trace | Photo displayed on device (remaining checks pending) |
+| 40 | Touch read errors recovered instead of rebooting; account worker stack in PSRAM | Built (device retest pending) |
+| 41 | Photo numbers continue after the account's highest saved photo, so a replacement board never collides | Built (device retest pending) |
+| 42 | CI builds the display with placeholder secrets | Done |
 
 ---
 
@@ -128,8 +131,9 @@ and [sign-in with the new password](docs/screenshots_videos/account_reset_new_pa
 
 SAVE captures the scope screen into RAM and uploads a BMP to the signed-in
 user's private Supabase folder. Photos are not saved on the device. NVS
-keeps only the screenshot counter, so filenames do not repeat after a
-normal reboot. Capturing briefly holds the LVGL lock; HTTPS runs on a
+keeps only the screenshot counter. Before each save the uploader also
+reads the account's highest photo number and continues after it, so a
+replacement board never reuses a filename. Capturing briefly holds the LVGL lock; HTTPS runs on a
 worker task, with one upload allowed at a time.
 
 Tested successful saving and viewing the uploaded result in Supabase.

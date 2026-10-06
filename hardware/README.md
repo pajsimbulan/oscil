@@ -8,9 +8,10 @@ breadboards: one acquires, one drives the display, one generates signals.
 · [BOM](../Oscil_bill_of_materials_bom.xlsx)
 · [Datasheets](../datasheets/)
 
-Status: schematic complete, ERC clean. Breadboard bring-up in progress:
-every assigned GPIO on all three boards checked against the schematic
-(see the firmware build log).
+Status: schematic complete, ERC clean. All three boards are built and
+running on breadboards: every assigned GPIO was checked against the
+schematic, the analog rail has extra decoupling, and the front end runs
+from a regulated 5 V adapter (see the build logs).
 
 ## Sheets
 
@@ -95,7 +96,7 @@ Six hierarchical sheets on the root page: power, both AFE channels,
 acquisition, display, generator. 2000x1500 mils each, two rows of three.
 Empty so far.
 
-Added hardware/datasheets/ — PDFs untracked, README of links instead.
+Added hardware/datasheets/: PDFs untracked, README of links instead.
 Two of the links I had were dead.
 
 Made the project symbol library and drew the ADS7883. Pin numbers checked
@@ -324,3 +325,52 @@ so one op-amp does filter and buffer.
 
 Dropped OUT_EN from the pin map. Nothing to switch, and the ladder
 already sits at 0V at boot through the terminator.
+
+## 2026-09-30
+
+Generator ladder moved to one value. Every 2R leg is a single 10k and
+every R is two 10k in parallel (5k), 23 parts, no 20k. Same-value parts
+hold the 2:1 ratio, and parallel pairs take less breadboard than series.
+Ladder output is now 5k, so the Sallen-Key corner moves from 23 kHz
+(Q 0.73) to 33 kHz (Q 0.69) with R38 kept at 10k. Filter note and
+ladder note updated on the sheet.
+
+## 2026-10-02
+
+Front-end decoupling. The scope trace had visible fuzz on a flat input.
+The ADS7883 uses VDD as its reference, so any noise on the analog rail
+shows up as code noise. Everything on the rail was 1 uF or smaller.
+
+Added:
+
+- 10 uF on the MCP1700 output (+3.3VA), beside C2.
+- 10 uF on the MCP1700 input (+5V), beside C1.
+- 10 uF at each ADS7883 VDD, beside the existing 1 uF and 10 nF, in the
+  same breadboard row as the pin.
+- 1 uF across R3, the 20k of the VREF divider. It filters the 2.2 V
+  reference at the divider (about 24 Hz with the 6.7k source), not on the
+  buffer output, where a capacitive load could make the follower oscillate.
+
+The noise on the trace dropped to a low level.
+
+Schematic labels fixed: the op-amps and both ADS7883s were drawn on
++3V3, the dev board's digital rail, but on the bench they run from the
+MCP1700 rail. Moved them to +3.3VA so the drawing matches the wiring.
+Digital pull-ups stay on +3V3. Notes added next to the new parts.
+
+Link series resistors. One 220R on each link wire: R40 (board 1 TX)
+and R11 (board 1 RX) for LINK1, R41 (board 2 TX) for LINK2. They limit
+the current into an unpowered board's ESD diode when one board is
+unplugged while another drives the line, and damp ringing on the
+jumpers. At 2 Mbaud the RC is about 5 ns against a 500 ns bit. Matches
+the bench.
+
+
+Front-end power. The 9 V breadboard power module overheated again and
+the 3.3 V analog rail sagged to about 2.9 V. Since that rail is also the
+ADC reference, every reading moved with it. The module is out. The +5V
+rail now comes from a regulated 5 V adapter, and the MCP1700 stays cool
+and holds 3.27 V. The front end draws only a few mA, so the heat was the
+module's own wiring or load, not this circuit.
+
+</details>
